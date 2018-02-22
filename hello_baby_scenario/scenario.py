@@ -94,6 +94,7 @@ class Scenario(JSONClass):
 		self.run_loop(self.prepComplete)
 
 	def resuscitation(self):
+		self.baby.deliver()
 		self.getCMDs.start()
 		self.update.start()
 		self.babyTimer.startTimer()

@@ -23,6 +23,7 @@ class Baby(JSONClass):
 		self.vitals=None
 		self.PE=None
 		self.delivered=False
+		self.supplies={}
 		self.cmdDict={'getPE':self.getPE, 'getVitals':self.getVitals}
 
 	def complications(self):
@@ -35,7 +36,7 @@ class Baby(JSONClass):
 		self.vitals=vs
 		self.PE=PE
 
-	def deliverBaby(self):
+	def deliver(self):
 		self.delivered=True
 
 	def getPE(self):

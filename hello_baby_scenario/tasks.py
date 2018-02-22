@@ -1,3 +1,6 @@
+#my approach to supplies sucks at the moment
+
+
 # dry/stimulate
 # provide oxygen (adjust mask, troubleshoot ETT)
 # give CPR - who is doing it, rate, depth, pausing? (correct compressions if needed)
@@ -40,13 +43,18 @@ class FetchSupply(Task):
 		super().__init__(taskName, baby, warmer, duration)
 		
 	def complete(self, supplyName):
-		self.warmer.getSupply(supplyName)
-	
+		self.warmer.fetchSupply(supplyName)
 	
 
 class PlaceSupply(Task):
 	def __init__(self, taskName, baby, warmer, duration):
 		super().__init__(taskName, baby, warmer, duration)
+	
+	def complete(self, supplyName):
+		supply=self.warmer.getSupply(supplyName)
+		if supply:
+			supply.using=True
+			self.baby.supplies[supplyName]=supply
 
 class InterveneTask(Task):
 	def __init__(self, taskName, baby, warmer, duration):

@@ -17,9 +17,6 @@ class Supply(JSONClass):
 	def getSupply(self):
 		self.available=True
 
-	def useSupply(self):
-		self.using=True
-
 	def __str__(self):
 		return self.name
 
@@ -101,7 +98,7 @@ class Warmer(JSONClass):
 	def setTempMode(self, tempMode):
 		self.tempMode=tempMode
 	
-	def getSupply(self, name):
+	def fetchSupply(self, name):
 		success=False
 		for supply in self.supplies:
 			if supply.name==name:
@@ -109,6 +106,13 @@ class Warmer(JSONClass):
 				success=True
 		if not success:
 			print(name+" is unavailable.")
+	
+	def getSupply(self, name):
+		toReturn=None
+		for supply in self.supplies:
+			if ((supply.name==name) and (supply.available)):
+				toReturn=supply
+		return toReturn
 			
 	def __str__(self):
 		return self.printWarmerStatus()

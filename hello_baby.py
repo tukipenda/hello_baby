@@ -9,10 +9,6 @@ app = Flask(__name__, static_url_path='/static')
 #initializing scenario
 babyScenario=Scenario()
 babyScenario.loadData()
-babyScenario.loadData()
-babyScenario.prepWarmer()
-babyScenario.resuscitation()
-babyScenario.scoring()
 
 
 @app.route('/')
