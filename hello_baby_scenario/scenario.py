@@ -1,4 +1,4 @@
-from jsonclass import JSONClass
+from jsonclass import JSONClass, merge_dicts
 import patients
 import warmer
 import staff
@@ -76,7 +76,7 @@ class Scenario(JSONClass):
 		self.taskMGR.loadTasks()
 
 	def executeCmd(self, cmdName, *args):
-		cmdDict={**self.baby.cmdDict, **self.mom.cmdDict, **self.staff.cmdDict, **self.warmer.cmdDict, **self.taskMGR.cmdDict}
+		cmdDict=merge_dicts(self.baby.cmdDict, self.mom.cmdDict, self.staff.cmdDict, self.warmer.cmdDict, self.taskMGR.cmdDict)
 		if cmdName=="l":
 			for cmd in cmdDict.keys():
 				print(cmd)

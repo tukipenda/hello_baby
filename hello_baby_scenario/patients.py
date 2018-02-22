@@ -160,6 +160,7 @@ class Mom(JSONClass):
 		super().__init__()
 		self.data=[prenatalLabs, HSVStatus, GBSStatus, ROM, GP]
 		self.text="Mom is a "+str(momAge)+" year old "+str(GP)+" woman."
+		self.cmdDict={}
 
 
 # Defining the delivery

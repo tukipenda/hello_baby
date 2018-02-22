@@ -1,4 +1,4 @@
-from jsonclass import JSONClass
+from jsonclass import *
 
 # temperature (turned on), suction, bag/mask, oxygen flow, baby timer
 # supplies - ETT (sizes), masks, pulse ox, laryngoscope, hat, blankets, bulb suction, deep suction/meconium aspirator, preemie supplies
@@ -75,7 +75,7 @@ class Warmer(JSONClass):
 		self.mask=BagMask()
 		self.cmdDict={"setO2":self.setOxygenString, "setSuction":self.setSuction, "setTemp":self.setTempMode, "turnOn":self.turnOn, "getSupply":self.getSupply,"printWarmer":self.printWarmerStatus, "printSupplyList":(lambda :print([supply.name for supply in self.supplies]))
 		}
-		self.cmdDict={**self.cmdDict, **self.mask.cmdDict}
+		self.cmdDict=merge_dicts(self.cmdDict, self.mask.cmdDict)
 
 	def turnOn(self):
 		self.turnedOn=True

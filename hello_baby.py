@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import json
 import sys
-sys.path.append("/home/tukipenda/mysite/hello_baby_scenario")
+sys.path.append("./hello_baby_scenario")
 from scenario import Scenario
 
 app = Flask(__name__, static_url_path='/static')
@@ -9,6 +9,10 @@ app = Flask(__name__, static_url_path='/static')
 #initializing scenario
 babyScenario=Scenario()
 babyScenario.loadData()
+babyScenario.loadData()
+babyScenario.prepWarmer()
+babyScenario.resuscitation()
+babyScenario.scoring()
 
 
 @app.route('/')
