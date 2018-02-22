@@ -1,0 +1,63 @@
+
+        <div class="row">
+        <div class="col-3">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            {% for value,name in [("warmer","Warmer"), ("bag-mask","Bag/Mask"), ("oxygen","Oxygen"), ("suction", "Suction"), ("supplies", "Supplies")] %}
+          <a class="nav-link {% if loop.first %} active {% endif %} " id="v-pills-{{value}}-tab" data-toggle="pill" href="#v-pills-{{value}}" role="tab" aria-controls="v-pills-{{value}}" aria-selected="true">{{name}}</a>
+        {% endfor %}
+        </div>
+        </div>
+
+
+        <div class="col-9">
+        <div class="tab-content" id="v-pills-tabContent">
+        {% set values=["warmer", "bag-mask", "oxygen", "suction", "supplies"] %}
+          <div class="tab-pane fade show active" id="v-pills-{{values[0]}}" role="tabpanel" aria-labelledby="v-pills-{{values[0]}}-tab">
+                <p> Heat is: <span v-if="warmer.turnedOn">on</span><span v-else>off</span></p>
+                <button v-on:click="toggleHeat" class="btn btn-primary">Turn heat <span v-if="warmer.turnedOn">off</span><span v-else>on</span></button>
+
+          </div>
+
+        <div class="tab-pane fade" id="v-pills-{{values[1]}}" role="tabpanel" aria-labelledby="v-pills-{{values[1]}}-tab">
+            <p>Mask sizes available: infant, preemie</p>
+
+            {% for pressure,pname in [("warmer.mask.PIP","PIP"), ("warmer.mask.PEEP","PEEP"),("warmer.mask.POP","Pop-off Pressure")]%}
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">{{pname}}</span>
+                      </div>
+                      <input type="text" class="form-control" v-model="{{pressure}}" :aria-label="{{pressure}}" aria-describedby="basic-addon1" v-on:change="updateWarmer">
+                    </div>
+            {% endfor %}
+
+       </div>
+
+        <div class="tab-pane fade" id="v-pills-{{values[2]}}" role="tabpanel" aria-labelledby="v-pills-{{values[2]}}-tab">
+            {% for pressure,pname in [("warmer.flow","Flow"), ("warmer.FIO2","FIO2")]%}
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">{{pname}}</span>
+                      </div>
+                      <input type="text" class="form-control" v-model="{{pressure}}" :aria-label="{{pressure}}" aria-describedby="basic-addon1" v-on:change="updateWarmer">
+                    </div>
+            {% endfor %}
+          </div>
+        <div class="tab-pane fade" id="v-pills-{{values[3]}}" role="tabpanel" aria-labelledby="v-pills-{{values[3]}}-tab">
+            <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">suction</span>
+                      </div>
+                      <input type="text" class="form-control" v-model="warmer.suction" :aria-label="warmer.suction" aria-describedby="basic-addon1" v-on:change="updateWarmer">
+          </div>
+         </div>
+        <div class="tab-pane fade" id="v-pills-{{values[4]}}" role="tabpanel" aria-labelledby="v-pills-{{values[4]}}-tab">
+                <ul class="col3" v-for="supply in warmer.supplies">
+                    <li>[[supply.name]]</li>
+                </ul>
+          </div>
+
+
+        </div>
+        </div>
+
+        </div>
