@@ -93,7 +93,7 @@ class Warmer(JSONClass):
 	def setOxygenString(self):
 		self.flow=input("Flow: ")
 		self.FIO2=input("FIO2: ")
-		self.setOxygen(flow, FIO2)
+		self.setOxygen(self.flow, self.FIO2)
 
 	def setSuction(self, suction):
 		self.suction=suction
