@@ -60,16 +60,3 @@ class Mom(JSONClass):
 	def __init__(self, **kwargs):
 		super().__init__()
 		self.data=kwargs
-
-
-# Defining the delivery
-
-class Delivery(JSONClass):
-	def __init__(self, deliveryType, stat):
-		self.dT=deliveryType
-		self.stat=stat
-
-	def __str__(self):
-		statString="stat " if (self.stat==True) else ""
-		return (statString+self.dT)
-

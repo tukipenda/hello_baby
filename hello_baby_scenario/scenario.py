@@ -34,7 +34,6 @@ class Scenario(JSONClass):
 		rom="ROM occurred 16 hours ago."
 		gp="G1PO"
 		self.mom=patients.Mom(age=25, prenatalLabs=pL, HSV=hsv, GBS=gbs, ROM=rom, GP=gp)
-		self.delivery=patients.Delivery("C/S", 1)
 
 		nurse=staff.RN("Juan")
 		respiratory=staff.RT("Sheri")
