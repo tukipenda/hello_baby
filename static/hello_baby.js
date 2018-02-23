@@ -25,6 +25,7 @@ var app = new Vue({
             baby:{},
             mom:{},
             warmer:{},
+            supplyMGR:{},
             scenario_data:{},
             staff:[]
         },
@@ -49,6 +50,11 @@ var app = new Vue({
                 model:"staff"
               }).then(function (response) {
                 self.staff=response.data;
+              })
+          axios.post("/getmodel", {
+                model:"supplyMGR"
+              }).then(function (response) {
+                self.supplyMGR=response.data;
               })
           axios.post("/getscenario", {
                 model:"scenario_data"
