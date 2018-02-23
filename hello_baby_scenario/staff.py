@@ -8,7 +8,6 @@ class Person(JSONClass):
 		self.task=None
 		self.skills=[]
 
-
 	def __str__(self):
 		toReturn=self.name+" is a "+str(self.title)+"\n"
 		if(self.role):

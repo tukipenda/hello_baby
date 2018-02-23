@@ -26,12 +26,6 @@ class Baby(JSONClass):
 		self.supplies={}
 		self.cmdDict={'getPE':self.getPE, 'getVitals':self.getVitals}
 
-	def complications(self):
-		if len(self.nc)==0:
-			return "no prenatal complications"
-		else:
-			return self.nc
-
 	def initialize(self, vs, PE):
 		self.vitals=vs
 		self.PE=PE
@@ -52,9 +46,6 @@ class Baby(JSONClass):
 		for key in self.vitals.keys():
 			print(key+": "+str(self.vitals[key]))
 
-	def __str__(self):
-		description="The baby is "+str(self.ga)+" weeks old with "+self.complications()+"."
-		return description
 
 class Mom(JSONClass):
 	def __init__(self, **kwargs):
