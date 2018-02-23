@@ -1,12 +1,12 @@
 {% block history %}
-<div class="list-group" v-for="(data,i) in mom.data" style="margin-top:20px">
+<div class="list-group" v-for="(value, key, i) in mom.data" style="margin-top:20px">
               <a :href="'#collapse'+i" class="list-group-item list-group-item-action active"
               data-toggle="collapse" :data-target="'#collapse'+i" aria-expanded="false" aria-controls="'collapse'+i">
-                Get [[data.printName]]
+                Get [[key]]
               </a>
               <div class="collapse" :id="'collapse'+i">
                   <div class="card card-body">
-                    [[data.text]]
+                    [[value]]
                   </div>
               </div>
             </div>

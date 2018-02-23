@@ -28,12 +28,12 @@ class Scenario(JSONClass):
 		self.scenario_data={'scenario_text':"You are called by the OB team for a stat C/S. Mom is 25 years old, and gestational age is 36 weeks."}
 		self.baby=patients.Baby(33, [])
 
-		pL=patients.prenatalLabs("VZVI", "RI", "HIV negative", "Hep B negative", "RPRNR", "Gonorrhea negative", "Chlamydia negative")
-		hsv=patients.HSVStatus(False, False, False)
-		gbs=patients.GBSStatus(True, 38.1, ["ampicillin"], False)
-		rom=patients.ROM(16, False)
-		gp=patients.GP(1, 0, 0, 0, 0, 0, 1)
-		self.mom=patients.Mom(25, pL, hsv, gbs, [], rom, ["ampicillin"], gp)
+		pL="Prenatal labs: VZVI, RI, HIV negative, Hep B negative, RPRNR, GC/Chlamydia negative"
+		hsv="No history of HSV and has no active lesions."
+		gbs="GBS+.  She was febrile to 38.1, and received ampicillin 2 hours before delivery."
+		rom="ROM occurred 16 hours ago."
+		gp="G1PO"
+		self.mom=patients.Mom(age=25, prenatalLabs=pL, HSV=hsv, GBS=gbs, ROM=rom, GP=gp)
 		self.delivery=patients.Delivery("C/S", 1)
 
 		nurse=staff.RN("Juan")
