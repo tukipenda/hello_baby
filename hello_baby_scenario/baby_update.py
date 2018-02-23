@@ -1,4 +1,4 @@
-import patients
+from baby import *
 
 #need to write tests for all of these methods!!!
 
@@ -79,6 +79,8 @@ class BabyUpdate:
 		pass
 
 
+# probably should move all of below into its own scenario data page - or maybe even preemieppv scenario page
+	
 #PreemiePPV scenario - data and logic
 #initial data about infant
 initVitals={'O2Sat':55, 'HR':120, 'RR':40, 'SBP':75, 'DBP':50, 'Temp':35}
@@ -97,6 +99,7 @@ initSats={"RArm":initVitals['O2Sat'], "LArm":initVitals['O2Sat'], "RLeg":initVit
 initEKG={"Rhythm":'sinus'}
 initMalformations={} #may need to change this to a list
 PEdict={'apgar':initAPGAR, 'resp':initResp, 'cardiac':initCardiac, 'abd':initAbd, 'skin':initSkin, 'otherPE':initOtherPE, 'secretions':initSecretions, 'neuro':initNeuro, 'sats':initSats, 'ekg':initEKG, 'malformations':initMalformations}
+
 
 class PreemiePPV(BabyUpdate):
 	def __init__(self, baby, warmer):

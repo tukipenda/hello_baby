@@ -1,5 +1,5 @@
 from jsonclass import JSONClass, merge_dicts
-import patients
+from baby import *
 import warmer
 import staff
 import tasks
@@ -7,6 +7,12 @@ import threading
 from baby_timer import *
 import baby_update
 import time
+
+#probably should move this into scenario_data of some sort
+class Mom(JSONClass):
+	def __init__(self, **kwargs):
+		super().__init__()
+		self.data=kwargs
 
 class Scenario(JSONClass):
 	def __init__(self):
@@ -26,14 +32,14 @@ class Scenario(JSONClass):
 	def loadData(self):
 		# Initialize a scenario
 		self.scenario_data={'scenario_text':"You are called by the OB team for a stat C/S. Mom is 25 years old, and gestational age is 36 weeks."}
-		self.baby=patients.Baby(33, [])
+		self.baby=Baby(33, [])
 
 		pL="Prenatal labs: VZVI, RI, HIV negative, Hep B negative, RPRNR, GC/Chlamydia negative"
 		hsv="No history of HSV and has no active lesions."
 		gbs="GBS+.  She was febrile to 38.1, and received ampicillin 2 hours before delivery."
 		rom="ROM occurred 16 hours ago."
 		gp="G1PO"
-		self.mom=patients.Mom(age=25, prenatalLabs=pL, HSV=hsv, GBS=gbs, ROM=rom, GP=gp)
+		self.mom=Mom(age=25, prenatalLabs=pL, HSV=hsv, GBS=gbs, ROM=rom, GP=gp)
 
 		nurse=staff.RN("Juan")
 		respiratory=staff.RT("Sheri")
