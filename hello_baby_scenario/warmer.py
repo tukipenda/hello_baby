@@ -6,27 +6,18 @@ from supplies import *
 
 
 class Warmer(JSONClass):
-	def __init__(self, supplies):
+	def __init__(self):
 		super().__init__()
 		self.turnedOn=False
-		self.supplies=supplies
 		self.suction=0
 		self.flow=0
 		self.FIO2=100
 		self.tempMode="manual"
-		self.mask=BagMask()
-		self.cmdDict={"setO2":self.setOxygenString, "setSuction":self.setSuction, "setTemp":self.setTempMode, "turnOn":self.turnOn, "getSupply":self.getSupply,"printWarmer":self.printWarmerStatus, "printSupplyList":(lambda :print([supply.name for supply in self.supplies]))
+		self.cmdDict={"setO2":self.setOxygenString, "setSuction":self.setSuction, "setTemp":self.setTempMode, "turnOn":self.turnOn, "printWarmer":self.printWarmerStatus, "printSupplyList":(lambda :print([supply.name for supply in self.supplies]))
 		}
-		self.cmdDict=merge_dicts(self.cmdDict, self.mask.cmdDict)
 
 	def turnOn(self):
 		self.turnedOn=True
-
-	def setBagMask(self, maskType):
-		self.mask.setMaskType(maskType)
-	
-	def setBagMaskPressures(self, PIP, PEEP, POP):
-		self.mask.setPressures(PIP, PEEP, POP)
 	
 	def setOxygen(self, flow, FIO2):
 		self.flow=flow
@@ -42,22 +33,6 @@ class Warmer(JSONClass):
 	
 	def setTempMode(self, tempMode):
 		self.tempMode=tempMode
-	
-	def fetchSupply(self, name):
-		success=False
-		for supply in self.supplies:
-			if supply.name==name:
-				supply.available=True
-				success=True
-		if not success:
-			print(name+" is unavailable.")
-	
-	def getSupply(self, name):
-		toReturn=None
-		for supply in self.supplies:
-			if ((supply.name==name) and (supply.available)):
-				toReturn=supply
-		return toReturn
 			
 	def __str__(self):
 		return self.printWarmerStatus()
@@ -68,7 +43,6 @@ class Warmer(JSONClass):
 		if self.turnedOn:
 			onStatus="on"
 			toPrint+="Warmer is "+onStatus+"."
-		toPrint+=str(self.mask)
 		if(self.flow==0):
 			toPrint+="\nOxygen is not turned on"
 		else:
@@ -77,10 +51,5 @@ class Warmer(JSONClass):
 			toPrint+="\nSuction is not turned on"
 		else:
 			toPrint+="\nSuction is set at "+str(self.suction)
-		toPrint+="\nSupplies include:"
-		for supply in self.supplies:
-			if supply.available:
-				toPrint+=supply.name
-				toPrint+="\n"
 		print(toPrint)
 		return(toPrint)

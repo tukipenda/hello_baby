@@ -15,7 +15,7 @@
 from jsonclass import *
 
 class Task(JSONClass):
-	def __init__(self, taskName, baby, warmer, duration):
+	def __init__(self, taskName, baby, supplyMGR, duration):
 		self.taskName=taskName
 		self.startTime=None
 		self.baby=baby
@@ -24,7 +24,7 @@ class Task(JSONClass):
 		self.isSuccessful=None
 		self.isComplete=None
 		self.isStarted=None
-		self.warmer=warmer
+		self.supplyMGR=supplyMGR
 	
 	def doTask(self, startTime, staffmember):
 		self.isStarted=True
@@ -39,26 +39,26 @@ class Task(JSONClass):
 
 
 class FetchSupply(Task):
-	def __init__(self, taskName, baby, warmer, duration):
-		super().__init__(taskName, baby, warmer, duration)
+	def __init__(self, taskName, baby, supplyMGR, duration):
+		super().__init__(taskName, baby, supplyMGR, duration)
 		
 	def complete(self, supplyName):
-		self.warmer.fetchSupply(supplyName)
+		self.supplyMGR.fetchSupply(supplyName)
 	
 
 class PlaceSupply(Task):
-	def __init__(self, taskName, baby, warmer, duration):
-		super().__init__(taskName, baby, warmer, duration)
+	def __init__(self, taskName, baby, supplyMGR, duration):
+		super().__init__(taskName, baby, supplyMGR, duration)
 	
 	def complete(self, supplyName):
-		supply=self.warmer.getSupply(supplyName)
+		supply=self.supplyMGR.getSupply(supplyName)
 		if supply:
 			supply.using=True
 			self.baby.supplies[supplyName]=supply
 
 class InterveneTask(Task):
-	def __init__(self, taskName, baby, warmer, duration):
-		super().__init__(taskName, baby, warmer, duration)
+	def __init__(self, taskName, baby, supplyMGR, duration):
+		super().__init__(taskName, baby, supplyMGR, duration)
 
 	def doTask(self, startTime, staffmember, *args):
 		super().doTask(self)
@@ -103,9 +103,9 @@ for task in allTasks:
 	
 
 class TaskManager(JSONClass):
-	def __init__(self, warmer, baby, scenario):
+	def __init__(self, supplyMGR, baby, scenario):
 		self.baby=baby
-		self.warmer=warmer
+		self.supplyMGR=supplyMGR
 		self.taskList={}
 		self.tasks=[]
 		self.cmdDict={'listTasks':self.listTasks}
@@ -123,11 +123,11 @@ class TaskManager(JSONClass):
 			return None
 	
 	def loadTasks(self):
-		self.taskList["fetch"]=FetchSupply("fetch", self.baby, self.warmer, 5)
-		self.taskList["place"]=PlaceSupply("place", self.baby, self.warmer, 5)
+		self.taskList["fetch"]=FetchSupply("fetch", self.baby, self.supplyMGR, 5)
+		self.taskList["place"]=PlaceSupply("place", self.baby, self.supplyMGR, 5)
 		for task in self.tasksToLoad.keys():
 			taskData=self.tasksToLoad[task]
-			self.taskList[task]=InterveneTask(taskData['name'], self.baby, self.warmer, taskData['duration'])
+			self.taskList[task]=InterveneTask(taskData['name'], self.baby, self.supplyMGR, taskData['duration'])
 		
 	def getTaskByName(self, taskName):
 		if (taskName, task in self.taskList.items()):

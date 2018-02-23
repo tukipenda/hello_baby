@@ -2,6 +2,7 @@ from jsonclass import JSONClass, merge_dicts
 from baby import *
 import warmer
 import staff
+import supplies
 import tasks
 import threading
 from baby_timer import *
@@ -20,6 +21,7 @@ class Scenario(JSONClass):
 		self.mom=None
 		self.staff=None
 		self.warmer=None
+		self.supplyMGR=None
 		self.scenario_data=None
 		self.taskMGR=None
 		self.getCMDs=threading.Thread(name='getCMDs', target=self.getCMDs)
@@ -46,13 +48,11 @@ class Scenario(JSONClass):
 		self.staff=staff.Staff([nurse, respiratory])
 
 		supplyList=[
-			"ETT",
 			"pulse_ox",
 			"hat",
 			"transwarmer",
 			"plastic_bag",
 			"temp_probe",
-			"laryngoscope",
 			"blankets",
 			"bulb_suction",
 			"meconium_aspirator",
@@ -66,22 +66,34 @@ class Scenario(JSONClass):
 		]
 		loadSupplyList=[]
 		for supplyName in supplyList:
-			supply=warmer.Supply(supplyName)
+			supply=supplies.Supply(supplyName)
 			loadSupplyList.append(supply)
 
+		for size in ["0", "1", "00"]:
+			laryngoscope=supplies.Laryngoscope(size)
+			loadSupplyList.append(laryngoscope)
+			
+		for size in ["2.5", "3", "3.5", "4"]:
+			ETT=supplies.ETT(size)
+			loadSupplyList.append(ETT)
+		
+		for maskType in ["infant", "preemie"]:
+			mask=supplies.BagMask(maskType)
+			loadSupplyList.append(mask)
 
 # temperature (turned on), suction, bag/mask, oxygen flow, baby timer
 # supplies - ETT (sizes), masks, pulse ox, laryngoscope, hat, blankets, bulb suction, deep suction/meconium aspirator, preemie supplies
-		self.warmer=warmer.Warmer(loadSupplyList)
+		self.warmer=warmer.Warmer()
+		self.supplyMGR=supplies.SupplyManager(loadSupplyList)
 
-		self.babyUpdate=baby_update.PreemiePPV(self.baby, self.warmer)
+		self.babyUpdate=baby_update.PreemiePPV(self.baby, self.warmer, self.supplyMGR)
 		self.babyUpdate.loadData()
 
-		self.taskMGR=tasks.TaskManager(self.warmer, self.baby, self)
+		self.taskMGR=tasks.TaskManager(self.supplyMGR, self.baby, self)
 		self.taskMGR.loadTasks()
 
 	def executeCmd(self, cmdName, *args):
-		cmdDict=merge_dicts(self.baby.cmdDict, self.mom.cmdDict, self.staff.cmdDict, self.warmer.cmdDict, self.taskMGR.cmdDict)
+		cmdDict=merge_dicts(self.baby.cmdDict, self.mom.cmdDict, self.staff.cmdDict, self.warmer.cmdDict, self.supplies.cmdDict, self.taskMGR.cmdDict)
 		if cmdName=="l":
 			for cmd in cmdDict.keys():
 				print(cmd)

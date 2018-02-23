@@ -45,9 +45,3 @@ class Baby(JSONClass):
 	def getVitals(self):
 		for key in self.vitals.keys():
 			print(key+": "+str(self.vitals[key]))
-
-
-class Mom(JSONClass):
-	def __init__(self, **kwargs):
-		super().__init__()
-		self.data=kwargs

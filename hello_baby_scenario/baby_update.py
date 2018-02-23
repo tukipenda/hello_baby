@@ -3,9 +3,10 @@ from baby import *
 #need to write tests for all of these methods!!!
 
 class BabyUpdate:
-	def __init__(self, baby, warmer):
+	def __init__(self, baby, warmer, supplyMGR):
 		self.baby=baby
 		self.warmer=warmer
+		self.supplyMGR=supplyMGR
 		self.activeTasks=[]
 	
 	def loadData(self, vitals, PE):
@@ -102,8 +103,8 @@ PEdict={'apgar':initAPGAR, 'resp':initResp, 'cardiac':initCardiac, 'abd':initAbd
 
 
 class PreemiePPV(BabyUpdate):
-	def __init__(self, baby, warmer):
-		super().__init__(baby, warmer)
+	def __init__(self, baby, warmer, supplyMGR):
+		super().__init__(baby, warmer, supplyMGR)
 	
 	def loadData(self, ):
 		super().loadData(initVitals, PEdict)
