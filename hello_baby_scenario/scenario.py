@@ -77,15 +77,15 @@ class Scenario(JSONClass):
             ETT=supplies.ETT(size)
             loadSupplyList["ETT"].append(ETT)
 
-        for maskType in ["infant", "preemie"]:
-            mask=supplies.BagMask(maskType)
+        for maskType in ["Infant", "Preemie"]:
+            mask=supplies.Mask(maskType)
             loadSupplyList["mask"].append(mask)
 
 # temperature (turned on), suction, bag/mask, oxygen flow, baby timer
 # supplies - ETT (sizes), masks, pulse ox, laryngoscope, hat, blankets, bulb suction, deep suction/meconium aspirator, preemie supplies
         self.supplyMGR=supplies.SupplyManager(loadSupplyList)
-        self.supplyMGR.fetchSupply("mask", maskType="infant")
-        self.supplyMGR.fetchSupply("mask", maskType="preemie")
+        self.supplyMGR.fetchSupply("mask", "Infant")
+        self.supplyMGR.fetchSupply("mask", "Preemie")
 
         self.warmer=warmer.Warmer()
 
