@@ -29,6 +29,10 @@ class Scenario(JSONClass):
         self.resusComplete=False
         self.babyUpdate=None
         self.babyTimer=BabyTimer()
+    
+    def printM(self, model_name):
+        model=getattr(self, model_name)
+        print(model.toJSON())
 
     def loadData(self):
         # Initialize a scenario
