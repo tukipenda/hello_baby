@@ -72,19 +72,19 @@ class Laryngoscope(Supply):
 class SupplyManager(JSONClass):
     def __init__(self, supplies):
         self.supplies=supplies
-        self.availableSupplies=[]
+        self.availableSupplies={}
 
         #supplies that have been used for baby
         self.activeSupplies=[]
 
-        self.cmdDict={"printSupplyList":(lambda :print([str(supply) for supply in self.supplies])),
-        "printAvailableSupplies":(lambda :print([str(supply) for supply in self.availableSupplies]))}
+        self.cmdDict={"printSupplyList":(lambda :print([str(supply) for supply in self.supplies.values()])),
+        "printAvailableSupplies":(lambda :print([str(supply) for supply in self.availableSupplies.values()]))}
 
 
     def fetchSupply(self, name, **kwargs):
         supply=self.getSupply(name, **kwargs)
         if supply:
-            if not supply in self.availableSupplies:
+            if not supply in self.availableSupplies.values():
                 self.availableSupplies.append(supply)
                 supply.getSupply()
         else:
@@ -118,6 +118,6 @@ class SupplyManager(JSONClass):
     def getMasks(self):
         toReturn=[]
         for supply in self.supplies:
-            if supply.name="mask":
+            if supply.name=="mask":
                 toReturn.append(supply)
         return toReturn
