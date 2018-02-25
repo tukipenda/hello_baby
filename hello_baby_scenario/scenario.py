@@ -72,26 +72,30 @@ class Scenario(JSONClass):
         for size in ["0", "1", "00"]:
             laryngoscope=supplies.Laryngoscope(size)
             loadSupplyList["laryngoscope"].append(laryngoscope)
-            
+
         for size in ["2.5", "3", "3.5", "4"]:
             ETT=supplies.ETT(size)
             loadSupplyList["ETT"].append(ETT)
-        
+
         for maskType in ["infant", "preemie"]:
             mask=supplies.BagMask(maskType)
             loadSupplyList["mask"].append(mask)
 
 # temperature (turned on), suction, bag/mask, oxygen flow, baby timer
 # supplies - ETT (sizes), masks, pulse ox, laryngoscope, hat, blankets, bulb suction, deep suction/meconium aspirator, preemie supplies
-        self.warmer=warmer.Warmer()
         self.supplyMGR=supplies.SupplyManager(loadSupplyList)
+        self.supplyMGR.fetchSupply("mask", maskType="infant")
+        self.supplyMGR.fetchSupply("mask", maskType="preemie")
+
+        self.warmer=warmer.Warmer()
+
 
         self.babyUpdate=baby_update.PreemiePPV(self.baby, self.warmer, self.supplyMGR)
         self.babyUpdate.loadData()
 
         self.taskMGR=tasks.TaskManager(self.supplyMGR, self.baby, self)
         self.taskMGR.loadTasks()
-        
+
         self.cmdDict=merge_dicts(self.baby.cmdDict, self.staff.cmdDict, self.warmer.cmdDict, self.supplyMGR.cmdDict, self.taskMGR.cmdDict)
 
 
