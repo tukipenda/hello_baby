@@ -64,22 +64,22 @@ class Scenario(JSONClass):
             "flush",
             "UVC"
         ]
-        loadSupplyList=[]
+        loadSupplyList={"laryngoscope":[], "ETT":[], "mask":[]}
         for supplyName in supplyList:
             supply=supplies.Supply(supplyName)
-            loadSupplyList.append(supply)
+            loadSupplyList[supplyName]=supply
 
         for size in ["0", "1", "00"]:
             laryngoscope=supplies.Laryngoscope(size)
-            loadSupplyList.append(laryngoscope)
+            loadSupplyList["laryngoscope"].append(laryngoscope)
             
         for size in ["2.5", "3", "3.5", "4"]:
             ETT=supplies.ETT(size)
-            loadSupplyList.append(ETT)
+            loadSupplyList["ETT"].append(ETT)
         
         for maskType in ["infant", "preemie"]:
             mask=supplies.BagMask(maskType)
-            loadSupplyList.append(mask)
+            loadSupplyList["mask"].append(mask)
 
 # temperature (turned on), suction, bag/mask, oxygen flow, baby timer
 # supplies - ETT (sizes), masks, pulse ox, laryngoscope, hat, blankets, bulb suction, deep suction/meconium aspirator, preemie supplies

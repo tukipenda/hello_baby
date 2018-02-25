@@ -19,7 +19,15 @@ class Supply(JSONClass):
 
     def __str__(self):
         return self.name
-
+    
+    def __eq__(self, other):
+        if isinstance(self, other.__class__):
+            return self.__dict__ == other.__dict__
+        return False
+        
+    def __ne__(self, other):
+        return not self.__eq__(other)
+        
 #need to adjust this class so that you have to fetch the maskType at the beginning
 class BagMask(Supply):
     def __init__(self, masktype):
@@ -75,7 +83,7 @@ class SupplyManager(JSONClass):
         self.availableSupplies={}
 
         #supplies that have been used for baby
-        self.activeSupplies=[]
+        self.activeSupplies={}
 
         self.cmdDict={"printSupplyList":(lambda :print([str(supply) for supply in self.supplies.values()])),
         "printAvailableSupplies":(lambda :print([str(supply) for supply in self.availableSupplies.values()]))}
@@ -84,40 +92,46 @@ class SupplyManager(JSONClass):
     def fetchSupply(self, name, **kwargs):
         supply=self.getSupply(name, **kwargs)
         if supply:
-            if not supply in self.availableSupplies.values():
-                self.availableSupplies.append(supply)
-                supply.getSupply()
-        else:
-            print("error")
+            supply.available=True
+            self.addSupplyToList(self.availableSupplies, supply)
 
     def placeSupply(self, name, **kwargs):
         supply=self.getSupply(name, **kwargs)
-        if supply:
-            if (supply in self.availableSupplies) and (not supply in self.activeSupplies):
-                self.activeSupplies.append(supply)
-                supply.placeSupply()
+        if (supply and supply.available):
+            supply.using=True
+            self.addSupplyToList(self.activeSupplies, supply)
         else:
-            print("error")
+            print("error") #god this needs to be better
 
 
     #this method sucks
     def getSupply(self, name, **kwargs):
-        toReturn=None
-        for supply in self.supplies:
-            gotSupply=True
-            if supply.name!=name:
-                gotSupply=False
-            for key,value in kwargs.items():
-                if hasattr(supply, key):
-                    if getattr(supply, key)!=value:
-                        gotSupply=False
-            if gotSupply:
-                toReturn=supply
-        return toReturn
-
-    def getMasks(self):
-        toReturn=[]
-        for supply in self.supplies:
-            if supply.name=="mask":
-                toReturn.append(supply)
-        return toReturn
+        return self.getSupplyFromList(self.supplies, name, **kwargs)
+   
+    def getSupplyFromList(self, searchList, name, **kwargs):
+        if name in searchList.keys():
+            toCheck=self.supplies[name]
+            if not isinstance(toCheck, list):
+                toCheck=[toCheck]
+            for supply in toCheck:
+                gotSupply=True
+                for key,value in kwargs.items():
+                    if hasattr(supply, key):
+                        if getattr(supply, key)!=value:
+                            gotSupply=False
+                if gotSupply:
+                    return supply
+        return None
+   
+    def addSupplyToList(self, addList, supply):
+        if not supply.name in addList:
+            addList[supply.name]=supply
+        else:
+            toCheck=addList[supply.name]
+            if not isinstance(toCheck, list):
+                toCheck=[toCheck]
+            for checkSupply in toCheck:
+                if checkSupply==supply:
+                    return # don't add the supply as its already there
+            toCheck.append(supply)
+            addList[supply.name]=toCheck
