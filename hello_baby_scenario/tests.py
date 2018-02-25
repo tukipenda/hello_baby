@@ -10,8 +10,11 @@ class Testing:
  
   def runTests(self):
     self.testPlaceSupply()
+    self.testUpdateTemp()
  
   # test updateTemp
+  def testUpdateTemp(self):
+    pass
   
   # test placeSupply
   def testPlaceSupply(self):
@@ -21,4 +24,4 @@ class Testing:
     fetch.complete("pulse_ox")
     place.complete("pulse_ox")
     place.complete("ETT")
-    print(self.scenario.baby.supplies)
+    self.scenario.cmdDict['printAvailableSupplies']()

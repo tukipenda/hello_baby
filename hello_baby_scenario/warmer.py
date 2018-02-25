@@ -13,8 +13,7 @@ class Warmer(JSONClass):
 		self.flow=0
 		self.FIO2=100
 		self.tempMode="manual"
-		self.cmdDict={"setO2":self.setOxygenString, "setSuction":self.setSuction, "setTemp":self.setTempMode, "turnOn":self.turnOn, "printWarmer":self.printWarmerStatus, "printSupplyList":(lambda :print([supply.name for supply in self.supplies]))
-		}
+		self.cmdDict={"setO2":self.setOxygenString, "setSuction":self.setSuction, "setTemp":self.setTempMode, "turnOn":self.turnOn, "printWarmer":self.printWarmerStatus}
 
 	def turnOn(self):
 		self.turnedOn=True

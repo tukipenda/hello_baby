@@ -11,8 +11,7 @@ t.runTests()
 babyScenario=Scenario()
 babyScenario.loadData()
 
-"""
+
 babyScenario.prepWarmer()
 babyScenario.resuscitation()
 babyScenario.scoring()
-"""

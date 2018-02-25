@@ -62,7 +62,7 @@ class Scenario(JSONClass):
 			"cord_clamp",
 			"scalpel",
 			"flush",
-			"UVC_kit"
+			"UVC"
 		]
 		loadSupplyList=[]
 		for supplyName in supplyList:
@@ -91,19 +91,22 @@ class Scenario(JSONClass):
 
 		self.taskMGR=tasks.TaskManager(self.supplyMGR, self.baby, self)
 		self.taskMGR.loadTasks()
+		
+		self.cmdDict=merge_dicts(self.baby.cmdDict, self.staff.cmdDict, self.warmer.cmdDict, self.supplyMGR.cmdDict, self.taskMGR.cmdDict)
 
-	def executeCmd(self, cmdName, *args):
-		cmdDict=merge_dicts(self.baby.cmdDict, self.mom.cmdDict, self.staff.cmdDict, self.warmer.cmdDict, self.supplies.cmdDict, self.taskMGR.cmdDict)
+
+	def executeCmd(self, *args, **kwargs):
+		cmdName=args[0]
+		args=args[1:]
 		if cmdName=="l":
-			for cmd in cmdDict.keys():
+			for cmd in self.cmdDict.keys():
 				print(cmd)
 		# should put in a try/except, but for now this is useful for debugging
-		if cmdName in cmdDict.keys():
-			print(*args)
-			cmdDict[cmdName](*args)
+		if cmdName in self.cmdDict.keys():
+			self.cmdDict[cmdName](*args)
 		else:
 			if cmdName in self.taskMGR.taskList.keys():
-				self.taskMGR.taskList[cmdName].complete(*args)
+				self.taskMGR.taskList[cmdName].complete(*args, **kwargs)
 
 
 	def prepWarmer(self):
@@ -135,7 +138,15 @@ class Scenario(JSONClass):
 				condition=True
 			else:
 				cmds=cmd.split(" ")
-				self.executeCmd(*cmds)
+				args=[]
+				kwargs={}
+				for cmd in cmds:
+					if not "=" in cmd:
+						args.append(cmd)
+					else:
+						cmd=cmd.split("=")
+						kwargs[cmd[0]]=cmd[1]
+				self.executeCmd(*args, **kwargs)
 		result=False
 		return result
 

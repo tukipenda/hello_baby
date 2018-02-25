@@ -45,3 +45,9 @@ class Baby(JSONClass):
 	def getVitals(self):
 		for key in self.vitals.keys():
 			print(key+": "+str(self.vitals[key]))
+	
+	def has(supplyName):
+		for supply in self.supplies:
+			if suppy.name==supplyName:
+				return True
+		return False

@@ -39,23 +39,32 @@ class Task(JSONClass):
 
 
 class FetchSupply(Task):
-	def __init__(self, taskName, baby, supplyMGR, duration):
-		super().__init__(taskName, baby, supplyMGR, duration)
+	def __init__(self, baby, supplyMGR, duration):
+		super().__init__("fetch", baby, supplyMGR, duration)
 		
-	def complete(self, supplyName):
-		self.supplyMGR.fetchSupply(supplyName)
+	def complete(self, supplyName, **kwargs):
+		self.supplyMGR.fetchSupply(supplyName, **kwargs)
 	
 
 class PlaceSupply(Task):
-	def __init__(self, taskName, baby, supplyMGR, duration):
-		super().__init__(taskName, baby, supplyMGR, duration)
+	def __init__(self, baby, supplyMGR, duration):
+		super().__init__("place", baby, supplyMGR, duration)
 	
-	def complete(self, supplyName):
-		supply=self.supplyMGR.getSupply(supplyName)
+	def complete(self, supplyName, **kwargs):
+		supply=self.supplyMGR.getSupply(supplyName, **kwargs)
 		if supply:
 			supply.using=True
-			self.baby.supplies[supplyName]=supply
+			self.supplyMGR.placeSupply(supplyName, **kwargs)
 
+#need to make this more accurate
+class PlaceUVC(PlaceSupply):
+	def __init__(self, baby, supplyMGR, duration):
+		super().__init__(baby, supplyMGR, duration)
+	
+	def complete(self, **kwargs):
+		super().complete("UVC", **kwargs)
+			
+			
 class InterveneTask(Task):
 	def __init__(self, taskName, baby, supplyMGR, duration):
 		super().__init__(taskName, baby, supplyMGR, duration)
@@ -69,38 +78,54 @@ class InterveneTask(Task):
 		scenario.babyUpdate.update(self.taskName, self.isSuccessful, time)
 		
 class Intubate(InterveneTask):
-	pass
+	def __init__(self, baby, supplyMGR, duration):
+		super().__init__("intubate", baby, supplyMGR, duration)	
 
-class PlaceUVC(InterveneTask):
-	pass
-
-class GivePPV(InterveneTask):
-	pass
-
+#MR SOPA adjustments - change pressures elsewhere, suction is a different one, as is airway adjunct
+# also need to updated baby based on efficacy of PPV.
+class GivePPV(Task):
+	def __init__(self, baby, supplyMGR, duration):
+		super().__init__("givePPV", baby, supplyMGR, duration)
+		
+		#self.airLeak=False - should be a property of the mask instead
+	
+	def startPPV(self, startTime, staffmember, *args):
+		pass
+	
+	def stopPPV(self, endTime):
+		pass
+	
+	def adjustMask(self):
+		pass
+	
+	def openMouth(self):
+		pass
+	
+	def repositionBaby(self):
+		pass
+	
 class GiveMed(InterveneTask):
-	pass
+	def __init__(self, baby, supplyMGR, duration):
+		super().__init__("giveMed", baby, supplyMGR, duration)
 
 class Suction(InterveneTask):
-	pass
+	def __init__(self, baby, supplyMGR, duration):
+		super().__init__("suction", baby, supplyMGR, duration)
 
 class CPR(InterveneTask):
-	pass
+	def __init__(self, baby, supplyMGR, duration):
+		super().__init__("cpr", baby, supplyMGR, duration)
+	
+	def startCPR(self):
+		pass
+	
+	def stopCPR(self):
+		pass
 
 
 #other interventions - adjust mask, increase PPV, open mouth, suction (location of suctioning, type)
 #warm, dry, stim, place UVC, give EPI (dose, route), give NS bolus, give below_cords
-#ask OBs for delayed cord clamping
-
-allTasks=[
-	["dry", 10],
-	["intubate", 15], #needs parameters
-	["givePPV", 5] #needs parameters, startTime/endTime
-]
-
-taskData={}
-for task in allTasks:
-	taskData[task[0]]={"name":task[0], "duration":task[1]}
-	
+#ask OBs for delayed cord clamping	
 
 class TaskManager(JSONClass):
 	def __init__(self, supplyMGR, baby, scenario):
@@ -110,7 +135,6 @@ class TaskManager(JSONClass):
 		self.tasks=[]
 		self.cmdDict={'listTasks':self.listTasks}
 		self.scenario=scenario
-		self.tasksToLoad=taskData
 	
 	def doTask(self, taskName, staffmember, startTime):
 		task=self.getTaskByName(taskName)
@@ -123,11 +147,16 @@ class TaskManager(JSONClass):
 			return None
 	
 	def loadTasks(self):
-		self.taskList["fetch"]=FetchSupply("fetch", self.baby, self.supplyMGR, 5)
-		self.taskList["place"]=PlaceSupply("place", self.baby, self.supplyMGR, 5)
-		for task in self.tasksToLoad.keys():
-			taskData=self.tasksToLoad[task]
-			self.taskList[task]=InterveneTask(taskData['name'], self.baby, self.supplyMGR, taskData['duration'])
+		self.taskList["fetch"]=FetchSupply(self.baby, self.supplyMGR, 5)
+		self.taskList["place"]=PlaceSupply(self.baby, self.supplyMGR, 5)
+		self.taskList["placeUVC"]=PlaceUVC(self.baby, self.supplyMGR, 15)
+		self.taskList["dry"]=InterveneTask("dry", self.baby, self.supplyMGR, 5)
+		self.taskList["stim"]=InterveneTask("stim", self.baby, self.supplyMGR, 5)
+		self.taskList["giveMed"]=GiveMed(self.baby, self.supplyMGR, 15)
+		self.taskList["intubate"]=Intubate(self.baby, self.supplyMGR, 15)
+		self.taskList["suction"]=Suction(self.baby, self.supplyMGR, 5)
+		self.taskList["givePPV"]=GivePPV(self.baby, self.supplyMGR, 5)
+		self.taskList["cpr"]=CPR(self.baby, self.supplyMGR, 5)
 		
 	def getTaskByName(self, taskName):
 		if (taskName, task in self.taskList.items()):

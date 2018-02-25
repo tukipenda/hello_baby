@@ -40,10 +40,16 @@ class BabyUpdate:
 				if temp>33:
 					self.baby.vitals['Temp']=round(temp-0.05, 2)
 			else:
-				if (self.warmer.tempMode=="manual" or temp<37):
-					self.baby.vitals['Temp']=round(temp+0.05, 2)
-				if (self.warmer.tempMode=="baby" and temp>37):
-					self.baby.vitals['Temp']=round(temp-0.05, 2)
+				if ((self.baby.PE['skin']['dry?']) and (self.baby.has("hat"))):
+					if (self.warmer.tempMode=="manual" or temp<37):
+						self.baby.vitals['Temp']=round(temp+0.05, 2)
+					if (self.warmer.tempMode=="baby" and temp>37):
+						self.baby.vitals['Temp']=round(temp-0.05, 2)
+				else:
+					if temp>34:
+						self.baby.vitals['Temp']=round(temp-0.05, 2)
+					
+					
 				
 
 		def updateO2sat():
