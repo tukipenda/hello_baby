@@ -115,8 +115,8 @@ class SupplyManager(JSONClass):
 				toReturn=supply
 		return toReturn
 
-    def getMasks(self):
-        toReturn=[]
+	def getMasks(self):
+		toReturn=[]
         for supply in self.supplies:
             if supply.name="mask":
                 toReturn.append(supply)
