@@ -8,10 +8,10 @@ t.runTests()
 
 
 #initializing scenario
-babyScenario=Scenario()
-babyScenario.loadData()
+b=Scenario()
+b.loadData()
 
 
-babyScenario.prepWarmer()
-babyScenario.resuscitation()
-babyScenario.scoring()
+b.prepWarmer()
+b.resuscitation()
+b.scoring()

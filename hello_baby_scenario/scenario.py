@@ -24,15 +24,12 @@ class Scenario(JSONClass):
         self.supplyMGR=None
         self.scenario_data=None
         self.taskMGR=None
+        self.getCode=threading.Thread(name='getCode', target=self.getCode)
         self.update=threading.Thread(name='update', target=self.updateBabyStatus)
         self.prepComplete=False
         self.resusComplete=False
         self.babyUpdate=None
         self.babyTimer=BabyTimer()
-    
-    def printM(self, model_name):
-        model=getattr(self, model_name)
-        print(model.toJSON())
 
     def loadData(self):
         # Initialize a scenario
@@ -104,6 +101,7 @@ class Scenario(JSONClass):
 
     def resuscitation(self):
         self.baby.deliver()
+        self.getCode.start()
         self.update.start()
         self.babyTimer.startTimer()
         print("Resuscitate the baby")
@@ -112,7 +110,19 @@ class Scenario(JSONClass):
         while(not self.resusComplete):
             time.sleep(5)
             self.taskMGR.completeTasks(self.babyTimer.getElapsedTime())
+     
+    def getCode(self):
+        self.run_loop(self.resusComplete)
+    
+    def run_loop(self, condition):
+      while(not condition):
+          cmd=input(">>> ")
+          if cmd=="quit()":
+            condition=True
+          try:
+            exec(cmd)
+          except Exception as e: print(e)
+            
 
     def scoring(self):
         pass
-
