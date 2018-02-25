@@ -16,38 +16,38 @@ from jsonclass import JSONClass
 #scenarios - term with MAS, very preterm with RDS, term with TTN
 
 class Baby(JSONClass):
-	def __init__(self, ga, nc):
-		super().__init__()
-		self.ga=ga
-		self.nc=nc
-		self.vitals=None
-		self.PE=None
-		self.delivered=False
-		self.supplies={}
-		self.cmdDict={'getPE':self.getPE, 'getVitals':self.getVitals}
+    def __init__(self, ga, nc):
+        super().__init__()
+        self.ga=ga
+        self.nc=nc
+        self.vitals=None
+        self.PE=None
+        self.delivered=False
+        self.supplies={}
+        self.cmdDict={'getPE':self.getPE, 'getVitals':self.getVitals}
 
-	def initialize(self, vs, PE):
-		self.vitals=vs
-		self.PE=PE
+    def initialize(self, vs, PE):
+        self.vitals=vs
+        self.PE=PE
 
-	def deliver(self):
-		self.delivered=True
+    def deliver(self):
+        self.delivered=True
 
-	def getPE(self):
-		toPrint=""
-		for key in self.PE.keys():
-			toPrint+=key+": "
-			for k in self.PE[key].keys():
-				toPrint+=k+"-"+str(self.PE[key][k])+" "
-			toPrint+=("\n\n")
-		print(toPrint)
+    def getPE(self):
+        toPrint=""
+        for key in self.PE.keys():
+            toPrint+=key+": "
+            for k in self.PE[key].keys():
+                toPrint+=k+"-"+str(self.PE[key][k])+" "
+            toPrint+=("\n\n")
+        print(toPrint)
 
-	def getVitals(self):
-		for key in self.vitals.keys():
-			print(key+": "+str(self.vitals[key]))
-	
-	def has(supplyName):
-		for supply in self.supplies:
-			if suppy.name==supplyName:
-				return True
-		return False
+    def getVitals(self):
+        for key in self.vitals.keys():
+            print(key+": "+str(self.vitals[key]))
+    
+    def has(supplyName):
+        for supply in self.supplies:
+            if suppy.name==supplyName:
+                return True
+        return False
