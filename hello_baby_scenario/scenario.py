@@ -24,7 +24,6 @@ class Scenario(JSONClass):
         self.supplyMGR=None
         self.scenario_data=None
         self.taskMGR=None
-        self.getCMDs=threading.Thread(name='getCMDs', target=self.getCMDs)
         self.update=threading.Thread(name='update', target=self.updateBabyStatus)
         self.prepComplete=False
         self.resusComplete=False
@@ -96,30 +95,11 @@ class Scenario(JSONClass):
         self.taskMGR=tasks.TaskManager(self.supplyMGR, self.baby, self)
         self.taskMGR.loadTasks()
 
-        self.cmdDict=merge_dicts(self.baby.cmdDict, self.staff.cmdDict, self.warmer.cmdDict, self.supplyMGR.cmdDict, self.taskMGR.cmdDict)
-
-
-    def executeCmd(self, *args, **kwargs):
-        cmdName=args[0]
-        args=args[1:]
-        if cmdName=="l":
-            for cmd in self.cmdDict.keys():
-                print(cmd)
-        # should put in a try/except, but for now this is useful for debugging
-        if cmdName in self.cmdDict.keys():
-            self.cmdDict[cmdName](*args)
-        else:
-            if cmdName in self.taskMGR.taskList.keys():
-                self.taskMGR.taskList[cmdName].complete(*args, **kwargs)
-
-
     def prepWarmer(self):
         print("Prep the Warmer")
-        self.run_loop(self.prepComplete)
 
     def resuscitation(self):
         self.baby.deliver()
-        self.getCMDs.start()
         self.update.start()
         self.babyTimer.startTimer()
         print("Resuscitate the baby")
@@ -129,28 +109,6 @@ class Scenario(JSONClass):
             time.sleep(5)
             self.taskMGR.completeTasks(self.babyTimer.getElapsedTime())
 
-    def getCMDs(self):
-        self.run_loop(self.resusComplete)
-
     def scoring(self):
         pass
-
-    def run_loop(self, condition):
-        while(not condition):
-            cmd=input("Enter command: ")
-            if(cmd=="q"):
-                condition=True
-            else:
-                cmds=cmd.split(" ")
-                args=[]
-                kwargs={}
-                for cmd in cmds:
-                    if not "=" in cmd:
-                        args.append(cmd)
-                    else:
-                        cmd=cmd.split("=")
-                        kwargs[cmd[0]]=cmd[1]
-                self.executeCmd(*args, **kwargs)
-        result=False
-        return result
 

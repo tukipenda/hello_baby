@@ -85,9 +85,6 @@ class SupplyManager(JSONClass):
         #supplies that have been used for baby
         self.activeSupplies={}
 
-        self.cmdDict={"printSupplyList":(lambda :print([str(supply) for supply in self.supplies.values()])),
-        "printAvailableSupplies":(lambda :print([str(supply) for supply in self.availableSupplies.values()]))}
-
 
     def fetchSupply(self, name, **kwargs):
         supply=self.getSupply(name, **kwargs)

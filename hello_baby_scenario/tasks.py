@@ -133,7 +133,6 @@ class TaskManager(JSONClass):
         self.supplyMGR=supplyMGR
         self.taskList={}
         self.tasks=[]
-        self.cmdDict={'listTasks':self.listTasks}
         self.scenario=scenario
     
     def doTask(self, taskName, staffmember, startTime):

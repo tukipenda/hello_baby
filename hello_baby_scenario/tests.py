@@ -24,4 +24,3 @@ class Testing:
     fetch.complete("pulse_ox")
     place.complete("pulse_ox")
     place.complete("ETT")
-    self.scenario.cmdDict['printAvailableSupplies']()

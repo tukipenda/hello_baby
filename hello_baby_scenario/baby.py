@@ -24,7 +24,6 @@ class Baby(JSONClass):
         self.PE=None
         self.delivered=False
         self.supplies={}
-        self.cmdDict={'getPE':self.getPE, 'getVitals':self.getVitals}
 
     def initialize(self, vs, PE):
         self.vitals=vs
@@ -32,19 +31,6 @@ class Baby(JSONClass):
 
     def deliver(self):
         self.delivered=True
-
-    def getPE(self):
-        toPrint=""
-        for key in self.PE.keys():
-            toPrint+=key+": "
-            for k in self.PE[key].keys():
-                toPrint+=k+"-"+str(self.PE[key][k])+" "
-            toPrint+=("\n\n")
-        print(toPrint)
-
-    def getVitals(self):
-        for key in self.vitals.keys():
-            print(key+": "+str(self.vitals[key]))
     
     def has(supplyName):
         for supply in self.supplies:

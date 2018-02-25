@@ -58,7 +58,6 @@ class Staff(JSONClass):
     def __init__(self, people):
         super().__init__()
         self.staff=people
-        self.cmdDict={}
 
     def toJSON(self):
         toReturn=[]
