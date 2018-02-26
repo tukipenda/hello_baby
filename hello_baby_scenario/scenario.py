@@ -24,6 +24,8 @@ class Scenario(JSONClass):
         self.supplyMGR=None
         self.scenario_data=None
         self.taskMGR=None
+
+        #move to another place
         self.getCode=threading.Thread(name='getCode', target=self.getCode)
         self.update=threading.Thread(name='update', target=self.updateBabyStatus)
         self.prepComplete=False
@@ -31,70 +33,21 @@ class Scenario(JSONClass):
         self.babyUpdate=None
         self.babyTimer=BabyTimer()
 
-    def loadData(self):
+    def loadData(self, loadSupplyList, baby):
         # Initialize a scenario
-        self.scenario_data={'scenario_text':"You are called by the OB team for a stat C/S. Mom is 25 years old, and gestational age is 36 weeks."}
-        self.baby=Baby(33, [])
-
-        pL="Prenatal labs: VZVI, RI, HIV negative, Hep B negative, RPRNR, GC/Chlamydia negative"
-        hsv="No history of HSV and has no active lesions."
-        gbs="GBS+.  She was febrile to 38.1, and received ampicillin 2 hours before delivery."
-        rom="ROM occurred 16 hours ago."
-        gp="G1PO"
-        self.mom=Mom(age=25, prenatalLabs=pL, HSV=hsv, GBS=gbs, ROM=rom, GP=gp)
-
-        nurse=staff.RN("Juan")
-        respiratory=staff.RT("Sheri")
-        self.staff=staff.Staff([nurse, respiratory])
-
-        supplyList=[
-            "pulse_ox",
-            "hat",
-            "transwarmer",
-            "plastic_bag",
-            "temp_probe",
-            "blankets",
-            "bulb_suction",
-            "meconium_aspirator",
-            "stethoscope",
-            "epinephrine",
-            "normal_saline_bag",
-            "cord_clamp",
-            "scalpel",
-            "flush",
-            "UVC"
-        ]
-        loadSupplyList={"laryngoscope":[], "ETT":[], "mask":[]}
-        for supplyName in supplyList:
-            supply=supplies.Supply(supplyName)
-            loadSupplyList[supplyName]=supply
-
-        for size in ["0", "1", "00"]:
-            laryngoscope=supplies.Laryngoscope(size)
-            loadSupplyList["laryngoscope"].append(laryngoscope)
-
-        for size in ["2.5", "3", "3.5", "4"]:
-            ETT=supplies.ETT(size)
-            loadSupplyList["ETT"].append(ETT)
-
-        for maskType in ["Infant", "Preemie"]:
-            mask=supplies.Mask(maskType)
-            loadSupplyList["mask"].append(mask)
-
-# temperature (turned on), suction, bag/mask, oxygen flow, baby timer
-# supplies - ETT (sizes), masks, pulse ox, laryngoscope, hat, blankets, bulb suction, deep suction/meconium aspirator, preemie supplies
+        self.baby=baby
         self.supplyMGR=supplies.SupplyManager(loadSupplyList)
         self.supplyMGR.fetchSupply("mask", "Infant")
         self.supplyMGR.fetchSupply("mask", "Preemie")
-
         self.warmer=warmer.Warmer()
-
-
-        self.babyUpdate=baby_update.PreemiePPV(self.baby, self.warmer, self.supplyMGR)
-        self.babyUpdate.loadData()
-
         self.taskMGR=tasks.TaskManager(self.supplyMGR, self.baby, self)
         self.taskMGR.loadTasks()
+        self.loadBabyUpdate()
+
+#this method should not be called by itself
+    def loadBabyUpdate(self):
+        self.babyUpdate=baby_update.BabyUpdate(self.baby, self.warmer, self.supplyMGR)
+        self.babyUpdate.loadData()
 
     def prepWarmer(self):
         print("Prep the Warmer")
@@ -110,10 +63,10 @@ class Scenario(JSONClass):
         while(not self.resusComplete):
             time.sleep(5)
             self.taskMGR.completeTasks(self.babyTimer.getElapsedTime())
-     
+
     def getCode(self):
         self.run_loop(self.resusComplete)
-    
+
     def run_loop(self, condition):
       while(not condition):
           cmd=input(">>> ")
@@ -122,7 +75,7 @@ class Scenario(JSONClass):
           try:
             exec(cmd)
           except Exception as e: print(e)
-            
+
 
     def scoring(self):
         pass

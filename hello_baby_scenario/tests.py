@@ -1,7 +1,11 @@
-from scenario import Scenario
+from scenario import *
+from preemie_ppv import *
 
-testing=Scenario()
+testing=PreemiePPVScenario()
+
+#initializing scenario
 testing.loadData()
+testing.loadBabyUpdate()
 
 #test updateTemp
 class Testing:
