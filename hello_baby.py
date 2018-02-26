@@ -3,11 +3,12 @@ import json
 import sys
 sys.path.append("/home/tukipenda/mysite/hello_baby_scenario")
 from scenario import Scenario
+from preemie_ppv import *
 
 app = Flask(__name__, static_url_path='/static')
 
 #initializing scenario
-babyScenario=Scenario()
+babyScenario=PreemiePPVScenario()
 babyScenario.loadData()
 
 
