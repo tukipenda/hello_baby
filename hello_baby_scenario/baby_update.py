@@ -24,7 +24,7 @@ class BabyUpdate:
         self.updateSkin(*args)
 
 
-    def updateVitals(self, taskName, isSuccessful, time):
+    def updateVitals(self, *args):
         def updateHR():
             pass
         def updateRR():
@@ -60,29 +60,29 @@ class BabyUpdate:
         updateTemp()
         updateO2sat()
 
-    def updateApgar(self, taskName, isSuccessful, time):
+    def updateApgar(self, *args):
         pass
 
-    def updateResp(self, taskName, isSuccessful, time):
+    def updateResp(self, *args):
         pass
 
-    def updateCardiac(self, taskName, isSuccessful, time):
+    def updateCardiac(self, *args):
         pass
 
-    def updateSecretions(self, taskName, isSuccessful, time):
+    def updateSecretions(self, *args):
         pass
 
-    def updateNeuro(self, taskName, isSuccessful, time):
+    def updateNeuro(self, *args):
         pass
 
-    def updateSats(self, taskName, isSuccessful, time):
+    def updateSats(self, *args):
         pass
 
-    def updateSkin(self, taskName, isSuccessful, time):
+    def updateSkin(self, *args):
         if taskName=="dry":
             self.baby.PE['skin']['dry?']=True
 
-    def updateEKG(self, taskName, isSuccessful, time):
+    def updateEKG(self, *args):
         pass
 
 

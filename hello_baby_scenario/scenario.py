@@ -62,7 +62,7 @@ class Scenario(JSONClass):
     def updateBabyStatus(self):
         while(not self.resusComplete):
             time.sleep(5)
-            self.taskMGR.completeTasks(self.babyTimer.getElapsedTime())
+            self.babyUpdate.update()
 
     def getCode(self):
         self.run_loop(self.resusComplete)
@@ -75,7 +75,3 @@ class Scenario(JSONClass):
           try:
             exec(cmd)
           except Exception as e: print(e)
-
-
-    def scoring(self):
-        pass
