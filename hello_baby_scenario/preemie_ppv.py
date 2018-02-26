@@ -37,7 +37,7 @@ class PreemiePPVScenario(Scenario):
         super().__init__()
 
     def loadData(self):
-        self.scenario_data={'scenario_text':"You are called by the OB team for a stat C/S. Mom is 25 years old, and gestational age is 36 weeks."}
+        self.scenario_data={'scenario_text':"You are called by the OB team for a stat C/S. Mom is 25 years old, and gestational age is 32 weeks."}
         pL="Prenatal labs: VZVI, RI, HIV negative, Hep B negative, RPRNR, GC/Chlamydia negative"
         hsv="No history of HSV and has no active lesions."
         gbs="GBS+.  She was febrile to 38.1, and received ampicillin 2 hours before delivery."
