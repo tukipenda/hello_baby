@@ -101,6 +101,15 @@ var app = new Vue({
                             console.log(error.message);
                         });
                   },
+                  doTask: function(taskName, parameter){
+                    let self=this
+                      axios.post("/doTask", {
+                        task_name:taskName,
+                        parameter:parameter,
+                      }).then(function (response) {
+                    alert(response.data);
+                  })
+                  },
                   toggleHeat: function(){
                       this.warmer.turnedOn=!this.warmer.turnedOn;
                       this.updateWarmer();

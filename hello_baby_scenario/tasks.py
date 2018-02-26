@@ -26,7 +26,7 @@ class Task(JSONClass):
         self.isStarted=None
         self.supplyMGR=supplyMGR
 
-    def doTask(self, startTime, staffmember):
+    def doTask(self, startTime):
         self.isStarted=True
         self.startTime=startTime
 
@@ -56,6 +56,18 @@ class PlaceSupply(Task):
             supply.using=True
             self.supplyMGR.placeSupply(supplyName, **kwargs)
 
+
+class UseMask(Task):
+    def __init__(self, baby, supplyMGR, duration):
+        super().__init__("usemask", baby, supplyMGR, duration)
+
+    def doTask(self, startTime, masktype):
+        self.supplyMGR.fetchSupply("mask", masktype)
+
+    def complete(self, supplyName, **kwargs):
+        pass
+
+
 #need to make this more accurate
 class PlaceUVC(PlaceSupply):
     def __init__(self, baby, supplyMGR, duration):
@@ -69,7 +81,7 @@ class InterveneTask(Task):
     def __init__(self, taskName, baby, supplyMGR, duration):
         super().__init__(taskName, baby, supplyMGR, duration)
 
-    def doTask(self, startTime, staffmember, *args):
+    def doTask(self, startTime, *args):
         super().doTask(self)
 
     def complete(self, time, scenario, *args):
@@ -89,7 +101,7 @@ class GivePPV(Task):
 
         #self.airLeak=False - should be a property of the mask instead
 
-    def startPPV(self, startTime, staffmember, *args):
+    def startPPV(self, startTime, *args):
         pass
 
     def stopPPV(self, endTime):
@@ -127,6 +139,7 @@ class CPR(InterveneTask):
 #warm, dry, stim, place UVC, give EPI (dose, route), give NS bolus, give below_cords
 #ask OBs for delayed cord clamping
 
+# need to add staff to this at some point
 class TaskManager(JSONClass):
     def __init__(self, supplyMGR, baby, scenario):
         self.baby=baby
@@ -135,10 +148,10 @@ class TaskManager(JSONClass):
         self.tasks=[]
         self.scenario=scenario
 
-    def doTask(self, taskName, staffmember, startTime):
+    def doTask(self, taskName, startTime, *args):
         task=self.getTaskByName(taskName)
         if task:
-            task.doTask(staffmember, startTime)
+            task.doTask(startTime, *args)
             self.tasks.append(task)
             return task
         else:
@@ -147,6 +160,7 @@ class TaskManager(JSONClass):
 
     def loadTasks(self):
         self.taskList["fetch"]=FetchSupply(self.baby, self.supplyMGR, 5)
+        self.taskList["use"]=FetchSupply(self.baby, self.supplyMGR, 5)
         self.taskList["place"]=PlaceSupply(self.baby, self.supplyMGR, 5)
         self.taskList["placeUVC"]=PlaceUVC(self.baby, self.supplyMGR, 15)
         self.taskList["dry"]=InterveneTask("dry", self.baby, self.supplyMGR, 5)

@@ -47,3 +47,11 @@ def saveData():
     model=getattr(babyScenario, model_name)
     model.setJSON(json.loads(jsonModel))
     return ""
+
+
+@app.route('/doTask', methods=["post"])
+def doTask():
+    task_name=request.get_json()['task_name']
+    parameter=request.get_json()['parameter']
+    babyScenario.taskMGR.doTask(task_name, 0, parameter)
+    return json.dumps(babyScenario.supplyMGR.toJSON())
