@@ -103,7 +103,7 @@ class GiveMed(InterveneTask):
         super().__init__("giveMed", baby, supplyMGR)
 
 class Suction(InterveneTask):
-    def __init__(self, baby, supplyMGR, duration):
+    def __init__(self, baby, supplyMGR):
         super().__init__("suction", baby, supplyMGR)
 
 class CPR(InterveneTask):

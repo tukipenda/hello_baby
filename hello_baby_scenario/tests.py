@@ -22,8 +22,4 @@ class Testing:
 
   # test placeSupply
     def testPlaceSupply(self):
-        mgr=self.scenario.taskMGR
-        fetch=mgr.taskList['fetch']
-        place=mgr.taskList['place']
-        fetch.complete("pulse_ox")
-        place.complete("pulse_ox")
+        pass

@@ -68,10 +68,45 @@ class Scenario(JSONClass):
         self.run_loop(self.resusComplete)
 
     def run_loop(self, condition):
-      while(not condition):
-          cmd=input(">>> ")
-          if cmd=="quit()":
-            condition=True
-          try:
-            exec(cmd)
-          except Exception as e: print(e)
+        while(not condition):
+            cmd=input(">>> ")
+            if cmd=="quit()":
+                condition=True
+                break
+            if cmd=="l":
+                print("pb, pv, pw, pt, ps")
+                break
+            if cmd[0]=="p":
+                # things to print - baby's status, warmer's status, time, supplies (and supply status), 
+                if cmd[1]=="b":
+                    pe=self.baby.PE
+                    for k,v in pe.items():
+                        print(k+": "+str(v)+"\n")
+                    break
+                if cmd[1]=="v":
+                    print(self.baby.vitals)
+                    break
+                if cmd[1]=="w":
+                    print(self.warmer.__dict__)
+                    break
+                if cmd[1]=="t":
+                    print(self.babytimer.getElapsedTime())
+                    break
+                if cmd[1]=="s":
+                    s=self.supplyMGR.supplies
+                    for k,v in s.items():
+                        if k in ["ETT", "laryngoscope", "mask"]:
+                            v=" ".join([str(k) for k in v])
+                        print(k+": "+str(v)+"\n")
+                    break
+            if cmd.startswith("run"):
+                cmds=cmd.split(" ")
+                cmds=cmds[1:]
+                try:
+                    self.taskMGR.doTask(*cmds)
+                except Exception as e: print(e)
+                break
+            else:
+                try:
+                    exec(cmd)
+                except Exception as e: print(e)
