@@ -23,7 +23,7 @@ class Supply(JSONClass):
     
     def __eq__(self, other):
         if isinstance(self, other.__class__):
-            return self.__dict__ == other.__dict__
+            return self.name == other.name
         return False
         
     def __ne__(self, other):
@@ -44,6 +44,11 @@ class Mask(Supply):
             self.PEEP=PEEP
         if POP:
             self.POP=POP
+            
+    def __eq__(self, other):
+        if isinstance(self, other.__class__):
+            return ((self.name == other.name) and (self.masktype==other.masktype))
+        return False
 
 class ETT(Supply):
     def __init__(self, size):
@@ -52,6 +57,12 @@ class ETT(Supply):
 
     def __str__(self):
         return (self.name+" size: "+str(self.size))
+    
+    def __eq__(self, other):
+        if isinstance(self, other.__class__):
+            return ((self.name == other.name) and (self.size==other.size))
+        return False
+
 
 class Laryngoscope(Supply):
     def __init__(self, size):
@@ -59,12 +70,16 @@ class Laryngoscope(Supply):
         self.size=size
 
     def __str__(self):
-        return (self.name+" size: "+sr(self.size))
+        return (self.name+" size: "+str(self.size))
+    
+    def __eq__(self, other):
+        if isinstance(self, other.__class__):
+            return ((self.name == other.name) and (self.size==other.size))
+        return False
 
 class SupplyManager(JSONClass):
     def __init__(self, supplies):
         self.supplies=supplies
-
 
     def fetchSupply(self, name, *args):
         supply=self.getSupply(name, *args)

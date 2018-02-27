@@ -33,19 +33,16 @@ class FetchSupply(Task):
     def __init__(self, baby, supplyMGR):
         super().__init__("fetch", baby, supplyMGR)
 
-    def doTask(self, supplyName, **kwargs):
-        self.supplyMGR.fetchSupply(supplyName, **kwargs)
+    def doTask(self, supplyName, *args):
+        self.supplyMGR.fetchSupply(supplyName, *args)
 
 
 class PlaceSupply(Task):
     def __init__(self, baby, supplyMGR):
         super().__init__("place", baby, supplyMGR)
 
-    def doTask(self, supplyName, **kwargs):
-        supply=self.supplyMGR.getSupply(supplyName, **kwargs)
-        if supply:
-            supply.using=True
-            self.supplyMGR.placeSupply(supplyName, **kwargs)
+    def doTask(self, supplyName, *args):
+        self.supplyMGR.placeSupply(supplyName, *args)
 
 
 class UseMask(Task):
@@ -60,8 +57,8 @@ class PlaceUVC(PlaceSupply):
     def __init__(self, baby, supplyMGR):
         super().__init__(baby, supplyMGR)
 
-    def doTask(self, **kwargs):
-        super().doTask("UVC", **kwargs)
+    def doTask(self, *args):
+        super().doTask("UVC", *args)
 
 
 class InterveneTask(Task):
