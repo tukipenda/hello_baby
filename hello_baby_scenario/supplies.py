@@ -20,15 +20,15 @@ class Supply(JSONClass):
 
     def __str__(self):
         return self.name
-    
+
     def __eq__(self, other):
         if isinstance(self, other.__class__):
             return self.name == other.name
         return False
-        
+
     def __ne__(self, other):
         return not self.__eq__(other)
-        
+
 class Mask(Supply):
     def __init__(self, masktype):
         super().__init__("mask")
@@ -45,7 +45,7 @@ class Mask(Supply):
             self.PEEP=PEEP
         if POP:
             self.POP=POP
-            
+
     def __eq__(self, other):
         if isinstance(self, other.__class__):
             return ((self.name == other.name) and (self.masktype==other.masktype))
@@ -58,7 +58,7 @@ class ETT(Supply):
 
     def __str__(self):
         return (self.name+" size: "+str(self.size))
-    
+
     def __eq__(self, other):
         if isinstance(self, other.__class__):
             return ((self.name == other.name) and (self.size==other.size))
@@ -72,7 +72,7 @@ class Laryngoscope(Supply):
 
     def __str__(self):
         return (self.name+" size: "+str(self.size))
-    
+
     def __eq__(self, other):
         if isinstance(self, other.__class__):
             return ((self.name == other.name) and (self.size==other.size))
@@ -81,6 +81,12 @@ class Laryngoscope(Supply):
 class SupplyManager(JSONClass):
     def __init__(self, supplies):
         self.supplies=supplies
+        self.supplyList=[] #I think this is a bad hack for getting things to work.  Need a better solution!
+        for name in self.supplies.keys():
+            if name in ["ETT", "laryngoscope", "mask"]:
+                self.supplyList.extend(self.supplies[name])
+            else:
+                self.supplyList.append(self.supplies[name])
 
     def fetchSupply(self, name, *args):
         supply=self.getSupply(name, *args)

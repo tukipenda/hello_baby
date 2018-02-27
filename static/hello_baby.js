@@ -101,13 +101,13 @@ var app = new Vue({
                             console.log(error.message);
                         });
                   },
-                  doTask: function(taskName, parameter){
-                    let self=this
+                  doTask: function(){
+                    var argsToSend = Array.prototype.slice.call(arguments);
+                    let self=this;
                       axios.post("/doTask", {
-                        task_name:taskName,
-                        parameter:parameter,
+                        args:argsToSend
                       }).then(function (response) {
-                    alert(response.data);
+                        self.updateData();
                   })
                   },
                   toggleHeat: function(){
@@ -120,6 +120,29 @@ var app = new Vue({
                         model_name:"warmer",
                         model:JSON.stringify(self.warmer),
                       })
+                  },
+                  updateData: function(){
+                          let self=this;
+                        axios.post("/getmodel", {
+                            model:"baby"
+                          }).then(function (response) {
+                            self.baby=response.data;
+                          })
+                      axios.post("/getmodel", {
+                            model:"warmer"
+                          }).then(function (response) {
+                            self.warmer=response.data;
+                          })
+                      axios.post("/getmodel", {
+                            model:"staff"
+                          }).then(function (response) {
+                            self.staff=response.data;
+                          })
+                      axios.post("/getmodel", {
+                            model:"supplyMGR"
+                          }).then(function (response) {
+                            self.supplyMGR=response.data;
+                          })
                   },
               reset: function() {
                     this.$data.state = "started";
