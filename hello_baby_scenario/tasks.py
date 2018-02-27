@@ -49,9 +49,15 @@ class UseMask(Task):
     def __init__(self, baby, supplyMGR):
         super().__init__("usemask", baby, supplyMGR)
 
+    #this lets us switch between masks, but only use one mask at a time. 
+    #however, need to reset PIP/PEEP/POP when switching between masks, aaaaaah
     def doTask(self, masktype):
-        self.supplyMGR.fetchSupply("mask", masktype)
-
+        for mask in self.supplyMGR.supplies['mask']:
+            if mask.masktype==masktype:
+                mask.using=True
+            else:
+                mask.using=False
+                
 #need to make this more accurate
 class PlaceUVC(PlaceSupply):
     def __init__(self, baby, supplyMGR):
@@ -132,7 +138,7 @@ class TaskManager(JSONClass):
 
     def loadTasks(self):
         self.taskList["fetch"]=FetchSupply(self.baby, self.supplyMGR)
-        self.taskList["use"]=FetchSupply(self.baby, self.supplyMGR)
+        self.taskList["usemask"]=UseMask(self.baby, self.supplyMGR)
         self.taskList["place"]=PlaceSupply(self.baby, self.supplyMGR)
         self.taskList["placeUVC"]=PlaceUVC(self.baby, self.supplyMGR)
         self.taskList["dry"]=InterveneTask("dry", self.baby, self.supplyMGR)

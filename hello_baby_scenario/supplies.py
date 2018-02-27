@@ -10,7 +10,7 @@ class Supply(JSONClass):
     def __init__(self, name):
         self.name=name
         self.available=False
-        self.using=False
+        self.placed=False
 
     def getSupply(self):
         self.available=True
@@ -33,6 +33,7 @@ class Mask(Supply):
     def __init__(self, masktype):
         super().__init__("mask")
         self.masktype=masktype
+        self.using=False
         self.PIP=0
         self.PEEP=0
         self.POP=0
@@ -86,10 +87,11 @@ class SupplyManager(JSONClass):
         if supply:
             supply.available=True
 
+    #can't use this with ETT, laryngoscope, mask
     def placeSupply(self, name, *args):
         supply=self.getSupply(name, *args)
         if (supply and supply.available):
-            supply.using=True
+            supply.placed=True
         else:
             print("error") #god this needs to be better
 
