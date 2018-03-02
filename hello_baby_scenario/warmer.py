@@ -13,6 +13,9 @@ class Warmer(JSONClass):
         self.flow=0
         self.FIO2=100
         self.tempMode="manual"
+        self.PIP=0
+        self.POP=0
+        self.PEEP=0
       
     def turnOn(self):
         self.turnedOn=True
@@ -20,6 +23,12 @@ class Warmer(JSONClass):
     def setOxygen(self, flow, FIO2):
         self.flow=flow
         self.FIO2=FIO2
+
+        
+    def setPressure(self, PIP, PEEP, POP):
+        self.PIP=PIP
+        self.PEEP=PEEP
+        self.POP=POP
 
     def setSuction(self, suction):
         self.suction=suction

@@ -34,17 +34,6 @@ class Mask(Supply):
         super().__init__("mask")
         self.masktype=masktype
         self.using=False
-        self.PIP=0
-        self.PEEP=0
-        self.POP=0
-
-    def setPressures(self, PIP, PEEP, POP):
-        if PIP:
-            self.PIP=PIP
-        if PEEP:
-            self.PEEP=PEEP
-        if POP:
-            self.POP=POP
 
     def __eq__(self, other):
         if isinstance(self, other.__class__):
