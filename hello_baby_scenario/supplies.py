@@ -11,6 +11,7 @@ class Supply(JSONClass):
         self.name=name
         self.available=False
         self.placed=False
+        self.pp=" ".join(name.split("_")).title()
 
     def getSupply(self):
         self.available=True
@@ -34,6 +35,7 @@ class Mask(Supply):
         super().__init__("mask")
         self.masktype=masktype
         self.using=False
+        self.pp=self.masktype+" "+self.pp
 
     def __eq__(self, other):
         if isinstance(self, other.__class__):
@@ -44,6 +46,7 @@ class ETT(Supply):
     def __init__(self, size):
         super().__init__("ETT")
         self.size=size
+        self.pp="ETT "+str(self.size)
 
     def __str__(self):
         return (self.name+" size: "+str(self.size))
@@ -58,6 +61,7 @@ class Laryngoscope(Supply):
     def __init__(self, size):
         super().__init__("laryngoscope")
         self.size=size
+        self.pp=self.pp+" "+str(self.size)
 
     def __str__(self):
         return (self.name+" size: "+str(self.size))

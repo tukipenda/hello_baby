@@ -29,8 +29,7 @@ var app = new Vue({
             warmer:{},
             supplyMGR:{},
             scenario_data:{},
-            staff:[],
-            supplySearchOptions:[]
+            staff:[]
         },
         created: function(){
             let self=this;
@@ -74,6 +73,9 @@ var app = new Vue({
             clearInterval(this.interval);
         },
         computed: {
+            supplySearchOptions: function(){
+                return this.supplyMGR.supplyList;
+            },
             time: function() {
                 return this.minutes + ':' + this.seconds;
             },
