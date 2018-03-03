@@ -82,10 +82,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">Fetch Supplies:</span>
                       </div>
-                      <div class="ui-widget">
-
-                      <input type="text" class="form-control ui-widget" id="searchForSupplies" aria-describedby="basic-addon3" placeholder="search...">
-                      </div>
+                      <v-select :options="supplySearchOptions"></v-select>
 
                     </div>
                 <ul class="col3" v-for="supply in supplyMGR.supplyList">

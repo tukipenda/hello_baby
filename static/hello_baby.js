@@ -12,23 +12,7 @@ appearance: "Infant is not crying.  Tone is poor. Infant is blue.  Not breathing
 staff: [{name:"Raquel",role:"RT"},{name:"Desmond",role:"RN"}],
 */
 
-$( function() {
-    var availableTags = [
-     "ETT 2.5",
-     "ETT 3.0",
-     "ETT 3.5",
-     "ETT 4.0",
-     "Hat",
-     "Preemie Mask",
-     "Infant Mask",
-     "Pulse ox",
-     "Laryngoscope",
-     "Temp probe"
-    ];
-    $( "#searchForSupplies" ).autocomplete({
-      source: availableTags
-    });
-  } );
+Vue.component('v-select', VueSelect.VueSelect);
 
 var app = new Vue({
         el: '#HelloBabyApp',
@@ -45,7 +29,8 @@ var app = new Vue({
             warmer:{},
             supplyMGR:{},
             scenario_data:{},
-            staff:[]
+            staff:[],
+            supplySearchOptions:[]
         },
         created: function(){
             let self=this;
