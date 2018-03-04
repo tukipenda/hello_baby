@@ -82,7 +82,7 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">Fetch Supplies:</span>
                       </div>
-                      <v-select label="pp" v-model="supplyToFetch" @input="doTask('fetch', supplyToFetch.name" :options="supplySearchOptions" placeholder="search..."></v-select>
+                      <v-select label="pp" v-model="supplyToFetch" @input="doTask('fetch', supplyToFetch.name)" :options="supplySearchOptions" placeholder="search..."></v-select>
 
                     </div>
                 <ul class="col3" v-for="supply in supplyMGR.supplyList">
