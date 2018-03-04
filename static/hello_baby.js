@@ -12,7 +12,14 @@ appearance: "Infant is not crying.  Tone is poor. Infant is blue.  Not breathing
 staff: [{name:"Raquel",role:"RT"},{name:"Desmond",role:"RN"}],
 */
 
-Vue.component('v-select', VueSelect.VueSelect);
+Vue.component('v-select', VueSelect.VueSelect); /*There is a problem which is css is dynamically loaded based on the name of the component here.  Probably I eventually need to package this on my own
+so this is not an issue
+*/
+
+var hs = document.getElementsByTagName('style');
+for (var i=0, max = hs.length; i < max; i++) {
+    hs[i].parentNode.removeChild(hs[i]);
+}
 
 var app = new Vue({
         el: '#HelloBabyApp',
