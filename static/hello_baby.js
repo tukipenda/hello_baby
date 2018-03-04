@@ -81,7 +81,14 @@ var app = new Vue({
         },
         computed: {
             supplySearchOptions: function(){
-                return this.supplyMGR.supplyList;
+                var supplyList=this.supplyMGR.supplyList;
+                var toReturn=[];
+                for (var i=0;i<supplyList.length;i++){
+                    if(supplyList[i].available==false){
+                        toReturn.push(supplyList[i]);
+                    };
+                }
+                return toReturn;
             },
             time: function() {
                 return this.minutes + ':' + this.seconds;
