@@ -12,7 +12,9 @@ appearance: "Infant is not crying.  Tone is poor. Infant is blue.  Not breathing
 staff: [{name:"Raquel",role:"RT"},{name:"Desmond",role:"RN"}],
 */
 
-Vue.component('v-select', VueSelect.VueSelect); /*There is a problem which is css is dynamically loaded based on the name of the component here.  Probably I eventually need to package this on my own
+Vue.component('v-select', VueSelect.VueSelect);
+Vue.component('v-select-intervene', VueSelect.VueSelect);
+/*There is a problem which is css is dynamically loaded based on the name of the component here.  Probably I eventually need to package this on my own
 so this is not an issue
 */
 
@@ -26,11 +28,11 @@ var app = new Vue({
         delimiters: ['[[',']]'],
         data: {
             contents: '',
-             state: "started",
-                startTime: Date.now(),
-                currentTime: Date.now(),
-                interval: null,
-
+            state: "paused",
+            startTime: null,
+            currentTime: null,
+            interval: null,
+            baby_timer_started: false,
             baby:{},
             mom:{},
             warmer:{},
@@ -108,6 +110,12 @@ var app = new Vue({
             }
         },
         methods: {
+                startBabyTimer: function(){
+                    this.baby_timer_started=true;
+                    this.state="started";
+                    this.startTime=Date.now();
+                    this.currentTime=Date.now();
+                },
                 buttonClick: function(link){
                     let self=this;
                     axios.get(link)
