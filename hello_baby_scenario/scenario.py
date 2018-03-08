@@ -76,7 +76,7 @@ class Scenario(JSONClass):
                 print("pb, pv, pw, pt, ps")
 
             elif ((cmd[0]=="p") and (len(cmd)==2)):
-                # things to print - baby's status, warmer's status, time, supplies (and supply status), 
+                # things to print - baby's status, warmer's status, time, supplies (and supply status),
                 if cmd[1]=="b":
                     pe=self.baby.PE
                     for k,v in pe.items():
@@ -115,3 +115,21 @@ class Scenario(JSONClass):
                 try:
                     exec(cmd)
                 except Exception as e: print(e)
+
+class ScenarioMGR:
+    def __init__(self, scenario_class):
+        self.scenarios={}
+        self.scenario_class=scenario_class
+
+    def setScenario(self, scenario_id, scenario):
+        self.scenarios[scenario_id]=scenario
+
+
+    def getScenario(self, scenario_id):
+        if scenario_id in self.scenarios.keys():
+            return self.scenarios[scenario_id]
+        else:
+            toGet=self.scenario_class()
+            toGet.loadData()
+            self.scenarios[scenario_id]=toGet
+            return toGet
