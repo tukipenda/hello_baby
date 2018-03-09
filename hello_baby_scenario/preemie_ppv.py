@@ -30,6 +30,25 @@ class PreemiePPVUpdate(BabyUpdate):
 
     def loadData(self):
         super().loadData(initVitals, PEdict)
+        
+    def updateResp(self, *args, **kwargs):
+        resp=self.PE['resp']
+        if False: #replace w/ getting effective ventilation?
+#            self.PE['resp']['rate']=ventilation.rate
+#           self.PE['resp]
+            pass
+        
+        elif self.time<60:
+            resp['breath_sounds']="None"
+            resp['WOB']="None"
+            resp['grunting']=False
+            resp['spontaneous']=False
+            resp['chest_rise']="None"
+            resp['rate']=0
+            self.vitals['RR']=0
+        
+        elif self.time<120:
+            pass
 
 
 class PreemiePPVScenario(Scenario):

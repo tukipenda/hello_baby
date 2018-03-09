@@ -24,6 +24,7 @@ class Scenario(JSONClass):
         self.supplyMGR=None
         self.scenario_data=None
         self.taskMGR=None
+        self.time=None
 
         #move to another place
         self.getCode=threading.Thread(name='getCode', target=self.getCode)
@@ -62,7 +63,8 @@ class Scenario(JSONClass):
     def updateBabyStatus(self):
         while(not self.resusComplete):
             time.sleep(5)
-            self.babyUpdate.update()
+            self.time=self.babyTimer.getElapsedTime()
+            self.babyUpdate.update(time=self.time)
 
     def getCode(self):
         self.run_loop(self.resusComplete)
@@ -123,7 +125,6 @@ class ScenarioMGR:
 
     def setScenario(self, scenario_id, scenario):
         self.scenarios[scenario_id]=scenario
-
 
     def getScenario(self, scenario_id):
         if scenario_id in self.scenarios.keys():

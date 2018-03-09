@@ -5,26 +5,38 @@ from baby import *
 class BabyUpdate:
     def __init__(self, baby, warmer, supplyMGR):
         self.baby=baby
+        self.PE={}
+        self.vitals={}
         self.warmer=warmer
         self.supplyMGR=supplyMGR
         self.activeTasks=[]
+        self.time=0
 
     def loadData(self, vitals, PE):
         self.baby.initialize(vitals, PE)
-
-    def update(self, *args):
-        self.updateVitals(*args)
-        self.updateApgar(*args)
-        self.updateCardiac(*args)
-        self.updateResp(*args)
-        self.updateNeuro(*args)
-        self.updateSecretions(*args)
-        self.updateSats(*args)
-        self.updateEKG(*args)
-        self.updateSkin(*args)
+        self.PE=self.baby.PE
+        self.vitals=self.baby.vitals
 
 
-    def updateVitals(self, *args):
+    def update(self, *args, **kwargs):
+        if 'time' in kwargs.keys():
+            self.time=kwargs['time']
+        if 'taskname' in kwargs.keys():
+            self.currentTaskName=kwargs['taskname']
+        else:
+            self.currentTaskName=None
+        self.updateVitals(*args, **kwargs)
+        self.updateApgar(*args, **kwargs)
+        self.updateCardiac(*args, **kwargs)
+        self.updateResp(*args, **kwargs)
+        self.updateNeuro(*args, **kwargs)
+        self.updateSecretions(*args, **kwargs)
+        self.updateSats(*args, **kwargs)
+        self.updateEKG(*args, **kwargs)
+        self.updateSkin(*args, **kwargs)
+
+
+    def updateVitals(self, *args, **kwargs):
         def updateHR():
             pass
         def updateRR():
@@ -60,28 +72,28 @@ class BabyUpdate:
         updateTemp()
         updateO2sat()
 
-    def updateApgar(self, *args):
+    def updateApgar(self, *args, **kwargs):
         pass
 
-    def updateResp(self, *args):
+    def updateResp(self, *args, **kwargs):
+        pass
+        
+
+    def updateCardiac(self, *args, **kwargs):
         pass
 
-    def updateCardiac(self, *args):
+    def updateSecretions(self, *args, **kwargs):
         pass
 
-    def updateSecretions(self, *args):
+    def updateNeuro(self, *args, **kwargs):
         pass
 
-    def updateNeuro(self, *args):
+    def updateSats(self, *args, **kwargs):
         pass
 
-    def updateSats(self, *args):
-        pass
+    def updateSkin(self, *args, **kwargs):
+        if self.currentTaskName=="dry":
+            self.baby.PE['skin']['dry?']=True
 
-    def updateSkin(self, *args):
-        pass
-#        if taskName=="dry":
- #           self.baby.PE['skin']['dry?']=True
-
-    def updateEKG(self, *args):
+    def updateEKG(self, *args, **kwargs):
         pass
