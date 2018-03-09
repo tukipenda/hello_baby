@@ -33,6 +33,7 @@ var app = new Vue({
             currentTime: null,
             interval: null,
             baby_timer_started: false,
+            baby_delivered: false,
             baby:{},
             mom:{},
             warmer:{},
@@ -115,6 +116,9 @@ var app = new Vue({
                     this.state="started";
                     this.startTime=Date.now();
                     this.currentTime=Date.now();
+                },
+                deliverBaby: function(){
+                    this.baby_delivered=true;
                 },
                 buttonClick: function(link){
                     let self=this;

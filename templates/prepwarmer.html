@@ -6,18 +6,22 @@
 <div class="card-body">
 
                 <nav>
-          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
 
-               {% for value,name in [("history","History"), ("prep-warmer","Prep Warmer"), ("communicate","Communicate")] %}
-
-            <a class="nav-item nav-link {% if loop.first %} active {% endif %}" id="nav-{{value}}-tab" data-toggle="tab" href="#nav-{{value}}" role="tab" aria-controls="nav-{{value}}"
-            aria-selected={% if loop.first %}"true" {% else %} "false" {% endif %}>{{name}}</a>
-
-        {% endfor %}
-
-         <a class="nav-item nav-link btn btn-primary btn-sm" id="nav-communicate-tab" href="./resuscitation" style="margin-left:90px">Baby out!</a>
-
-          </div>
+    {% for value,name in [("resuscitation", "Resuscitation"),("history","History"), ("exam","Exam"), ("warmer", "Warmer"),("communicate","Communicate"), ("intervene", "Intervene")] %}
+    <a {% if value in ["resuscitation", "exam", "intervene"] %} v-if="baby_delivered" {% endif %}
+    class="nav-item nav-link {% if value=="history" %} active {% endif %}" id="nav-{{value}}-tab" data-toggle="tab" href="#nav-{{value}}" role="tab" aria-controls="nav-{{value}}" aria-selected="true">{{name}}</a>
+    {% endfor %}
+    <div v-if="baby_delivered">
+        <button class="btn btn-primary" v-on:click="startBabyTimer" style="margin-left:90px;"> Start Timer </button>
+    </div>
+    <div v-else-if="baby_timer_started">
+    <a class="btn btn-warning" style="margin-left:90px;"> Time: <span id="time" v-html="time"></span> </a>
+    </div>
+    <div v-else>
+        <button class="btn btn-primary" style="margin-left:90px;" v-on:click="deliverBaby"> Baby Out! </button>
+    </div>
+  </div>
 
         </nav>
 
@@ -30,7 +34,23 @@
 
            </div>
 
-          <div class="tab-pane fade" id="nav-prep-warmer" role="tabpanel" aria-labelledby="nav-prep-warmer-tab">
+            <div class="tab-pane fade" id="nav-exam" role="tabpanel" aria-labelledby="nav-exam-tab">
+              <div class="card col-6" id="resuscExam">
+                  <div class="card-body">
+                  <div class="row">
+                      [[baby.appearance]]
+                    </div>
+                  {% for examAction in ["Listen to heart", "Listen to lungs", "Examine Abdomen"] %}
+                  <div class="row">
+                  <button class="btn btn-primary" style="margin-top:20px">{{examAction}}</button>
+                  </div>
+                  {% endfor %}
+                  </div>
+
+                </div>
+         </div>
+
+          <div class="tab-pane fade" id="nav-warmer" role="tabpanel" aria-labelledby="nav-prep-warmer-tab">
               <div id="prepWarmerPrep" style="margin-top: 30px">
                   {% include "./warmer_settings.html" %}
 
@@ -52,6 +72,35 @@
         </div>
 
         </div>
+
+
+         <div class="tab-pane fade" id="nav-intervene" role="tabpanel" aria-labelledby="nav-intervene-tab">
+
+              <div class="input-group mb-3" style="margin-top:30px">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">Interventions:</span>
+                      </div>
+                      <v-select-intervene label="pp" v-model="supplyToFetch" @input="doTask('fetch', supplyToFetch.name)" :options="supplySearchOptions" placeholder="search..."></v-select-intervene>
+
+                    </div>
+
+        </div>
+
+         <div class="tab-pane fade show" id="nav-resuscitation" role="tabpanel" aria-labelledby="nav-resuscitation-tab">
+             <div class="card col-6" id="resuscExam">
+                  <div class="card-body">
+                  <div class="row">
+                      [[baby.appearance]]
+                    </div>
+                  </div>
+
+                  CPR
+                  Vitals
+                  Oxygenation
+
+                </div>
+        </div>
+
         </div>
 
 </div>
