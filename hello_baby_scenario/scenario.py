@@ -110,9 +110,9 @@ class Scenario(JSONClass):
                         kwargs[cmd[0]]=cmd[1]
                     else:
                         args.append(cmd)
-                try:
-                    self.taskMGR.doTask(*args, **kwargs)
-                except Exception as e: print(e)
+           #     try:
+                self.taskMGR.doTask(*args, **kwargs)
+            #    except Exception as e: print(e)
             else:
                 try:
                     exec(cmd)

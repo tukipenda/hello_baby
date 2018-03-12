@@ -1,5 +1,11 @@
 #my approach to supplies sucks at the moment
 
+# what matters in a task?
+# taskname, supply/supplies being used,  person who is doing it?, duration of the task, adjustment to the task?, starting/stopping the taskname
+
+#CPR has a set of tasks
+#ventilation has a set of tasks, supplies
+#medicines infant has received
 
 # dry/stimulate
 # provide oxygen (adjust mask, troubleshoot ETT)
@@ -25,7 +31,7 @@ class Task(JSONClass):
         self.isStarted=None
         self.supplyMGR=supplyMGR
 
-    def doTask(self):
+    def doTask(self, *args):
         pass
 
 
@@ -72,7 +78,7 @@ class InterveneTask(Task):
         super().__init__(taskName, baby, supplyMGR)
 
     def doTask(self, *args):
-        super().doTask(self)
+        super().doTask(*args)
 
 class Intubate(InterveneTask):
     def __init__(self, baby, supplyMGR):

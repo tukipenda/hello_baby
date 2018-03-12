@@ -1,0 +1,35 @@
+scenario - has one liner, mom's history, rules for how to update baby w/ time
+baby - has a PE, vitals that are updated
+warmer - can be set up
+supplies available - some supplies have a size or type
+
+CPR
+ventilation - w/ bag-mask or via ETT
+UVC - place, give medications
+
+current 
+
+Typical scenario
+baby comes out not breathing
+timer on
+suction, dry, stim
+place bag-mask (mask size), start  (PPV settings)
+adjust mask
+open mouth
+good chest rise, but heart rate now less than 60
+intubate (tube size, laryngoscope size)
+start compressions
+set resp rate, compressions rate
+heart rate increasing
+stop compressions
+continue mechanical ventilation
+transfer to NICU
+
+Actions affect infant.
+
+Scenario - baby PE, vitals, ventilation status, CPR status, UVC status, medications given, tasks completed
+update function -> all of the logic (inputs - time, actions, baby's status)
+
+ventilation type - bag/mask vs ett, rate, PIP/PEEP/POP, FiO2, efficacy level?, 
+bag mask ventilation - mouth open?, seal?, secretions, positioning
+ett - tube size, tube placement (deep or shallow?), 
