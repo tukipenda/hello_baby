@@ -3,12 +3,21 @@ from jsonclass import *
 
 #need to write tests for all of these methods!!!
 class Ventilation(JSONClass):
-    def __init(self, baby, warmer, supplyMGR):
+    def __init__(self, baby, warmer, supplyMGR):
+        self.baby=baby
+        self.warmer=warmer
+        self.supplyMGR=supplyMGR
         self.type=None
         self.efficacy=None
-    
+        self.mouthOpen=True
+        self.positioning=None
+        self.airwayOpen=None
+        self.airLeak=None
+        
+        #self.rate, pressures, secretions
+        
     def startPPV(self):
-        pass
+        self.type="PPV"
     
     def stopPPV(self):
         pass
@@ -29,10 +38,14 @@ class Ventilation(JSONClass):
         pass
     
     def intubate(self):
-        pass
+        self.type="mechanical"
    
     def extubate(self):
         pass
+    
+    def updateEfficiency(self):
+        if self.type=="PPV":
+            pass
     
 
 class CPR(JSONClass):
@@ -76,6 +89,18 @@ class UVC(JSONClass):
     
     def giveBlood(self, amount):
         pass
+    
+class UpdateCVR:
+    def __init__(self, baby, warmer, supplyMGR, Ventilation, UVC, CPR):
+        self.baby=baby
+        self.PE={}
+        self.vitals={}
+        self.warmer=warmer
+        self.supplyMGR=supplyMGR
+        self.activeTasks=[]
+        self.time=0
+    
+    
     
 class BabyUpdate:
     def __init__(self, baby, warmer, supplyMGR):
