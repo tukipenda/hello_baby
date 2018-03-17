@@ -1,7 +1,82 @@
 from baby import *
+from jsonclass import *
 
 #need to write tests for all of these methods!!!
+class Ventilation(JSONClass):
+    def __init(self, baby, warmer, supplyMGR):
+        self.type=None
+        self.efficacy=None
+    
+    def startPPV(self):
+        pass
+    
+    def stopPPV(self):
+        pass
+   
+    def adjustMask(self):
+        pass
+    
+    def openMouth(self):
+        pass
+    
+    def reposition(self):
+        pass
+   
+    def deepSuction(self):
+        pass
+    
+    def setPressures(self, PIP, PEEP, POP):
+        pass
+    
+    def intubate(self):
+        pass
+   
+    def extubate(self):
+        pass
+    
 
+class CPR(JSONClass):
+    def __init(self, baby, warmer, supplyMGR, ventilation):
+        self.rate=None
+        self.breathsToCompressions=None # [1, 3]
+        self.CPRDepth=None
+        self.efficacy=None
+    
+    def startCPR(self):
+        pass
+    
+    def stopCPR(self):
+        pass
+    
+    def increaseDepth(self):
+        pass
+    
+    def decreaseDepth(self):
+        pass
+   
+    def setRate(self, rate):
+        pass
+    
+    def setRatio(self, CPRDepth):
+        pass
+    
+class UVC(JSONClass):
+    def __init(self, baby, warmer, supplyMGR):
+        self.uvc_placed=False
+        self.medicationsGiven=[]
+    
+    def placeUVC(self):
+        pass
+    
+    def giveMed(self, medication, amount):
+        pass
+    
+    def giveVolume(self, fluid, amount):
+        pass
+    
+    def giveBlood(self, amount):
+        pass
+    
 class BabyUpdate:
     def __init__(self, baby, warmer, supplyMGR):
         self.baby=baby

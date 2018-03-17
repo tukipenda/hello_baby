@@ -4,15 +4,18 @@ from baby_update import BabyUpdate
 
 # probably should move all of below into its own scenario data page - or maybe even preemieppv scenario page
 
+
 #PreemiePPV scenario - data and logic
-#initial data about infant
-initVitals={'O2Sat':55, 'HR':120, 'RR':40, 'SBP':75, 'DBP':50, 'Temp':35}
+#initial data about infant - all of this should probably be in the form of objects to make life easier
+initVitals={'O2Sat':55, 'HR':120, 'RR':40, 'SBP':75, 'DBP':50, 'Temp':35, 'weight':2.25} # weight probably belongs somewhere else
 initAPGAR={"tone":0, "cry":1, "color":1, "respirations":1, "HR":2}
 initResp={"rate":initVitals['RR'], "breath_sounds":"None", "chest_rise":"None", "WOB":"None", "grunting?":"None", "spontaneous?":"False"}
 initCardiac={"HR":initVitals['HR'], "murmur":"no murmur", "femoral_pulse":"2+", "radial_pulse":"2+"}
 initAbd={"BS":"+bs", "palpate":"soft, no HSM"}
 initSkin={"color":initAPGAR['color'], "dry?":False, "texture":"term infant skin"}
-initOtherPE={"scalp":'no caput', "clavicles":'no clavicular fracture', "ears":'normally positioned', "eyes":'red reflex intact bilaterally', "umbilical_cord":"normal 3 vessel cord", "palate":'palate intact', "lips":'no cleft lips', "GU":'normal genitalia', "hips":'no hip click', "spine":'no dimple', "anus":'patent anus'}
+initOtherPE={"scalp":'no caput', "clavicles":'no clavicular fracture', "ears":'normally positioned', 
+             "eyes":'red reflex intact bilaterally', "umbilical_cord":"normal 3 vessel cord", "palate":'palate intact', "lips":'no cleft lips', "GU":'normal genitalia', 
+             "hips":'no hip click', "spine":'no dimple', "anus":'patent anus'}
 
 #internal_state
 initSecretions={"quantity":'moderate', "below_cords":'no', "color":'clear', "thickness":'thin'}
@@ -21,7 +24,8 @@ initSats={"RArm":initVitals['O2Sat'], "LArm":initVitals['O2Sat'], "RLeg":initVit
 #initBP={"RArm":{}, "LArm":{}, "RLeg":{}, "LLeg":{}}
 initEKG={"Rhythm":'sinus'}
 initMalformations={} #may need to change this to a list
-PEdict={'apgar':initAPGAR, 'resp':initResp, 'cardiac':initCardiac, 'abd':initAbd, 'skin':initSkin, 'otherPE':initOtherPE, 'secretions':initSecretions, 'neuro':initNeuro, 'sats':initSats, 'ekg':initEKG, 'malformations':initMalformations}
+PEdict={'apgar':initAPGAR, 'resp':initResp, 'cardiac':initCardiac, 'abd':initAbd, 'skin':initSkin, 'otherPE':initOtherPE, 
+        'secretions':initSecretions, 'neuro':initNeuro, 'sats':initSats, 'ekg':initEKG, 'malformations':initMalformations}
 
 
 class PreemiePPVUpdate(BabyUpdate):
@@ -106,7 +110,20 @@ class PreemiePPVScenario(Scenario):
             loadSupplyList["mask"].append(mask)
 
         baby=Baby(32, [])
+        self.baby=baby
         super().loadData(loadSupplyList, baby)
+        self.supplyMGR=supplies.SupplyManager(loadSupplyList)
+        self.tasks={
+            'fetch':self.supplyMGR.fetchSupply,
+            'place':self.supplyMGR.placeSupply,
+            'turnOn':self.warmer.turnOn
+       #    'dry':,
+        #    'stimulate':,
+         #   'suction':,
+            
+        }
+
+
 
     def loadBabyUpdate(self):
         self.babyUpdate=PreemiePPVUpdate(self.baby, self.warmer, self.supplyMGR)

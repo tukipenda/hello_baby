@@ -3,7 +3,6 @@ from baby import *
 import warmer
 import staff
 import supplies
-import tasks
 import threading
 from baby_timer import *
 import baby_update
@@ -23,8 +22,8 @@ class Scenario(JSONClass):
         self.warmer=None
         self.supplyMGR=None
         self.scenario_data=None
-        self.taskMGR=None
         self.time=None
+        self.tasks=None
 
         #move to another place
         self.getCode=threading.Thread(name='getCode', target=self.getCode)
@@ -36,13 +35,7 @@ class Scenario(JSONClass):
 
     def loadData(self, loadSupplyList, baby):
         # Initialize a scenario
-        self.baby=baby
-        self.supplyMGR=supplies.SupplyManager(loadSupplyList)
-        self.supplyMGR.fetchSupply("mask", "Infant")
-        self.supplyMGR.fetchSupply("mask", "Preemie")
         self.warmer=warmer.Warmer()
-        self.taskMGR=tasks.TaskManager(self.supplyMGR, self.baby, self)
-        self.taskMGR.loadTasks()
         self.loadBabyUpdate()
 
 #this method should not be called by itself
@@ -111,7 +104,10 @@ class Scenario(JSONClass):
                     else:
                         args.append(cmd)
            #     try:
-                self.taskMGR.doTask(*args, **kwargs)
+                name=args[0]
+                args=args[1:]
+                task=self.tasks[name]
+                task(*args, **kwargs)
             #    except Exception as e: print(e)
             else:
                 try:
