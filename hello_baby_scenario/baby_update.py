@@ -20,13 +20,13 @@ class Ventilation(JSONClass):
         self.type="PPV"
     
     def stopPPV(self):
-        pass
+        self.type=None
    
     def adjustMask(self):
         pass
     
     def openMouth(self):
-        pass
+        self.mouthOpen=True
     
     def reposition(self):
         pass
@@ -41,11 +41,10 @@ class Ventilation(JSONClass):
         self.type="mechanical"
    
     def extubate(self):
-        pass
+        self.type=None
     
-    def updateEfficiency(self):
-        if self.type=="PPV":
-            pass
+    def update(self, *args, **kwargs):
+        pass
     
 
 class CPR(JSONClass):
@@ -72,6 +71,9 @@ class CPR(JSONClass):
     
     def setRatio(self, CPRDepth):
         pass
+   
+    def update(self, *args, **kwargs):
+        pass
     
 class UVC(JSONClass):
     def __init(self, baby, warmer, supplyMGR):
@@ -90,23 +92,17 @@ class UVC(JSONClass):
     def giveBlood(self, amount):
         pass
     
-class UpdateCVR:
-    def __init__(self, baby, warmer, supplyMGR, Ventilation, UVC, CPR):
-        self.baby=baby
-        self.PE={}
-        self.vitals={}
-        self.warmer=warmer
-        self.supplyMGR=supplyMGR
-        self.activeTasks=[]
-        self.time=0
-    
-    
+    def update(self, *args, **kwargs):
+        pass
     
 class BabyUpdate:
-    def __init__(self, baby, warmer, supplyMGR):
+    def __init__(self, baby, vent, CPR, UVC, warmer, supplyMGR):
         self.baby=baby
         self.PE={}
         self.vitals={}
+        self.UVC=UVC
+        self.CPR=CPR
+        self.vent=vent
         self.warmer=warmer
         self.supplyMGR=supplyMGR
         self.activeTasks=[]
@@ -125,6 +121,9 @@ class BabyUpdate:
             self.currentTaskName=kwargs['taskname']
         else:
             self.currentTaskName=None
+        self.UVC.update(*args, **kwargs)
+        self.CPR.update(*args, **kwargs)
+        self.vent.update(*args, **kwargs)
         self.updateVitals(*args, **kwargs)
         self.updateApgar(*args, **kwargs)
         self.updateCardiac(*args, **kwargs)

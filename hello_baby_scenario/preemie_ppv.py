@@ -29,8 +29,8 @@ PEdict={'apgar':initAPGAR, 'resp':initResp, 'cardiac':initCardiac, 'abd':initAbd
 
 
 class PreemiePPVUpdate(BabyUpdate):
-    def __init__(self, baby, warmer, supplyMGR):
-        super().__init__(baby, warmer, supplyMGR)
+    def __init__(self, baby, warmer, UVC, CPR, vent, supplyMGR):
+        super().__init__(baby, warmer, UVC, CPR, vent, supplyMGR)
 
     def loadData(self):
         super().loadData(initVitals, PEdict)
