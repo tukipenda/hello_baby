@@ -8,7 +8,7 @@
                 <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
 
-    {% for value,name in [("resuscitation", "Resuscitation"),("history","History"), ("exam","Exam"), ("warmer", "Warmer"),("communicate","Communicate"), ("intervene", "Intervene")] %}
+    {% for value,name in [("resuscitation", "Resuscitation"),("history","History"), ("exam","Exam"), ("warmer", "Warmer"), ("intervene", "Intervene")] %}
     <a {% if value in ["resuscitation", "exam", "intervene"] %} v-if="baby_delivered" {% endif %}
     class="nav-item nav-link {% if value=="history" %} active {% endif %}" id="nav-{{value}}-tab" data-toggle="tab" href="#nav-{{value}}" role="tab" aria-controls="nav-{{value}}" aria-selected="true">{{name}}</a>
     {% endfor %}
@@ -57,21 +57,6 @@
             </div>
             </div>
 
-
-          <div class="tab-pane fade" id="nav-communicate" role="tabpanel" aria-labelledby="nav-communicate-tab">
-
-        <div id="prepWarmerCommunicate" style="margin-top: 30px">
-
-             <div class="card" style="width: 18rem;" v-for="person in staff">
-          <div class="card-body">
-            <h5 class="card-title">[[person.name]] - [[person.title]]</h5>
-            <p class="card-text">Role: [[person.role]]</p>
-          </div>
-        </div>
-
-        </div>
-
-        </div>
 
 
          <div class="tab-pane fade" id="nav-intervene" role="tabpanel" aria-labelledby="nav-intervene-tab">
