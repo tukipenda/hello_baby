@@ -1,7 +1,6 @@
 from jsonclass import JSONClass, merge_dicts
 from baby import *
 import warmer
-import staff
 import supplies
 import threading
 from baby_timer import *
@@ -18,7 +17,6 @@ class Scenario(JSONClass):
     def __init__(self):
         self.baby=None
         self.mom=None
-        self.staff=None
         self.warmer=None
         self.supplyMGR=None
         self.scenario_data=None

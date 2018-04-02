@@ -1,5 +1,8 @@
 import types
+from collections import defaultdict
 #This class needs some serious testing to troubleshoot it!
+
+def simple_tree(): return defaultdict(simple_tree)
 
 def merge_dicts(*dict_args):
     """

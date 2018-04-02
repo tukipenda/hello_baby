@@ -1,48 +1,73 @@
 from scenario import *
-from baby_update import BabyUpdate
+from baby_update import *
+from jsonclass import simple_tree
 
-
-# probably should move all of below into its own scenario data page - or maybe even preemieppv scenario page
-
-
-#PreemiePPV scenario - data and logic
-#initial data about infant - all of this should probably be in the form of objects to make life easier
-initVitals={'O2Sat':55, 'HR':120, 'RR':40, 'SBP':75, 'DBP':50, 'Temp':35, 'weight':2.25} # weight probably belongs somewhere else
-initAPGAR={"tone":0, "cry":1, "color":1, "respirations":1, "HR":2}
-initResp={"rate":initVitals['RR'], "breath_sounds":"None", "chest_rise":"None", "WOB":"None", "grunting?":"None", "spontaneous?":"False"}
-initCardiac={"HR":initVitals['HR'], "murmur":"no murmur", "femoral_pulse":"2+", "radial_pulse":"2+"}
-initAbd={"BS":"+bs", "palpate":"soft, no HSM"}
-initSkin={"color":initAPGAR['color'], "dry?":False, "texture":"term infant skin"}
-initOtherPE={"scalp":'no caput', "clavicles":'no clavicular fracture', "ears":'normally positioned', 
+#I deleted APGAR for now,not including malformations, BP, EKG, or 4-extremity sats
+PE=simple_tree()
+PE['vitals']={'O2Sat':55, 'HR':120, 'RR':40, 'SBP':75, 'DBP':50, 'temp':35, 'weight':2.25}
+PE['resp']={"breath_sounds":"None", "chest_rise":"None", "WOB":"None", "grunting?":"None", "spontaneous?":"False"}
+PE['cardiac']={"murmur":"no murmur", "femoral_pulse":"2+", "radial_pulse":"2+"}
+PE['abd']={"BS":"+bs", "palpate":"soft, no HSM"}
+PE['skin']={"color":'blue', "dry?":False, "texture":"term infant skin"}
+PE['secretions']={"quantity":'moderate', "below_cords":'no', "color":'clear', "thickness":'thin'}
+PE['neuro']={"LOC":'weak cry', "RLeg":'moving normally', "LLeg":'moving normally', "RArm":'moving normally', "LArm":'moving normally', "deficit":"none"}
+PE['other']={"scalp":'no caput', "clavicles":'no clavicular fracture', "ears":'normally positioned', 
              "eyes":'red reflex intact bilaterally', "umbilical_cord":"normal 3 vessel cord", "palate":'palate intact', "lips":'no cleft lips', "GU":'normal genitalia', 
              "hips":'no hip click', "spine":'no dimple', "anus":'patent anus'}
 
-#internal_state
-initSecretions={"quantity":'moderate', "below_cords":'no', "color":'clear', "thickness":'thin'}
-initNeuro={"LOC":'weak cry', "RLeg":'moving normally', "LLeg":'moving normally', "RArm":'moving normally', "LArm":'moving normally', "deficit":"none"}
-initSats={"RArm":initVitals['O2Sat'], "LArm":initVitals['O2Sat'], "RLeg":initVitals['O2Sat'], "LLeg":initVitals['O2Sat']}
-#initBP={"RArm":{}, "LArm":{}, "RLeg":{}, "LLeg":{}}
-initEKG={"Rhythm":'sinus'}
-initMalformations={} #may need to change this to a list
-PEdict={'apgar':initAPGAR, 'resp':initResp, 'cardiac':initCardiac, 'abd':initAbd, 'skin':initSkin, 'otherPE':initOtherPE, 
-        'secretions':initSecretions, 'neuro':initNeuro, 'sats':initSats, 'ekg':initEKG, 'malformations':initMalformations}
 
+class PreemiePPVHealth(Health):
+    def __init__(self, baby, vent, CPR, UVC):
+        circ_eff=3
+        vol_status=3
+        card_health=3
+        brain_health=3
+        super().__init__(baby, vent, CPR, UVC, circ_eff, vol_status, card_health, brain_health)  
+    
+    def updateCardiac(self, time):
+        O2del=self.getO2Delivery()
+        if time>60:
+            goodO2Del=sum(O2Del[-12:]) #seconds of good O2 delivery in the last minute
+            if (time-self.timeChanged)>60:
+                if (goodO2Del<15):
+                    self.card_health=max(0, self.card_health-1)
+                    self.timeChanged=time
+                elif(sum(O2Del[-24:])<45 and goodO2Del<30):
+                    self.card_health=max(0, self.card_health-1)
+                    self.timeChanged=time
+            elif goodO2Del>55:
+                self.card_health=min(3, self.card_health+1)
+                self.timeChanged=time
+
+        
 
 class PreemiePPVUpdate(BabyUpdate):
-    def __init__(self, baby, warmer, UVC, CPR, vent, supplyMGR):
-        super().__init__(baby, warmer, UVC, CPR, vent, supplyMGR)
+    def __init__(self, baby, health, warmer, supplyMGR):
+        super().__init__(baby, health, warmer, supplyMGR)
 
     def loadData(self):
-        super().loadData(initVitals, PEdict)
+        super().loadData(PE)
         
     def updateResp(self, *args, **kwargs):
         resp=self.PE['resp']
-        if False: #replace w/ getting effective ventilation?
-#            self.PE['resp']['rate']=ventilation.rate
-#           self.PE['resp]
+        vent=self.vent
+        if vent.type in ["mechanical", "PPV"]: 
+            resp.rate=vent.rate
+            resp.breath_sounds="clear bilaterally"
+            resp.grunting="None"
+            if vent.efficacy=="good":
+                resp.chest_rise="good"
+            if vent.efficacy=="poor":
+                resp.chest_rise="minimal chest rise"
+                resp.breath_sounds="barely audible"
+            if vent.efficacy=="none":
+                resp.chest_rise="none"
+                resp.breath_sounds="None"
+        
+        elif vent.type=="spontaneous":
             pass
         
-        elif self.time<60:
+        else:
             resp['breath_sounds']="None"
             resp['WOB']="None"
             resp['grunting']=False
@@ -50,9 +75,18 @@ class PreemiePPVUpdate(BabyUpdate):
             resp['chest_rise']="None"
             resp['rate']=0
             self.vitals['RR']=0
-        
-        elif self.time<120:
-            pass
+     
+    def updateCardiac(self, *args, **kwargs):
+        pass
+    
+    def updateVitals(self, *args, **kwargs):
+        pass
+    
+    def updateNeuro(self, *args, **kwargs):
+        pass
+
+    def updateSecretions(self, *args, **kwargs):
+        pass
 
 
 class PreemiePPVScenario(Scenario):
@@ -67,13 +101,6 @@ class PreemiePPVScenario(Scenario):
         rom="ROM occurred 16 hours ago."
         gp="G1PO"
         self.mom=Mom(age=25, prenatalLabs=pL, HSV=hsv, GBS=gbs, ROM=rom, GP=gp)
-
-        self.mom=Mom(age=25, prenatalLabs=pL, HSV=hsv, GBS=gbs, ROM=rom, GP=gp)
-
-        nurse=staff.RN("Juan")
-        respiratory=staff.RT("Sheri")
-        self.staff=staff.Staff([nurse, respiratory])
-
 
         supplyList=[
             "pulse_ox",
@@ -126,7 +153,11 @@ class PreemiePPVScenario(Scenario):
 
 
     def loadBabyUpdate(self):
-        self.babyUpdate=PreemiePPVUpdate(self.baby, self.warmer, self.supplyMGR)
+        self.vent=Ventilation(self.warmer)
+        self.CPR=CPR()
+        self.UVC=UVC()
+        self.health=PreemiePPVHealth(self.baby, self.vent, self.CPR, self.UVC)
+        self.babyUpdate=PreemiePPVUpdate(self.baby, self.health, self.warmer, self.supplyMGR)
         self.babyUpdate.loadData()
 
 # temperature (turned on), suction, bag/mask, oxygen flow, baby timer
