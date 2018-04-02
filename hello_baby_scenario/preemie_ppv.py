@@ -32,7 +32,8 @@ class PreemiePPVHealth(Health):
                 if (goodO2Del<15):
                     self.card_health=max(0, self.card_health-1)
                     self.timeChanged=time
-                elif(sum(O2Del[-24:])<45 and goodO2Del<30):
+                # need to fix the case where time<120
+                elif(sum(O2Del[-24:])<45 and goodO2Del<30): #if we've only had 30 seconds of good O2 in the past minute, and 45 in the past two minutes, we are in trouble.
                     self.card_health=max(0, self.card_health-1)
                     self.timeChanged=time
             elif goodO2Del>55:

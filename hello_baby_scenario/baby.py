@@ -152,7 +152,7 @@ class Health(JSONClass):
         ndelta=len(self.oxygenation)
         tdelta=time//5
         resp_eff=0
-        if vent.efficacy==1:
+        if vent.efficacy=="good":
             resp_eff=1
         if tdelta>ndelta:
             for x in range(len(tdelta-ndelta)):
