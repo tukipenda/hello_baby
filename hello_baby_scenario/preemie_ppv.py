@@ -11,8 +11,8 @@ PE['abd']={"BS":"+bs", "palpate":"soft, no HSM"}
 PE['skin']={"color":'blue', "dry?":False, "texture":"term infant skin"}
 PE['secretions']={"quantity":'moderate', "below_cords":'no', "color":'clear', "thickness":'thin'}
 PE['neuro']={"LOC":'weak cry', "RLeg":'moving normally', "LLeg":'moving normally', "RArm":'moving normally', "LArm":'moving normally', "deficit":"none"}
-PE['other']={"scalp":'no caput', "clavicles":'no clavicular fracture', "ears":'normally positioned', 
-             "eyes":'red reflex intact bilaterally', "umbilical_cord":"normal 3 vessel cord", "palate":'palate intact', "lips":'no cleft lips', "GU":'normal genitalia', 
+PE['other']={"scalp":'no caput', "clavicles":'no clavicular fracture', "ears":'normally positioned',
+             "eyes":'red reflex intact bilaterally', "umbilical_cord":"normal 3 vessel cord", "palate":'palate intact', "lips":'no cleft lips', "GU":'normal genitalia',
              "hips":'no hip click', "spine":'no dimple', "anus":'patent anus'}
 
 
@@ -22,8 +22,8 @@ class PreemiePPVHealth(Health):
         vol_status=3
         card_health=3
         brain_health=3
-        super().__init__(baby, vent, CPR, UVC, circ_eff, vol_status, card_health, brain_health)  
-    
+        super().__init__(baby, vent, CPR, UVC, circ_eff, vol_status, card_health, brain_health)
+
     def updateCardiac(self, time):
         O2del=self.getO2Delivery()
         if time>60:
@@ -40,7 +40,7 @@ class PreemiePPVHealth(Health):
                 self.card_health=min(3, self.card_health+1)
                 self.timeChanged=time
 
-        
+
 
 class PreemiePPVUpdate(BabyUpdate):
     def __init__(self, baby, health, warmer, supplyMGR):
@@ -48,11 +48,11 @@ class PreemiePPVUpdate(BabyUpdate):
 
     def loadData(self):
         super().loadData(PE)
-        
+
     def updateResp(self, *args, **kwargs):
         resp=self.PE['resp']
         vent=self.vent
-        if vent.type in ["mechanical", "PPV"]: 
+        if vent.type in ["mechanical", "PPV"]:
             resp.rate=vent.rate
             resp.breath_sounds="clear bilaterally"
             resp.grunting="None"
@@ -64,10 +64,10 @@ class PreemiePPVUpdate(BabyUpdate):
             if vent.efficacy=="none":
                 resp.chest_rise="none"
                 resp.breath_sounds="None"
-        
+
         elif vent.type=="spontaneous":
             pass
-        
+
         else:
             resp['breath_sounds']="None"
             resp['WOB']="None"
@@ -76,13 +76,13 @@ class PreemiePPVUpdate(BabyUpdate):
             resp['chest_rise']="None"
             resp['rate']=0
             self.vitals['RR']=0
-     
+
     def updateCardiac(self, *args, **kwargs):
         pass
-    
+
     def updateVitals(self, *args, **kwargs):
         pass
-    
+
     def updateNeuro(self, *args, **kwargs):
         pass
 
@@ -144,11 +144,12 @@ class PreemiePPVScenario(Scenario):
         self.tasks={
             'fetch':self.supplyMGR.fetchSupply,
             'place':self.supplyMGR.placeSupply,
-            'turnOn':self.warmer.turnOn
+            'turnOn':self.warmer.turnOn,
+            'useMask':self.supplyMGR.useMask,
        #    'dry':,
         #    'stimulate':,
          #   'suction':,
-            
+
         }
 
 

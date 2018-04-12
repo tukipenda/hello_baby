@@ -31,15 +31,15 @@ class Supply(JSONClass):
         return not self.__eq__(other)
 
 class Mask(Supply):
-    def __init__(self, masktype):
+    def __init__(self, size):
         super().__init__("mask")
-        self.masktype=masktype
+        self.size=size
         self.using=False
-        self.pp=self.masktype+" "+self.pp
+        self.pp=self.size+" "+self.pp
 
     def __eq__(self, other):
         if isinstance(self, other.__class__):
-            return ((self.name == other.name) and (self.masktype==other.masktype))
+            return ((self.name == other.name) and (self.size==other.size))
         return False
 
 class ETT(Supply):
@@ -81,27 +81,35 @@ class SupplyManager(JSONClass):
             else:
                 self.supplyList.append(self.supplies[name])
 
-    def fetchSupply(self, name, *args):
-        supply=self.getSupply(name, *args)
+    def useMask(self, masktype):
+        for mask in self.supplies['mask']:
+            if mask.size==masktype:
+                mask.using=True
+            else:
+                mask.using=False
+
+    def fetchSupply(self, name, size=None):
+        supply=self.getSupply(name, size=size)
         if supply:
             supply.available=True
 
     #can't use this with ETT, laryngoscope, mask
-    def placeSupply(self, name, *args):
-        supply=self.getSupply(name, *args)
-        if (supply and supply.available):
+    def placeSupply(self, name, size=None):
+        supply=self.getSupply(name, size=size)
+        if supply:
             supply.placed=True
-        else:
-            print("error") #god this needs to be better
 
-    def getSupply(self, name, *args):
-        if name in ["ETT", "laryngoscope", "mask"]:
-            className=name[0].upper()+name[1:]
-            supplyClass=getattr(sys.modules[__name__], className)
-            testSupply=supplyClass(*args)
-            for supply in self.supplies[name]:
-                if supply==testSupply:
-                    return supply
+    def getSupply(self, name, size=None):
+        if name in ["ETT", "mask", "laryngoscope"]:
+            if size:
+                className=name[0].upper()+name[1:]
+                supplyClass=getattr(sys.modules[__name__], className)
+                testSupply=supplyClass(size)
+                for supply in self.supplies[name]:
+                    if supply==testSupply:
+                        return supply
+            else:
+                return None
         else:
             if name in self.supplies.keys():
                 return self.supplies[name]

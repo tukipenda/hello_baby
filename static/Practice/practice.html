@@ -4,15 +4,36 @@
     <meta charset="utf-8">
     <title>Hello Baby</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='hello_baby_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='vue-select.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='vuetify.css') }}">
 
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <!-- link href="https://unpkg.com/vuetify/dist/vuetify.css" rel="stylesheet" -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+
+    <!-- Vue select -->
+    <script src="https://unpkg.com/vue-select@2.4.0"></script>
+
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+
+
+
+    <!--jquery and jquery UI -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+
+    <!--scripts below to make axios work with IE -->
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 
   </head>
   <body>
@@ -34,38 +55,15 @@
 
     <main role="main" class="container" style="margin-top: 90px">
         <div id="HelloBabyApp">
+            <h1>use refresh</h1>
+                    <vue-slider ref="slider" v-bind="options" v-model="test"></vue-slider>
 
-    <div class="card">
-    <div class="card-body">
-
-
-
-<input id="ex4" type="text" data-slider-min="-5" data-slider-max="20" data-slider-step="1" data-slider-value="-3" data-slider-orientation="vertical"/>
-        <input
-        	type="text"
-        	class="slider"
-        	id="PIPslider"
-        	data-provide="slider"
-        	data-slider-ticks="[0, 5, 10, 15, 20, 25, 30, 35, 40]"
-        	data-slider-ticks-labels='[0, 5, 10, 15, 20, 25, 30, 35, 40]'
-        	ticks_snap_bounds="3"
-        	data-slider-step="1"
-        	data-slider-value="0"
-        >
-
-</div>
-
-  </div>
-</div>
+        </div>
 
     </main>
-    <script> $('#PIPslider').slider({
-	formatter: function(value) {
-		return 'Current value: ' + value;
-	}
-});
-</script>
-    <script src="{{ url_for('static',filename='hello_baby.js') }}"></script>
+      <!-- Vue slider component -->
+    <script src="https://nightcatsama.github.io/vue-slider-component/dist/index.js"></script>
+    <script src="http://tukipenda.pythonanywhere.com/static/hello_baby.js"></script>
   </body>
 </html>
 

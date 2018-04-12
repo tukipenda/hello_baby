@@ -50,8 +50,7 @@ def getmodel():
         babyScenario=scenarioMGR.getScenario(scenario_id)
         model_name=request.get_json()['model']
         getObject=getattr(babyScenario, model_name)
-        app.logger.info(model_name)
-        app.logger.info(str(getObject.toJSON()))
+#        app.logger.info(model_name)
         toReturn=json.dumps(getObject.toJSON())
         return toReturn
 
@@ -81,6 +80,7 @@ def doTask():
     if 'scenario_id' in session.keys():
         scenario_id=session['scenario_id']
         babyScenario=scenarioMGR.getScenario(scenario_id)
-        args=request.get_json()['args']
-        babyScenario.taskMGR.doTask(*args)
-        return str(args)
+        taskName=request.get_json()['taskName']
+        kv=request.get_json()['kv']
+        babyScenario.tasks[taskName](**kv)
+        return "success"

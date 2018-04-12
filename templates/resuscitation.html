@@ -56,7 +56,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">Interventions:</span>
                     </div>
-                    <v-select-intervene label="pp" v-model="supplyToFetch" @input="doTask('fetch', supplyToFetch.name)" :options="supplySearchOptions" placeholder="search..."></v-select-intervene>
+                    <v-select-intervene label="pp" v-model="supplyToFetch" @input="doTask('fetch', supplyToFetch.name, supplyToFetch.size)" :options="supplySearchOptions" placeholder="search..."></v-select-intervene>
 
                 </div>
 

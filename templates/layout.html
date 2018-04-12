@@ -7,23 +7,35 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static',filename='hello_baby_style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='vue-select.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='vuetify.css') }}">
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <!-- link href="https://unpkg.com/vuetify/dist/vuetify.css" rel="stylesheet" -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
 
+    <!-- Vue select -->
     <script src="https://unpkg.com/vue-select@2.4.0"></script>
+
+    <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- vuetify -->
+    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+
 
     <!--jquery and jquery UI -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.js"></script>
 
 
     <!--scripts below to make axios work with IE -->
     <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.css">
+
 </head>
 
 <body>
@@ -42,14 +54,59 @@
     </nav>
 
     <main role="main" class="container" style="margin-top: 90px">
+        <div id="IEalert" class="alert alert-warning" role="alert" style="display:none">
+          I am still working on supporting internet explorer.  If you have trouble getting this website to work, you may need to try chrome or firefox.
+          I will try to get this website working in internet explorer as soon as possible.  Thanks for your patience!
+        </div>
         <div id="HelloBabyApp">
 
             {% block body %}{% endblock %}
         </div>
 
     </main>
+
+    <!-- IE Message -->
+    <script>
+
+        function detectIE() {
+            var ua = window.navigator.userAgent;
+
+            var msie = ua.indexOf('MSIE ');
+            if (msie > 0) {
+                // IE 10 or older => return version number
+                return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+            }
+
+            var trident = ua.indexOf('Trident/');
+            if (trident > 0) {
+                // IE 11 => return version number
+                var rv = ua.indexOf('rv:');
+                return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+            }
+
+            var edge = ua.indexOf('Edge/');
+            if (edge > 0) {
+               // Edge (IE 12+) => return version number
+               return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+            }
+
+            // other browser
+            return false;
+        }
+
+        if(detectIE()){
+            $("#IEalert").show();
+        }
+
+    </script>
+
+    <!-- Vue slider component -->
+    <script src="https://nightcatsama.github.io/vue-slider-component/dist/index.js"></script>
+
     <script src="{{ url_for('static',filename='hello_baby.js') }}"></script>
     {% block javascript %}{% endblock %}
+
+
 </body>
 
 </html>

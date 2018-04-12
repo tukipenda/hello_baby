@@ -1,16 +1,16 @@
 <div class="row">
     <div class="col-3">
-        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
             {% for value,name in [("warmer","Warmer"), ("mask", "Bag Mask"), ("oxygen","Oxygen"), ("suction", "Suction"), ("supplies", "Supplies")] %}
-            <a class="nav-link {% if loop.first %} active {% endif %} " id="v-pills-{{value}}-tab" data-toggle="pill" href="#v-pills-{{value}}" role="tab" aria-controls="v-pills-{{value}}" aria-selected="true">{{name}}</a> {% endfor %}
+            <a v-on:click="showTab='{{value}}'" class="nav-link {% if loop.first %} active {% endif %} " id="v-pills-{{value}}-tab" data-toggle="pill" href="#v-pills-{{value}}" role="tab" aria-controls="v-pills-{{value}}" aria-selected="true">{{name}}</a> {% endfor %}
         </div>
     </div>
 
 
     <div class="col-9">
-        <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-content">
             {% set values=["warmer", "mask", "oxygen", "suction", "supplies"] %}
-            <div class="tab-pane fade show active" id="v-pills-{{values[0]}}" role="tabpanel" aria-labelledby="v-pills-{{values[0]}}-tab">
+            <div v-if="showTab=='warmer'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[0]}}-tab">
                 <span v-if="warmer.turnedOn">
                     <h3> Heat is: <span class="badge badge-danger">on</span> </h3>
                 <button v-on:click="toggleHeat" class="btn btn-secondary btn-sm">Turn heat off</button>
@@ -22,7 +22,7 @@
 
             </div>
 
-            <div class="tab-pane fade" id="v-pills-{{values[1]}}" role="tabpanel" aria-labelledby="v-pills-{{values[1]}}-tab">
+            <div v-if="showTab=='mask'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[1]}}-tab">
 
 
                 <div class="row">
@@ -33,11 +33,11 @@
                     <div v-for="mask in supplyMGR.supplies.mask" class="col-3">
                         <div v-if="mask.using">
 
-                            <button type="button" class="btn btn-primary">[[mask.masktype]] Mask</button>
+                            <button type="button" class="btn btn-primary">[[mask.size]] Mask</button>
 
                         </div>
                         <div v-else>
-                            <button type="button" class="btn btn-light" v-on:click="doTask('usemask', mask.masktype)">[[mask.masktype]] Mask</button>
+                            <button type="button" class="btn btn-light" v-on:click="doTask('useMask', mask.size)">[[mask.size]] Mask</button>
                         </div>
                     </div>
                 </div>
@@ -45,46 +45,78 @@
                 <div class="mt-5">
                     <div class="offset-md-1 col-md-4">
                         {% for pressure,pname in [("warmer.PIP", "PIP"), ("warmer.PEEP", "PEEP"), ("warmer.POP", "POP")] %}
-                        <div class="input-group mb-3 row">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">{{pname}}</span>
+                        <div class="row">
+                            <div class="card sliderCard">
+                            <div class="row">
+                                <div class="col-2">
+                                <h4>{{pname}}: </h4>
+                                </div>
+                            <vue-slider ref="slider" v-bind="helloSliderOptions(0, {% if pname=="PEEP" %} 20 {% else %} 50 {% endif %}, width='{% if pname=="PEEP"%} 50% {% else %} 75% {% endif %}')" v-model="{{pressure}}">
+                                <div slot="label" slot-scope="{ label, active }">
+                                  <span :class="['custom-label', { active }]" v-if="label % {% if pname=="PEEP"%} 5 {% else %} 10 {% endif %} === 0" >
+                                    [[ label ]]
+                                  </span>
+                                </div>
+                            </vue-slider>
                             </div>
-                            <input type="text" class="form-control" v-model="{{pressure}}" :aria-label="{{pressure}}" aria-describedby="basic-addon1" v-on:change="updateWarmer">
+                            </div>
+
                         </div>
                         {% endfor %}
                     </div>
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="v-pills-{{values[2]}}" role="tabpanel" aria-labelledby="v-pills-{{values[2]}}-tab">
+            <div v-if="showTab=='oxygen'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[2]}}-tab">
                 {% for pressure,pname in [("warmer.flow","Flow"), ("warmer.FIO2","FIO2")]%}
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">{{pname}}</span>
+                <div class="row">
+                    <div class="card sliderCard">
+                    <div class="row">
+                        <div class="col-2">
+                        <h4>{{pname}}: </h4>
+                        </div>
+                    <vue-slider ref="slider" v-bind="helloSliderOptions(0, {% if pressure=="warmer.flow" %} 20 {% else %} 100 {% endif %})" v-model="{{pressure}}">
+                        <div slot="label" slot-scope="{ label, active }">
+                          <span :class="['custom-label', { active }]" v-if="label % {% if pressure=="warmer.flow"%} 5 {% else %} 20 {% endif %} === 0" >
+                            [[ label ]]
+                          </span>
+                        </div>
+                    </vue-slider>
                     </div>
-                    <input type="text" class="form-control" v-model="{{pressure}}" :aria-label="{{pressure}}" aria-describedby="basic-addon1" v-on:change="updateWarmer">
+                    </div>
+
                 </div>
                 {% endfor %}
             </div>
-            <div class="tab-pane fade" id="v-pills-{{values[3]}}" role="tabpanel" aria-labelledby="v-pills-{{values[3]}}-tab">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">suction</span>
+            <div v-if="showTab=='suction'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[3]}}-tab">
+                    <div class="card sliderCard">
+                    <div class="row">
+                        <div class="col-2">
+                        <h4>Suction: </h4>
+                        </div>
+                    <vue-slider ref="slider" v-bind="helloSliderOptions(0, 140)" v-model="warmer.suction">
+                        <div slot="label" slot-scope="{ label, active }">
+                          <span :class="['custom-label', { active }]" v-if="label % 20 === 0" >
+                            [[ label ]]
+                          </span>
+                        </div>
+                    </vue-slider>
                     </div>
-                    <input type="text" class="form-control" v-model="warmer.suction" :aria-label="warmer.suction" aria-describedby="basic-addon1" v-on:change="updateWarmer">
-                </div>
+                    </div>
+
             </div>
-            <div class="tab-pane fade" id="v-pills-{{values[4]}}" role="tabpanel" aria-labelledby="v-pills-{{values[4]}}-tab">
+            <div v-if="showTab=='supplies'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[4]}}-tab">
 
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">Fetch Supplies:</span>
                     </div>
-                    <v-select label="pp" v-model="supplyToFetch" @input="doTask('fetch', supplyToFetch.name)" :options="supplySearchOptions" placeholder="search..."></v-select>
+                    <v-select label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)" :options="supplySearchOptions" placeholder="search..."></v-select>
 
                 </div>
-                <ul class="col3" v-for="supply in supplyMGR.supplyList">
-                    <li v-if="supply.available">[[supply.pp]]</li>
+                <h3>Available Supplies: </h3>
+                <ul class="col3" v-for="supply in availableSupplies">
+                    <li>[[supply.pp]]</li>
                 </ul>
             </div>
 
