@@ -45,7 +45,8 @@ var app = new Vue({
             baby:{},
             mom:{},
             warmer:{},
-            supplyMGR:{supplyList:[]},
+            PE:{},
+            supplyList:[],
             scenario_data:{},
             test: 0,
             showTab: "warmer",
@@ -55,26 +56,12 @@ var app = new Vue({
            'vueSlider': window['vue-slider-component'],
         },
         created: function(){
+            this.updateData();
             let self=this;
-            axios.post("/getmodel", {
-                model:"baby"
-              }).then(function (response) {
-                self.baby=response.data;
-              })
             axios.post("/getmodel", {
                 model:"mom"
               }).then(function (response) {
                 self.mom=response.data;
-              })
-          axios.post("/getmodel", {
-                model:"warmer"
-              }).then(function (response) {
-                self.warmer=response.data;
-              })
-          axios.post("/getmodel", {
-                model:"supplyMGR"
-              }).then(function (response) {
-                self.supplyMGR=response.data;
               })
           axios.post("/getscenario", {
                 model:"scenario_data"
@@ -93,7 +80,7 @@ var app = new Vue({
         computed: {
             availableSupplies: function(){
                 var toReturn=[]
-                var s=this.supplyMGR.supplyList;
+                var s=this.supplyList;
                 for (var i=0;i<s.length;i++){
                     if(s[i].available==true){
                         toReturn.push(s[i]);
@@ -102,7 +89,7 @@ var app = new Vue({
                 return toReturn;
             },
             supplySearchOptions: function(){
-                var supplyList=this.supplyMGR.supplyList;
+                var supplyList=this.supplyList;
                 var toReturn=[];
                 for (var i=0;i<supplyList.length;i++){
                     if(supplyList[i].available==false){
@@ -144,7 +131,7 @@ var app = new Vue({
                 }*/
 
                 console.log("\nall");
-                s=this.supplyMGR.supplyList;
+                s=this.supplyList;
                 for (var i=0;i<s.length;i++){
                     if(s[i].available==true){
                         console.log(s[i].pp);
@@ -153,7 +140,7 @@ var app = new Vue({
 
                 },
                 testing: function(){
-                    s=this.supplyMGR.supplyList;
+                    s=this.supplyList;
                     for(i=0; i<s.length;i++){
                         this.getSupply(s[i]);
                         console.log(s[i].name);
@@ -199,14 +186,13 @@ var app = new Vue({
                   getSupply: function(supply){
                       var name=supply.name;
                       var size=supply.size;
-                      console.log("fetch");
-                      console.log(name);
-                      console.log(size);
-                      this.doTask({'taskName':"fetch", "kv":{'name':name, 'size':size}});
+                      console.log(supply.name);
+                      supply.available=true;
+                      this.doTask("fetch", {'name':name, 'size':size});
                   },
-                  doTask: function(argsToSend){
+                  doTask: function(name, kv){
                     let self=this;
-                      axios.post("/doTask", argsToSend).then(function (response) {
+                      axios.post("/doTask", {'taskName':name, "kv":kv}).then(function (response) {
                         self.updateData();
                   })
                   },
@@ -255,24 +241,14 @@ var app = new Vue({
                   },
                   updateData: function(){
                           let self=this;
-                        axios.post("/getmodel", {
-                            model:"baby"
-                          }).then(function (response) {
-                            self.baby=response.data;
+                          axios.get("/updatedata").then(function(response){
+                              self.PE=response.data["PE"];
+                              self.supplyList=response.data["supplyList"];
+                              self.warmer=response.data["warmer"];
                           })
-                      axios.post("/getmodel", {
-                            model:"warmer"
-                          }).then(function (response) {
-                            self.warmer=response.data;
-                          })
-                      axios.post("/getmodel", {
-                            model:"supplyMGR"
-                          }).then(function (response) {
-                            self.supplyMGR=response.data;
-
-                            self.getSupplyNames();
-                          })
-
+                  },
+                  useMask: function(maskSize){
+                    this.doTask("useMask", {"size":maskSize})
                   },
               reset: function() {
                     this.$data.state = "started";

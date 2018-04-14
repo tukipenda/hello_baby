@@ -3,6 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 import json
 import sys
 sys.path.append("/home/tukipenda/mysite/hello_baby_scenario")
+import jsonclass
 from scenario import Scenario
 from preemie_ppv import *
 import uuid
@@ -54,6 +55,19 @@ def getmodel():
         toReturn=json.dumps(getObject.toJSON())
         return toReturn
 
+@app.route('/updatedata', methods=["get", "post"])
+def getUpdatedData():
+    if 'scenario_id' in session.keys():
+        scenario_id=session['scenario_id']
+        babyScenario=scenarioMGR.getScenario(scenario_id)
+        supplyList=babyScenario.supplyMGR.supplyList
+        PE=babyScenario.baby.PE
+        warmer=babyScenario.warmer
+        app.logger.info(len([supply.name for supply in supplyList if supply.available]))
+        returnDict={"PE":PE, "supplyList":supplyList, "warmer":warmer}
+        toReturn=json.dumps(jsonclass.convertToJSON(returnDict))
+        return toReturn
+
 
 @app.route('/getscenario', methods=["get", "post"])
 def getScenario():
@@ -82,5 +96,26 @@ def doTask():
         babyScenario=scenarioMGR.getScenario(scenario_id)
         taskName=request.get_json()['taskName']
         kv=request.get_json()['kv']
+        app.logger.info(kv['name'])
         babyScenario.tasks[taskName](**kv)
         return "success"
+
+if __name__=="__main__":
+    s=scenarioMGR.getScenario(1)
+    slist=s.supplyMGR.supplyList
+    def getLen():
+        alist=[supply.name for supply in slist if supply.available]
+        print(len(alist))
+
+    def fetch(num):
+        k=slist[num]
+        print(k.pp)
+        size=""
+        if not hasattr(k, "size"):
+            size=None
+        else:
+            size=k.size
+        s.tasks["fetch"](name=k.name, size=size)
+
+    def pp():
+        print([supply.name for supply in slist if supply.available])

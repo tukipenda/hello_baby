@@ -37,7 +37,7 @@
 
                         </div>
                         <div v-else>
-                            <button type="button" class="btn btn-light" v-on:click="doTask('useMask', mask.size)">[[mask.size]] Mask</button>
+                            <button type="button" class="btn btn-light" v-on:click="useMask(mask.size)">[[mask.size]] Mask</button>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                                 <div class="col-2">
                                 <h4>{{pname}}: </h4>
                                 </div>
-                            <vue-slider ref="slider" v-bind="helloSliderOptions(0, {% if pname=="PEEP" %} 20 {% else %} 50 {% endif %}, width='{% if pname=="PEEP"%} 50% {% else %} 75% {% endif %}')" v-model="{{pressure}}">
+                            <vue-slider ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, {% if pname=="PEEP" %} 20 {% else %} 50 {% endif %}, width='{% if pname=="PEEP"%} 50% {% else %} 75% {% endif %}')" v-model="{{pressure}}">
                                 <div slot="label" slot-scope="{ label, active }">
                                   <span :class="['custom-label', { active }]" v-if="label % {% if pname=="PEEP"%} 5 {% else %} 10 {% endif %} === 0" >
                                     [[ label ]]
@@ -75,7 +75,7 @@
                         <div class="col-2">
                         <h4>{{pname}}: </h4>
                         </div>
-                    <vue-slider ref="slider" v-bind="helloSliderOptions(0, {% if pressure=="warmer.flow" %} 20 {% else %} 100 {% endif %})" v-model="{{pressure}}">
+                    <vue-slider ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, {% if pressure=="warmer.flow" %} 20 {% else %} 100 {% endif %})" v-model="{{pressure}}">
                         <div slot="label" slot-scope="{ label, active }">
                           <span :class="['custom-label', { active }]" v-if="label % {% if pressure=="warmer.flow"%} 5 {% else %} 20 {% endif %} === 0" >
                             [[ label ]]
@@ -94,7 +94,7 @@
                         <div class="col-2">
                         <h4>Suction: </h4>
                         </div>
-                    <vue-slider ref="slider" v-bind="helloSliderOptions(0, 140)" v-model="warmer.suction">
+                    <vue-slider ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, 140)" v-model="warmer.suction">
                         <div slot="label" slot-scope="{ label, active }">
                           <span :class="['custom-label', { active }]" v-if="label % 20 === 0" >
                             [[ label ]]

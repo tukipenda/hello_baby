@@ -71,3 +71,21 @@ class JSONClass:
         else:
             toReturn=jsonValue
         return toReturn
+
+def convertToJSON(item):
+    toReturn=None
+    if isinstance(item, dict):
+        toReturn={}
+        for key,value in item.items():
+            toReturn[key]=convertToJSON(value)
+    elif isinstance(item, list):
+        toReturn=[]
+        for value in item:
+            toReturn.append(convertToJSON(value))
+    elif (isinstance(item, types.MethodType) or isinstance(item, types.LambdaType)):
+        toReturn=item.__name__
+    elif isinstance(item, JSONClass):
+        toReturn=item.toJSON()
+    else:
+        toReturn=item
+    return toReturn
