@@ -1,13 +1,16 @@
 from flask import Flask, render_template, request, session #learn to use flash?
-from flask_debugtoolbar import DebugToolbarExtension
+#from flask_debugtoolbar import DebugToolbarExtension
 import json
 import sys
 sys.path.append("/home/tukipenda/mysite/hello_baby_scenario")
 import jsonclass
-from scenario import Scenario
 from preemie_ppv import *
 import uuid
 import random
+
+from scenario import Scenario
+from preemie_ppv import *
+
 
 app = Flask(__name__, static_url_path='/static')
 

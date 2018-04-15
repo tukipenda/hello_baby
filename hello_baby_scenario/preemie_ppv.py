@@ -16,6 +16,9 @@ PE['other']={"scalp":'no caput', "clavicles":'no clavicular fracture', "ears":'n
              "hips":'no hip click', "spine":'no dimple', "anus":'patent anus'}
 
 
+def test_first():
+    assert 1+2==3
+
 class PreemiePPVHealth(Health):
     def __init__(self, baby, vent, CPR, UVC):
         circ_eff=3

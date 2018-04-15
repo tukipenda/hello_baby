@@ -1,14 +1,7 @@
 import json
 import sys
 from preemie_ppv import *
-import tests
+import test_app
 import pdb
+import random
 
-
-
-print("here")
-b=PreemiePPVScenario()
-b.loadData()
-
-b.prepWarmer()
-b.resuscitation()
