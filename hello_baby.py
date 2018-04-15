@@ -7,6 +7,7 @@ import jsonclass
 from scenario import Scenario
 from preemie_ppv import *
 import uuid
+import random
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -20,7 +21,12 @@ scenarioMGR=ScenarioMGR(PreemiePPVScenario)
 
 @app.route('/debug')
 def debug():
-    return str(session['scenario_id'])
+    if 'scenario_id' in session.keys():
+        scenario_id=session['scenario_id']
+        babyScenario=scenarioMGR.getScenario(scenario_id)
+        supplyList=babyScenario.supplyMGR.supplyList
+        toReturn=[supply.pp for supply in supplyList if supply.available]
+        return str(toReturn)
 
 @app.route('/')
 def home():
@@ -51,7 +57,6 @@ def getmodel():
         babyScenario=scenarioMGR.getScenario(scenario_id)
         model_name=request.get_json()['model']
         getObject=getattr(babyScenario, model_name)
-#        app.logger.info(model_name)
         toReturn=json.dumps(getObject.toJSON())
         return toReturn
 
@@ -63,11 +68,11 @@ def getUpdatedData():
         supplyList=babyScenario.supplyMGR.supplyList
         PE=babyScenario.baby.PE
         warmer=babyScenario.warmer
-        app.logger.info(len([supply.name for supply in supplyList if supply.available]))
+        app.logger.info(scenario_id)
+        app.logger.info([supply.pp for supply in supplyList if supply.available])
         returnDict={"PE":PE, "supplyList":supplyList, "warmer":warmer}
         toReturn=json.dumps(jsonclass.convertToJSON(returnDict))
         return toReturn
-
 
 @app.route('/getscenario', methods=["get", "post"])
 def getScenario():
@@ -97,25 +102,12 @@ def doTask():
         taskName=request.get_json()['taskName']
         kv=request.get_json()['kv']
         app.logger.info(kv['name'])
+        app.logger.info([supply.pp for supply in babyScenario.supplyMGR.supplyList if supply.available])
         babyScenario.tasks[taskName](**kv)
+        app.logger.info([supply.pp for supply in babyScenario.supplyMGR.supplyList if supply.available])
+        app.logger.info("task completed")
         return "success"
 
 if __name__=="__main__":
     s=scenarioMGR.getScenario(1)
     slist=s.supplyMGR.supplyList
-    def getLen():
-        alist=[supply.name for supply in slist if supply.available]
-        print(len(alist))
-
-    def fetch(num):
-        k=slist[num]
-        print(k.pp)
-        size=""
-        if not hasattr(k, "size"):
-            size=None
-        else:
-            size=k.size
-        s.tasks["fetch"](name=k.name, size=size)
-
-    def pp():
-        print([supply.name for supply in slist if supply.available])

@@ -90,23 +90,19 @@ class SupplyManager(JSONClass):
 
     def fetchSupply(self, name, size=None):
         supply=self.getSupply(name, size=size)
-        if supply:
-            supply.available=True
+        supply.available=True
 
     #can't use this with ETT, laryngoscope, mask
     def placeSupply(self, name, size=None):
         supply=self.getSupply(name, size=size)
-        if supply:
+        if supply.available:
             supply.placed=True
 
     def getSupply(self, name, size=None):
         if name in ["ETT", "mask", "laryngoscope"]:
             if size:
-                className=name[0].upper()+name[1:]
-                supplyClass=getattr(sys.modules[__name__], className)
-                testSupply=supplyClass(size)
                 for supply in self.supplies[name]:
-                    if supply==testSupply:
+                    if supply.size==size:
                         return supply
             else:
                 return None
