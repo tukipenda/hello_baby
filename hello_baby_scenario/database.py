@@ -3,6 +3,8 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import data
+import json
 
 app = Flask("hello_baby")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/hello_baby.db'
@@ -16,11 +18,6 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
-
-
-
-admin = User(username='admin', email='admin@example.com')
-guest = User(username='guest', email='guest@example.com')
 
 class Baby(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -182,7 +179,32 @@ class Scenario(db.Model):
     baby_PE=db.Column(db.Text)
 
 
-b=Baby()
+baby_data=json.dumps(data.baby_data)
+mom_data=json.dumps(data.mom_data)
+baby_PE=json.dumps(data.PE)
+scenario=Scenario(scenario=data.scenario, baby_data=baby_data, mom_data=mom_data, baby_PE=baby_PE)
+print(json.loads(baby_data)['ga'])
+
+def createBaby(user, scenario):
+    baby_data=json.loads(scenario.baby_data)
+    baby_PE=json.loads(scenario.baby_PE)
+    b=Baby(user_id=user.id, ga=scenario.baby_data['ga'], neonatal_complications=scenario.baby_data['neonatal_complications'])
+    db.session.add(b)
+    for model in {data.vitals:PEVitals, PEResp, PECardiac, PESecretions, PEAbdomen, PENeuro, PESkin, PEOther}:
+
+
+      subPE=model(**kwargs)
+      db.session.add(subPE)
+
 db.create_all()
-db.session.add(b)
+
+
+admin = User(username='admin', email='admin@example.com')
+guest = User(username='guest', email='guest@example.com')
+
+db.session.add(admin)
+db.session.add(guest)
+db.session.add(scenario)
+db.session.commit()
+createBaby(admin, scenario)
 db.session.commit()
