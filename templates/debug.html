@@ -1,0 +1,19 @@
+{% extends "layout.html" %} {% block body %}
+<div class="card">
+    <div class="card-body">
+        <div class="card-text">
+            <form action="/baddebug" method="post">
+              <div class="form-group">
+                <label for="result">Command</label>
+                <textarea class="form-control" id="result" rows="3"></textarea>
+
+                 <button type="submit" class="btn btn-primary mb-2">Submit</button>
+              </div>
+
+            </form>
+            {{result}}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

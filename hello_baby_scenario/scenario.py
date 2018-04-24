@@ -7,6 +7,10 @@ from baby_timer import *
 import baby_update
 import time
 
+import logging
+
+log = logging.getLogger('tester.sub')
+
 #probably should move this into scenario_data of some sort
 class Mom(JSONClass):
     def __init__(self, **kwargs):
@@ -124,6 +128,8 @@ class ScenarioMGR:
         if scenario_id in self.scenarios.keys():
             return self.scenarios[scenario_id]
         else:
+            log.info("here")
+            log.info(scenario_id)
             toGet=self.scenario_class()
             toGet.loadData()
             self.scenarios[scenario_id]=toGet

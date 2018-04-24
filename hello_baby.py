@@ -70,9 +70,8 @@ def getUpdatedData():
         babyScenario=scenarioMGR.getScenario(scenario_id)
         supplyList=babyScenario.supplyMGR.supplyList
         PE=babyScenario.baby.PE
+        app.logger.info([supply.pp for supply in babyScenario.supplyMGR.supplyList if supply.available])
         warmer=babyScenario.warmer
-        app.logger.info(scenario_id)
-        app.logger.info([supply.pp for supply in supplyList if supply.available])
         returnDict={"PE":PE, "supplyList":supplyList, "warmer":warmer}
         toReturn=json.dumps(jsonclass.convertToJSON(returnDict))
         return toReturn
@@ -104,11 +103,7 @@ def doTask():
         babyScenario=scenarioMGR.getScenario(scenario_id)
         taskName=request.get_json()['taskName']
         kv=request.get_json()['kv']
-        app.logger.info(kv['name'])
-        app.logger.info([supply.pp for supply in babyScenario.supplyMGR.supplyList if supply.available])
         babyScenario.tasks[taskName](**kv)
-        app.logger.info([supply.pp for supply in babyScenario.supplyMGR.supplyList if supply.available])
-        app.logger.info("task completed")
         return "success"
 
 if __name__=="__main__":
