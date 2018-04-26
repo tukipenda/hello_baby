@@ -3,6 +3,7 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy as sqla
 import data
 import json
 
@@ -191,18 +192,19 @@ def createBaby(user, scenario):
     db.session.add(b)
     db.session.commit()
     baby_id=b.id
-    for datadict,model in [(data.vitals,PEVitals), (data.resp, PEResp), (data.cardiac, PECardiac), (data.secretions, PESecretions),
-    (data.abd, PEAbdomen), (data.neuro, PENeuro), (data.skin,PESkin), (data.other, PEOther)]:
+    for datadict,model in [(baby_PE['vitals'],PEVitals), (baby_PE['resp'], PEResp), (baby_PE['cardiac'], PECardiac), (baby_PE['secretions'], PESecretions),
+    (baby_PE['abd'], PEAbdomen), (baby_PE['neuro'], PENeuro), (baby_PE['skin'],PESkin), (baby_PE['other'], PEOther)]:
         subPE=model(baby_id=baby_id, **datadict)
         db.session.add(subPE)
         db.session.commit()
 
 db.create_all()
 
-
-admin = User(username='3admin')
-
-db.session.add(admin)
+admin = User.query.filter_by(username='admin').first()
+if not admin:
+    admin = User(username='admin')
+    db.session.add(admin)
+    db.session.commit()
 db.session.add(scenario)
 db.session.commit()
 createBaby(admin, scenario)
