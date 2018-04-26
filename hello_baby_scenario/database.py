@@ -14,7 +14,6 @@ db = SQLAlchemy(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -188,22 +187,22 @@ print(json.loads(baby_data)['ga'])
 def createBaby(user, scenario):
     baby_data=json.loads(scenario.baby_data)
     baby_PE=json.loads(scenario.baby_PE)
-    b=Baby(user_id=user.id, ga=scenario.baby_data['ga'], neonatal_complications=scenario.baby_data['neonatal_complications'])
+    b=Baby(user_id=user.id, ga=baby_data['ga'], neonatal_complications=baby_data['neonatal_complications'])
     db.session.add(b)
-    for model in {data.vitals:PEVitals, PEResp, PECardiac, PESecretions, PEAbdomen, PENeuro, PESkin, PEOther}:
-
-
-      subPE=model(**kwargs)
-      db.session.add(subPE)
+    db.session.commit()
+    baby_id=b.id
+    for datadict,model in [(data.vitals,PEVitals), (data.resp, PEResp), (data.cardiac, PECardiac), (data.secretions, PESecretions),
+    (data.abd, PEAbdomen), (data.neuro, PENeuro), (data.skin,PESkin), (data.other, PEOther)]:
+        subPE=model(baby_id=baby_id, **datadict)
+        db.session.add(subPE)
+        db.session.commit()
 
 db.create_all()
 
 
-admin = User(username='admin', email='admin@example.com')
-guest = User(username='guest', email='guest@example.com')
+admin = User(username='3admin')
 
 db.session.add(admin)
-db.session.add(guest)
 db.session.add(scenario)
 db.session.commit()
 createBaby(admin, scenario)

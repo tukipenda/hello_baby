@@ -10,11 +10,11 @@ mom_data={"age":25,
 
 vitals={'o2sat':55, 'hr':120, 'rr':40, 'sbp':75, 'dbp':50, 'temp':35, 'weight':2.25}
 resp={"breath_sounds":"None", "chest_rise":"None", "wob":"None", "is_grunting":False, "is_spontaneous":False}
-cardiac={"murmur":"no murmur", "femoral_pulse":"2+", "radial_pulse":"2+"}
-abd={"BS":"+bs", "palpate":"soft, no HSM"}
+cardiac={"murmur":"no murmur", "femoral_pulse":"2+", "brachial_pulse":"2+"}
+abd={"bs":"+bs", "palpate":"soft, no HSM"}
 skin={"color":'blue', "is_dry":False, "texture":"term infant skin"}
 secretions={"quantity":'moderate', "below_cords":False, "color":'clear', "thickness":'thin'}
-neuro={"LOC":'weak cry', "deficit":"none"}
+neuro={"loc":'weak cry', "motor_deficit":"none"}
 other={"scalp":'no caput', "clavicles":'no clavicular fracture', "ears":'normally positioned',
              "eyes":'red reflex intact bilaterally', "umbilical_cord":"normal 3 vessel cord", "palate":'palate intact', "lips":'no cleft lips', "gu":'normal genitalia',
              "hips":'no hip click', "spine":'no dimple', "anus":'patent anus'}
