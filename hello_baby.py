@@ -24,9 +24,9 @@ scenarioMGR=ScenarioMGR(PreemiePPVScenario)
 
 @app.route('/debug')
 def debug():
-    if 'scenario_id' in session.keys():
-        scenario_id=session['scenario_id']
-        babyScenario=scenarioMGR.getScenario(scenario_id)
+    if 'user_id' in session.keys():
+        user_id=session['user_id']
+        babyScenario=scenarioMGR.getScenario(user_id)
         supplyList=babyScenario.supplyMGR.supplyList
         toReturn=[supply.pp for supply in supplyList if supply.available]
         return str(toReturn)
@@ -37,12 +37,12 @@ def home():
 
 @app.route('/scenario')
 def scenario():
-    if 'scenario_id' in session.keys():
+    if 'user_id' in session.keys():
         return render_template('scenario.html')
     else:
-        scenario_id=uuid.uuid4()
-        scenarioMGR.getScenario(scenario_id)
-        session['scenario_id']=scenario_id
+        user_id=uuid.uuid4()
+        scenarioMGR.getScenario(user_id)
+        session['user_id']=user_id
         return render_template('scenario.html')
 
 @app.route('/prepwarmer')
@@ -55,9 +55,9 @@ def resuscitation():
 
 @app.route('/getmodel', methods=["get", "post"])
 def getmodel():
-    if 'scenario_id' in session.keys():
-        scenario_id=session['scenario_id']
-        babyScenario=scenarioMGR.getScenario(scenario_id)
+    if 'user_id' in session.keys():
+        user_id=session['user_id']
+        babyScenario=scenarioMGR.getScenario(user_id)
         model_name=request.get_json()['model']
         getObject=getattr(babyScenario, model_name)
         toReturn=json.dumps(getObject.toJSON())
@@ -65,9 +65,9 @@ def getmodel():
 
 @app.route('/updatedata', methods=["get", "post"])
 def getUpdatedData():
-    if 'scenario_id' in session.keys():
-        scenario_id=session['scenario_id']
-        babyScenario=scenarioMGR.getScenario(scenario_id)
+    if 'user_id' in session.keys():
+        user_id=session['user_id']
+        babyScenario=scenarioMGR.getScenario(user_id)
         supplyList=babyScenario.supplyMGR.supplyList
         PE=babyScenario.baby.PE
         app.logger.info([supply.pp for supply in babyScenario.supplyMGR.supplyList if supply.available])
@@ -78,17 +78,17 @@ def getUpdatedData():
 
 @app.route('/getscenario', methods=["get", "post"])
 def getScenario():
-    if 'scenario_id' in session.keys():
-        scenario_id=session['scenario_id']
-        babyScenario=scenarioMGR.getScenario(scenario_id)
+    if 'user_id' in session.keys():
+        user_id=session['user_id']
+        babyScenario=scenarioMGR.getScenario(user_id)
         toReturn=json.dumps(babyScenario.scenario_data)
         return toReturn
 
 @app.route('/savedata', methods=["get", "post"])
 def saveData():
-    if 'scenario_id' in session.keys():
-        scenario_id=session['scenario_id']
-        babyScenario=scenarioMGR.getScenario(scenario_id)
+    if 'user_id' in session.keys():
+        user_id=session['user_id']
+        babyScenario=scenarioMGR.getScenario(user_id)
         model_name=request.get_json()['model_name']
         jsonModel=request.get_json()['model']
         model=getattr(babyScenario, model_name)
@@ -98,9 +98,9 @@ def saveData():
 
 @app.route('/doTask', methods=["post"])
 def doTask():
-    if 'scenario_id' in session.keys():
-        scenario_id=session['scenario_id']
-        babyScenario=scenarioMGR.getScenario(scenario_id)
+    if 'user_id' in session.keys():
+        user_id=session['user_id']
+        babyScenario=scenarioMGR.getScenario(user_id)
         taskName=request.get_json()['taskName']
         kv=request.get_json()['kv']
         babyScenario.tasks[taskName](**kv)

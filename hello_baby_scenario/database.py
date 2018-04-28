@@ -9,7 +9,9 @@ import json
 
 app = Flask("hello_baby")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/hello_baby.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db = SQLAlchemy(app)
+
 
 
 class User(db.Model):
@@ -183,7 +185,17 @@ baby_data=json.dumps(data.baby_data)
 mom_data=json.dumps(data.mom_data)
 baby_PE=json.dumps(data.PE)
 scenario=Scenario(scenario=data.scenario, baby_data=baby_data, mom_data=mom_data, baby_PE=baby_PE)
-print(json.loads(baby_data)['ga'])
+
+PEDict={
+    'vitals':PEVitals,
+    'resp':PEResp,
+    'cardiac':PECardiac,
+    'secretions':PESecretions,
+    'abd':PEAbdomen,
+    'neuro':PENeuro,
+    'skin':PESkin,
+    'other':PEOther
+}
 
 def createBaby(user, scenario):
     baby_data=json.loads(scenario.baby_data)
@@ -192,11 +204,26 @@ def createBaby(user, scenario):
     db.session.add(b)
     db.session.commit()
     baby_id=b.id
-    for datadict,model in [(baby_PE['vitals'],PEVitals), (baby_PE['resp'], PEResp), (baby_PE['cardiac'], PECardiac), (baby_PE['secretions'], PESecretions),
-    (baby_PE['abd'], PEAbdomen), (baby_PE['neuro'], PENeuro), (baby_PE['skin'],PESkin), (baby_PE['other'], PEOther)]:
-        subPE=model(baby_id=baby_id, **datadict)
+    for name,model in PEDict.items():
+        subPE=model(baby_id=baby_id, **baby_PE[name])
         db.session.add(subPE)
         db.session.commit()
+
+def getPEAttribute(baby_id, pe_name, attribute):
+    model=PEDict[pe_name].query.filter_by(baby_id=baby_id).first()
+    if (model and hasattr(model, attribute)):
+        return getattr(model, attribute)
+    else:
+        return None
+
+def setPEAttribute(baby_id, pe_name, attribute, value):
+    model=PEDict[pe_name].query.filter_by(baby_id=baby_id).first()
+    if (model and hasattr(model, attribute)):
+        setattr(model, attribute, value)
+        db.session.commit()
+    else:
+        pass
+        #raise failure error
 
 db.create_all()
 
@@ -209,3 +236,7 @@ db.session.add(scenario)
 db.session.commit()
 createBaby(admin, scenario)
 db.session.commit()
+
+print(getPEAttribute(1, "vitals", "rr"))
+setPEAttribute(1, "vitals", "rr", 30)
+print(getPEAttribute(1, "vitals", "rr"))

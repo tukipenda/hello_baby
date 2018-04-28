@@ -1,5 +1,6 @@
 from baby import *
 from jsonclass import *
+import database
 
 class BabyUpdate:
     def __init__(self, baby, health, warmer, supplyMGR):
@@ -26,7 +27,7 @@ class BabyUpdate:
         self.CPR.update(*args, **kwargs)
         updateVitals()
         updateSkin()
-            
+
 
     def updateVitals(self):
         def updateHR():
