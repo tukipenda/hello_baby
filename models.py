@@ -1,3 +1,5 @@
+import app
+import hello_baby_scenario
 #need create, teardown
 #user, scenario,
 
