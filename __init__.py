@@ -1,18 +1,41 @@
-from flask import Flask, render_template, request, session #learn to use flash?
+from flask import Flask, render_template, request, session
 #from flask_debugtoolbar import DebugToolbarExtension
+
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy as sqla
 import json
 import sys
-sys.path.append("/home/tukipenda/mysite/hello_baby_scenario")
+sys.path.append("/home/tukipenda/hello_baby/hello_baby_scenario")
+
+sys.path.append("/home/tukipenda/hello_baby/")
+
 import jsonclass
 from preemie_ppv import *
 import uuid
 import random
-
 from scenario import Scenario
-from preemie_ppv import *
 
 
 app = Flask(__name__, static_url_path='/static')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/hello_baby.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+db = SQLAlchemy(app)
+
+from models import *
+
+
+db.create_all()
+
+#admin = User.query.filter_by(username='admin').first()
+#if not admin:
+#    admin = User(username='admin')
+ #   db.session.add(admin)
+  #  db.session.commit()
+#db.session.add(scenario)
+#db.session.commit()
+#createBaby(admin, scenario)
+#db.session.commit()
 
 #not secure
 app.secret_key="something very easy"
