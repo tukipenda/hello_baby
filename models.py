@@ -3,7 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy as sqla
 import json
-import hello_baby_scenario.data as data
+import hello_baby_scenario.preemie_ppv_data as data
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -197,7 +197,10 @@ def createBaby(user, scenario):
     for name,model in PEDict.items():
         subPE=model(baby_id=baby_id, **baby_PE[name])
         db.session.add(subPE)
-        db.session.commit()
+    db.session.commit()
+    for supply in data.supplyList:
+        Supply(baby_id=baby_id, supply_name=supply['name'], size=supply['size'], is_available=False, is_using=False)
+    db.session.commit()
 
 def getPEAttribute(baby_id, pe_name, attribute):
     model=PEDict[pe_name].query.filter_by(baby_id=baby_id).first()

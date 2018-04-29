@@ -20,3 +20,33 @@ other={"scalp":'no caput', "clavicles":'no clavicular fracture', "ears":'normall
              "hips":'no hip click', "spine":'no dimple', "anus":'patent anus'}
 
 PE={"vitals":vitals, "resp":resp, "cardiac":cardiac, "abd":abd, "skin":skin, "secretions":secretions, "neuro":neuro, "other":other}
+
+simple_supplies=[
+            "pulse_ox",
+            "hat",
+            "transwarmer",
+            "plastic_bag",
+            "temp_probe",
+            "blankets",
+            "bulb_suction",
+            "meconium_aspirator",
+            "stethoscope",
+            "epinephrine",
+            "normal_saline_bag",
+            "cord_clamp",
+            "scalpel",
+            "flush",
+            "UVC"
+        ]
+supplyList=[]
+for supply in supplies:
+    supplyList.append({"name":supply, "size":None})
+
+for size in ["0", "1", "00"]:
+    supplyList.append({"name":'laryngoscope', "size":size})
+
+for size in ["2.5", "3", "3.5", "4"]:
+    supplyList.append({"name":'ett', "size":size})
+
+for maskType in ["Infant", "Preemie"]:
+    supplyList.append({"name":'mask', "size":size})
