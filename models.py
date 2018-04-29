@@ -1,17 +1,9 @@
-import app
-import hello_baby_scenario
-#need create, teardown
-#user, scenario,
-
+from app import db
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy as sqla
-import sys
-sys.path.append("/home/tukipenda/")
-sys.path.append("/home/tukipenda/hello_baby/hello_baby_scenario")
-import data
 import json
-from hello_baby import db
+import hello_baby_scenario.data as data
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
