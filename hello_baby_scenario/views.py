@@ -8,7 +8,7 @@ import preemie_ppv as ppv
 def debug():
     if 'user_id' in session.keys():
         pass
-    
+
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -23,7 +23,7 @@ def scenario():
         user=models.User(username=user_id)
         db.session.add(user)
         db.session.commit()
-        ppv.create_baby(user)
+        ppv.PPVCreateBaby(user)
         return render_template('scenario.html')
 
 @app.route('/prepwarmer')
