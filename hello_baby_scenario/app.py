@@ -2,12 +2,13 @@ from flask import Flask, render_template, request, session
 #from flask_debugtoolbar import DebugToolbarExtension
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
+import os
 app = Flask(__name__, static_url_path='/static')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/hello_baby.db'
+dirname=os.path.dirname(os.path.abspath(__file__))
+dbpath='sqlite:///{0}/hello_baby.db'.format(dirname)
+app.config['SQLALCHEMY_DATABASE_URI'] = dbpath
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db = SQLAlchemy(app)
-db.create_all()
 
 #admin = User.query.filter_by(username='admin').first()
 #if not admin:

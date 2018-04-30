@@ -62,12 +62,12 @@ var app = new Vue({
                 model:"mom"
               }).then(function (response) {
                 self.mom=response.data;
-              })
+              });
           axios.post("/getscenario", {
                 model:"scenario_data"
               }).then(function (response) {
                 self.scenario_data=response.data;
-              })
+              });
 
 
         },
@@ -79,7 +79,7 @@ var app = new Vue({
         },
         computed: {
             availableSupplies: function(){
-                var toReturn=[]
+                var toReturn=[];
                 var s=this.supplyList;
                 for (var i=0;i<s.length;i++){
                     if(s[i].available==true){
@@ -146,7 +146,7 @@ var app = new Vue({
                         console.log(s[i].name);
                         a=this.availableSupplies;
                         b=this.supplySearchOptions;
-                        ab=[]
+                        ab=[];
                         for(var j=0;j<a.length;j++){
                             ab.push(a[j].name);
                         }
@@ -194,7 +194,7 @@ var app = new Vue({
                     let self=this;
                       axios.post("/doTask", {'taskName':name, "kv":kv}).then(function (response) {
                         self.updateData();
-                  })
+                  });
                   },
                   helloSliderOptions: function(min, max, width='50%'){
                       var options={
@@ -233,11 +233,11 @@ var app = new Vue({
                       this.updateWarmer();
                   },
                   updateWarmer: function(){
-                      let self=this
+                      let self=this;
                       axios.post("/savedata", {
                         model_name:"warmer",
                         model:JSON.stringify(self.warmer),
-                      })
+                      });
                   },
                   updateData: function(){
                           let self=this;
@@ -245,10 +245,10 @@ var app = new Vue({
                               self.PE=response.data["PE"];
                               self.supplyList=response.data["supplyList"];
                               self.warmer=response.data["warmer"];
-                          })
+                          });
                   },
                   useMask: function(maskSize){
-                    this.doTask("useMask", {"size":maskSize})
+                    this.doTask("useMask", {"size":maskSize});
                   },
               reset: function() {
                     this.$data.state = "started";

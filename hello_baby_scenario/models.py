@@ -3,7 +3,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy as sqla
 import json
-import hello_baby_scenario.preemie_ppv_data as data
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,7 +33,7 @@ class PEVitals(db.Model):
     dbp=db.Column(db.Integer)
     o2sat=db.Column(db.Integer)
     temp=db.Column(db.Integer)
-    weight=db.column(db.Float)
+    weight=db.Column(db.Float)
 
 class PEResp(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -165,16 +164,12 @@ class Supply(db.Model):
 
 class Scenario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name=db.Column(db.Text) # needs to be unique
     scenario=db.Column(db.Text)
     baby_data=db.Column(db.Text)
     mom_data=db.Column(db.Text)
     baby_PE=db.Column(db.Text)
-
-
-baby_data=json.dumps(data.baby_data)
-mom_data=json.dumps(data.mom_data)
-baby_PE=json.dumps(data.PE)
-scenario=Scenario(scenario=data.scenario, baby_data=baby_data, mom_data=mom_data, baby_PE=baby_PE)
+    supplies=db.Column(db.Text)
 
 PEDict={
     'vitals':PEVitals,
@@ -187,9 +182,10 @@ PEDict={
     'other':PEOther
 }
 
-def createBaby(user, scenario):
+def create_baby(user, scenario):
     baby_data=json.loads(scenario.baby_data)
     baby_PE=json.loads(scenario.baby_PE)
+    supplies=json.loads(scenario.supplies)
     b=Baby(user_id=user.id, ga=baby_data['ga'], neonatal_complications=baby_data['neonatal_complications'])
     db.session.add(b)
     db.session.commit()
@@ -198,8 +194,9 @@ def createBaby(user, scenario):
         subPE=model(baby_id=baby_id, **baby_PE[name])
         db.session.add(subPE)
     db.session.commit()
-    for supply in data.supplyList:
-        Supply(baby_id=baby_id, supply_name=supply['name'], size=supply['size'], is_available=False, is_using=False)
+    for supply in supplies:
+        newSupply=Supply(baby_id=baby_id, supply_name=supply['name'], size=supply['size'], is_available=False, is_using=False)
+        db.session.add(newSupply)
     db.session.commit()
 
 def getPEAttribute(baby_id, pe_name, attribute):
@@ -217,3 +214,6 @@ def setPEAttribute(baby_id, pe_name, attribute, value):
     else:
         pass
         #raise failure error
+
+        
+db.create_all()

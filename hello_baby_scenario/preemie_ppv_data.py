@@ -8,6 +8,7 @@ mom_data={"age":25,
   "rom":"ROM occurred 16 hours ago.",
   "gp":"G1PO"}
 
+#I deleted APGAR for now,not including malformations, BP, EKG, or 4-extremity sats
 vitals={'o2sat':55, 'hr':120, 'rr':40, 'sbp':75, 'dbp':50, 'temp':35, 'weight':2.25}
 resp={"breath_sounds":"None", "chest_rise":"None", "wob":"None", "is_grunting":False, "is_spontaneous":False}
 cardiac={"murmur":"no murmur", "femoral_pulse":"2+", "brachial_pulse":"2+"}
@@ -39,7 +40,7 @@ simple_supplies=[
             "UVC"
         ]
 supplyList=[]
-for supply in supplies:
+for supply in simple_supplies:
     supplyList.append({"name":supply, "size":None})
 
 for size in ["0", "1", "00"]:
