@@ -17,6 +17,7 @@ class Baby(db.Model):
         nullable=False)
     ga=db.Column(db.Text)
     neonatal_complications=db.Column(db.Text)
+    is_delivered=db.Column(db.Boolean)
 
     supplies = db.relationship('Supply', backref='baby', lazy=True)
 
@@ -128,19 +129,19 @@ class UVC(db.Model):
         nullable=False)
     is_uvc_placed=db.Column(db.Boolean)
     medications_given=db.Column(db.Text)
-
+    
 class Warmer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     baby_id = db.Column(db.Integer, db.ForeignKey('baby.id'),
         nullable=False)
+    is_turned_on=db.Column(db.Boolean)
+    suction=db.Column(db.Integer)
+    fio2=db.Column(db.Integer)
+    flow=db.Column(db.Integer)
     pip=db.Column(db.Integer)
     peep=db.Column(db.Integer)
     pop=db.Column(db.Integer)
-    suction=db.Column(db.Integer)
-    is_turned_on=db.Column(db.Boolean)
     temp_mode=db.Column(db.Text)
-    fiO2=db.Column(db.Integer)
-    flow=db.Column(db.Integer)
 
 class Health(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -161,7 +162,7 @@ class Supply(db.Model):
     is_available=db.Column(db.Boolean)
     is_using=db.Column(db.Boolean)
     size=db.Column(db.Text, nullable=True)
-
+    
 class Scenario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name=db.Column(db.Text) # needs to be unique
@@ -169,6 +170,7 @@ class Scenario(db.Model):
     baby_data=db.Column(db.Text)
     mom_data=db.Column(db.Text)
     baby_PE=db.Column(db.Text)
+    warmer=db.Column(db.Text)
     supplies=db.Column(db.Text)
 
 PEDict={
@@ -186,6 +188,7 @@ def create_baby(user, scenario):
     baby_data=json.loads(scenario.baby_data)
     baby_PE=json.loads(scenario.baby_PE)
     supplies=json.loads(scenario.supplies)
+    warmer=json.loads(scenario.warmer)
     b=Baby(user_id=user.id, ga=baby_data['ga'], neonatal_complications=baby_data['neonatal_complications'])
     db.session.add(b)
     db.session.commit()
@@ -197,6 +200,9 @@ def create_baby(user, scenario):
     for supply in supplies:
         newSupply=Supply(baby_id=baby_id, supply_name=supply['name'], size=supply['size'], is_available=False, is_using=False)
         db.session.add(newSupply)
+    db.session.commit()
+    w=Warmer(baby_id=baby_id, **warmer)
+    db.session.add(w)
     db.session.commit()
 
 def getPEAttribute(baby_id, pe_name, attribute):

@@ -1,5 +1,5 @@
 scenario="You are called by the OB team for a stat C/S. Mom is 25 years old, and gestational age is 32 weeks."
-baby_data={"ga":"32", "neonatal_complications":"None", "delivery":"C/S"}
+baby_data={"ga":"32", "neonatal_complications":"None", "delivery":"C/S", "is_delivered":False}
 
 mom_data={"age":25,
   "PNL":"Prenatal labs: VZVI, RI, HIV negative, Hep B negative, RPRNR, GC/Chlamydia negative",
@@ -7,6 +7,17 @@ mom_data={"age":25,
   "gbs":"GBS+.  She was febrile to 38.1, and received ampicillin 2 hours before delivery.",
   "rom":"ROM occurred 16 hours ago.",
   "gp":"G1PO"}
+
+warmer={
+    "is_turned_on":False,
+    "suction":0,
+    "fio2":100,
+    "flow":0,
+    "temp_mode":"Manual",
+    "peep":0,
+    "pip":0,
+    "pop":0    
+}
 
 #I deleted APGAR for now,not including malformations, BP, EKG, or 4-extremity sats
 vitals={'o2sat':55, 'hr':120, 'rr':40, 'sbp':75, 'dbp':50, 'temp':35, 'weight':2.25}

@@ -12,16 +12,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = dbpath
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db = SQLAlchemy(app)
 
-#admin = User.query.filter_by(username='admin').first()
-#if not admin:
-#    admin = User(username='admin')
- #   db.session.add(admin)
-  #  db.session.commit()
-#db.session.add(scenario)
-#db.session.commit()
-#createBaby(admin, scenario)
-#db.session.commit()
-
 #not secure
 app.secret_key="something very easy"
 app.debug=True

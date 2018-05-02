@@ -3,6 +3,7 @@ from app import app, db
 import uuid
 import models
 import preemie_ppv as ppv
+import json
 
 @app.route('/debug')
 def debug():
@@ -36,4 +37,5 @@ def getScenario():
     if 'user_id' in session.keys():
         user_id=session['user_id']
         user=models.User.query.filter_by(username=user_id).first()
-        return ppv.getScenarioData(user)
+        scenarioData=ppv.getScenarioData(user)
+        return(json.dumps(scenarioData))
