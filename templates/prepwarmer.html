@@ -10,7 +10,9 @@
 
                 {% for value,name in [("resuscitation", "Resuscitation"),("history","History"), ("exam","Exam"), ("warmer", "Warmer"), ("intervene", "Intervene")] %}
                 <a {% if value in [ "resuscitation", "exam", "intervene"] %} v-if="baby_delivered" {% endif %} class="nav-item nav-link {% if value==" history " %} active {% endif %}" id="nav-{{value}}-tab" data-toggle="tab" href="#nav-{{value}}" role="tab" aria-controls="nav-{{value}}"
-                    aria-selected="true">{{name}}</a> {% endfor %}
+                    aria-selected="true">
+                    {{name}}
+                </a> {% endfor %}
                 <div v-if="baby_delivered">
                     <button class="btn btn-primary" v-on:click="startBabyTimer" style="margin-left:90px;"> Start Timer </button>
                 </div>
@@ -38,7 +40,7 @@
                 <div class="card col-6" id="resuscExam">
                     <div class="card-body">
                         <div class="row">
-                            [[baby.appearance]]
+                            [[scenario.baby.appearance]]
                         </div>
                         {% for examAction in ["Listen to heart", "Listen to lungs", "Examine Abdomen"] %}
                         <div class="row">
@@ -75,7 +77,7 @@
                 <div class="card col-6" id="resuscExam">
                     <div class="card-body">
                         <div class="row">
-                            [[baby.appearance]]
+                            [[scenario.baby.appearance]]
                         </div>
                     </div>
 

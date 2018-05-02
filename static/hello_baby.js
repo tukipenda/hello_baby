@@ -42,12 +42,7 @@ var app = new Vue({
             interval: null,
             baby_timer_started: false,
             baby_delivered: false,
-            baby:{},
-            mom:{},
-            warmer:{},
-            PE:{},
-            supplyList:[],
-            scenario_data:{},
+            scenario:{},
             test: 0,
             showTab: "warmer",
             supplyToFetch: null
@@ -56,20 +51,7 @@ var app = new Vue({
            'vueSlider': window['vue-slider-component'],
         },
         created: function(){
-            this.updateData();
-            let self=this;
-            axios.post("/getmodel", {
-                model:"mom"
-              }).then(function (response) {
-                self.mom=response.data;
-              });
-          axios.post("/getscenario", {
-                model:"scenario_data"
-              }).then(function (response) {
-                self.scenario_data=response.data;
-              });
-
-
+            this.getScenario();
         },
         mounted: function() {
             this.interval = setInterval(this.updateCurrentTime, 1000);
@@ -116,6 +98,12 @@ var app = new Vue({
             }
         },
         methods: {
+                getScenario: function(){
+                    let self=this;
+                    axios.get("/getscenario").then(function(response){
+                        self.scenario=response.data;
+                    });
+                },
                 getSupplyNames: function(){
                   /*  console.log("options");
                     var s=this.supplySearchOptions;
@@ -238,14 +226,6 @@ var app = new Vue({
                         model_name:"warmer",
                         model:JSON.stringify(self.warmer),
                       });
-                  },
-                  updateData: function(){
-                          let self=this;
-                          axios.get("/updatedata").then(function(response){
-                              self.PE=response.data["PE"];
-                              self.supplyList=response.data["supplyList"];
-                              self.warmer=response.data["warmer"];
-                          });
                   },
                   useMask: function(maskSize){
                     this.doTask("useMask", {"size":maskSize});

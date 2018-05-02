@@ -1,3 +1,4 @@
+<!--
 <div class="row">
     <div class="col-3">
         <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
@@ -77,7 +78,7 @@
                         </div>
                     <vue-slider ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, {% if pressure=="warmer.flow" %} 20 {% else %} 100 {% endif %})" v-model="{{pressure}}">
                         <div slot="label" slot-scope="{ label, active }">
-                          <span :class="['custom-label', { active }]" v-if="label % {% if pressure=="warmer.flow"%} 5 {% else %} 20 {% endif %} === 0" >
+                          <span :class="['custom-label', { active }]" v-if="label % {% if pressure=="scenario.warmer.flow"%} 5 {% else %} 20 {% endif %} === 0" >
                             [[ label ]]
                           </span>
                         </div>
@@ -94,7 +95,7 @@
                         <div class="col-2">
                         <h4>Suction: </h4>
                         </div>
-                    <vue-slider ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, 140)" v-model="warmer.suction">
+                    <vue-slider ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, 140)" v-model="scenario.warmer.suction">
                         <div slot="label" slot-scope="{ label, active }">
                           <span :class="['custom-label', { active }]" v-if="label % 20 === 0" >
                             [[ label ]]
@@ -125,3 +126,4 @@
     </div>
 
 </div>
+-->

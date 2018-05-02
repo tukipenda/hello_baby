@@ -1,11 +1,8 @@
 import os
-dirname=os.path.dirname(os.path.abspath(__file__))
-import sys
-sys.path.append(dirname+"/hello_baby_scenario/")
-from app import app, db
-from models import *
-from views import *
-app.logger.info("Here")
+from werkzeug.wsgi import SharedDataMiddleware
+from hello_baby import app
 
-if __name__ == '__main__':
-    app.run()
+
+application = SharedDataMiddleware(app, {
+    '/static': os.path.join(os.path.dirname(__file__), 'static')
+})

@@ -1,2 +1,3 @@
 flask
-flask_sqlalchemy
+flask_sqlalchemygunicorn==19.8.1
+Werkzeug==0.14.1
