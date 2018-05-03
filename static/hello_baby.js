@@ -36,14 +36,9 @@ var app = new Vue({
         delimiters: ['[[',']]'],
         data: {
             contents: '',
-            state: "paused",
-            startTime: null,
-            currentTime: null,
-            interval: null,
             baby_timer_started: false,
             baby_delivered: false,
             scenario:{},
-            test: 0,
             showTab: "warmer",
             supplyToFetch: null
         },
@@ -62,7 +57,7 @@ var app = new Vue({
         computed: {
             availableSupplies: function(){
                 var toReturn=[];
-                var s=this.supplyList;
+                var s=this.scenario.supplies;
                 for (var i=0;i<s.length;i++){
                     if(s[i].available==true){
                         toReturn.push(s[i]);
@@ -71,7 +66,7 @@ var app = new Vue({
                 return toReturn;
             },
             supplySearchOptions: function(){
-                var supplyList=this.supplyList;
+                var supplyList=this.scenario.supplies;
                 var toReturn=[];
                 for (var i=0;i<supplyList.length;i++){
                     if(supplyList[i].available==false){
@@ -79,22 +74,6 @@ var app = new Vue({
                     };
                 }
                 return toReturn;
-            },
-            time: function() {
-                return this.minutes + ':' + this.seconds;
-            },
-            milliseconds: function() {
-                return this.currentTime - this.$data.startTime;
-            },
-            minutes: function() {
-                var lapsed = this.milliseconds;
-                var min = Math.floor((lapsed / 1000 / 60) % 60);
-                return min >= 10 ? min : '0' + min;
-            },
-            seconds: function() {
-                var lapsed = this.milliseconds;
-                var sec = Math.ceil((lapsed / 1000) % 60);
-                return sec >= 10 ? sec : '0' + sec;
             }
         },
         methods: {
@@ -127,29 +106,6 @@ var app = new Vue({
                 }
 
                 },
-                testing: function(){
-                    s=this.supplyList;
-                    for(i=0; i<s.length;i++){
-                        this.getSupply(s[i]);
-                        console.log(s[i].name);
-                        a=this.availableSupplies;
-                        b=this.supplySearchOptions;
-                        ab=[];
-                        for(var j=0;j<a.length;j++){
-                            ab.push(a[j].name);
-                        }
-                        console.log("available");
-                        console.log(ab);
-                        bb=[];
-                        console.log("");
-                        console.log("unused");
-                        for(var j=0;j<b.length;j++){
-                            bb.push(b[j].name);
-                        }
-                        console.log(bb);
-                    }
-
-                },
                 startBabyTimer: function(){
                     this.baby_timer_started=true;
                     this.state="started";
@@ -159,30 +115,13 @@ var app = new Vue({
                 deliverBaby: function(){
                     this.baby_delivered=true;
                 },
-                buttonClick: function(link){
-                    let self=this;
-                    axios.get(link)
-                        .then(function (response) {
-                            self.contents=response.data;
-                            self.display=false; //need to fix this if there is ever a button taking us back to the start
-                            console.log(response.data);
-                        })
-                        .catch(function (error) {
-                            console.log(error.message);
-                        });
-                  },
+
                   getSupply: function(supply){
                       var name=supply.name;
                       var size=supply.size;
                       console.log(supply.name);
                       supply.available=true;
                       this.doTask("fetch", {'name':name, 'size':size});
-                  },
-                  doTask: function(name, kv){
-                    let self=this;
-                      axios.post("/doTask", {'taskName':name, "kv":kv}).then(function (response) {
-                        self.updateData();
-                  });
                   },
                   helloSliderOptions: function(min, max, width='50%'){
                       var options={
@@ -217,35 +156,18 @@ var app = new Vue({
                     return options;
                   },
                   toggleHeat: function(){
-                      this.warmer.turnedOn=!this.warmer.turnedOn;
+                      this.scenario.warmer.is_turned_on=!this.scenario.warmer.is_turned_on;
                       this.updateWarmer();
                   },
                   updateWarmer: function(){
                       let self=this;
+                      /* Need to implement this
                       axios.post("/savedata", {
                         model_name:"warmer",
                         model:JSON.stringify(self.warmer),
                       });
-                  },
-                  useMask: function(maskSize){
-                    this.doTask("useMask", {"size":maskSize});
-                  },
-              reset: function() {
-                    this.$data.state = "started";
-                    this.$data.startTime = Date.now();
-                    this.$data.currentTime = Date.now();
-                },
-            pause: function() {
-                this.$data.state = "paused";
-            },
-            resume: function() {
-                this.$data.state = "started";
-            },
-            updateCurrentTime: function() {
-                if (this.$data.state == "started") {
-                    this.currentTime = Date.now();
-                }
-            }
+                      */
+                  }
             }
         });
 

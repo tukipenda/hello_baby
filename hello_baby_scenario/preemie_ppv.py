@@ -11,7 +11,10 @@ warmer=json.dumps(data.warmer)
 ppvScenario=models.Scenario(name="preemie_ppv", scenario=data.scenario, baby_data=baby_data, mom_data=mom_data, baby_PE=baby_PE, supplies=supplies, warmer=warmer)
 db.session.add(ppvScenario)
 db.session.commit()
-PPVCreateBaby=lambda x: models.create_baby(x, ppvScenario)
+
+def PPVCreateBaby(user):
+    ppvScenario=models.Scenario.query.filter_by(name="preemie_ppv").first()
+    models.create_baby(user, ppvScenario)
 
 def getSubDict(newdict, keys):
     return {key:newdict[key] for key in keys if (key in newdict.keys())}
@@ -32,6 +35,9 @@ def getScenarioData(user):
         'PE':PE,
         'mom':mom,
         'baby':babyDict,
-        'warmer':warmer
+        'warmer':warmer,
+        'supplies':[]
     }
     return returnDict
+
+def updateWarmer(user, warmer_dict):

@@ -1,5 +1,5 @@
 {% block history %}
-<div class="list-group" v-for="(value, key, i) in mom.data" style="margin-top:20px">
+<div class="list-group" v-for="(value, key, i) in scenario.mom" style="margin-top:20px">
     <div class="row">
         <a :href="'#collapse'+i" class="list-group-item list-group-item-action active col-2" data-toggle="collapse" :data-target="'#collapse'+i" aria-expanded="false" aria-controls="'collapse'+i">
                 Get [[key]]
