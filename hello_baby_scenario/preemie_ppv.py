@@ -14,7 +14,7 @@ db.session.commit()
 
 def PPVCreateBaby(user):
     ppvScenario=models.Scenario.query.filter_by(name="preemie_ppv").first()
-    models.create_baby(user, ppvScenario)
+    return models.create_baby(user, ppvScenario)
 
 def getSupplies(baby_id):
     supplies=models.Supply.query.filter_by(baby_id=baby_id)
@@ -52,6 +52,13 @@ def getScenarioData(user):
     }
     return returnDict
 
-def updateWarmer(user, warmer_dict):
+def updateWarmer(baby_id, warmer_dict):
     warmer_dict=json.loads(warmer_dict)
-    #warmer=models.Warmer.query.filter_by(baby_)
+    warmer=models.Warmer.query.filter_by(baby_id=baby_id).update(warmer_dict)
+    db.session.commit()
+
+def doTask(baby_id, taskName, **kwargs):
+    if taskName=="fetch":
+        supply=models.Supply.query.filter_by(baby_id=baby_id, **kwargs).update(dict(is_available=True))
+        db.session.commit()
+    

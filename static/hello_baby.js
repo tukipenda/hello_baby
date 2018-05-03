@@ -115,9 +115,13 @@ var app = new Vue({
                 deliverBaby: function(){
                     this.baby_delivered=true;
                 },
-                doTask: function(taskName, args){
-                    axios.post("/dotask").then(function(response){
-                        self.scenario=response.data;
+                doTask: function(taskName, kwargs){
+                    let self=this;
+                    axios.post("/dotask", 
+                             {'name':taskName, 
+                             'kwargs':kwargs
+                             }).then(function(response){
+                        self.getScenario();
                     });
                 },
                   getSupply: function(supply){
@@ -164,12 +168,9 @@ var app = new Vue({
                   },
                   updateWarmer: function(){
                       let self=this;
-                      /* Need to implement this
-                      axios.post("/savedata", {
-                        model_name:"warmer",
-                        model:JSON.stringify(self.warmer),
+                      axios.post("/updatewarmer", {
+                        warmer:JSON.stringify(self.scenario.warmer),
                       });
-                      */
                   }
             }
         });

@@ -11,7 +11,7 @@
         <div class="tab-content">
             {% set values=["warmer", "mask", "oxygen", "suction", "supplies"] %}
             <div v-if="showTab=='warmer'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[0]}}-tab">
-                <span v-if="scenario.warmer.turned_on">
+                <span v-if="scenario.warmer.is_turned_on">
                     <h3> Heat is: <span class="badge badge-danger">on</span> </h3>
                 <button v-on:click="toggleHeat" class="btn btn-secondary btn-sm">Turn heat off</button>
                 </span>

@@ -204,6 +204,7 @@ def create_baby(user, scenario):
     w=Warmer(baby_id=baby_id, **warmer)
     db.session.add(w)
     db.session.commit()
+    return b
 
         
 db.create_all()

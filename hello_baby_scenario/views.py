@@ -12,6 +12,7 @@ def debug():
 
 @app.route('/')
 def home():
+    session.clear()
     return render_template('home.html')
 
 @app.route('/scenario')
@@ -25,7 +26,8 @@ def scenario():
         user=models.User(username=user_id)
         db.session.add(user)
         db.session.commit()
-        ppv.PPVCreateBaby(user)
+        baby=ppv.PPVCreateBaby(user)
+        session['baby_id']=baby.id
         return render_template('scenario.html')
 
 @app.route('/prepwarmer')
@@ -41,11 +43,20 @@ def getScenario():
         scenarioData=ppv.getScenarioData(user)
         return(json.dumps(scenarioData))
 
+@app.route('/updatewarmer', methods=["post"])
+def updateWarmer():
+    if 'baby_id' in session.keys():
+        baby_id=session['baby_id']
+        warmer_dict=request.get_json()['warmer']
+        ppv.updateWarmer(baby_id, warmer_dict)
+        return("")
 
 @app.route('/dotask', methods=["post"])
 def doTask():
     if 'user_id' in session.keys():
         user_id=session['user_id']
-        user=models.User.query.filter_by(username=user_id).first()
-        scenarioData=ppv.getScenarioData(user)
-        return(json.dumps(scenarioData))
+        baby_id=session['baby_id']
+        taskName=request.get_json()['name']
+        kwargs=request.get_json()['kwargs']
+        ppv.doTask(baby_id, taskName, **kwargs)
+        return("")
