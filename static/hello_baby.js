@@ -59,7 +59,7 @@ var app = new Vue({
                 var toReturn=[];
                 var s=this.scenario.supplies;
                 for (var i=0;i<s.length;i++){
-                    if(s[i].available==true){
+                    if(s[i].is_available==true){
                         toReturn.push(s[i]);
                     }
                 }
@@ -69,7 +69,7 @@ var app = new Vue({
                 var supplyList=this.scenario.supplies;
                 var toReturn=[];
                 for (var i=0;i<supplyList.length;i++){
-                    if(supplyList[i].available==false){
+                    if(supplyList[i].is_available==false){
                         toReturn.push(supplyList[i]);
                     };
                 }
@@ -115,11 +115,14 @@ var app = new Vue({
                 deliverBaby: function(){
                     this.baby_delivered=true;
                 },
-
+                doTask: function(taskName, args){
+                    axios.post("/dotask").then(function(response){
+                        self.scenario=response.data;
+                    });
+                },
                   getSupply: function(supply){
                       var name=supply.name;
                       var size=supply.size;
-                      console.log(supply.name);
                       supply.available=true;
                       this.doTask("fetch", {'name':name, 'size':size});
                   },

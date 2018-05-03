@@ -16,6 +16,18 @@ def PPVCreateBaby(user):
     ppvScenario=models.Scenario.query.filter_by(name="preemie_ppv").first()
     models.create_baby(user, ppvScenario)
 
+def getSupplies(baby_id):
+    supplies=models.Supply.query.filter_by(baby_id=baby_id)
+    toReturn=[]
+    for supply in supplies:
+        s={}
+        s['size']=supply.size
+        s['name']=supply.name
+        s['is_available']=supply.is_available
+        s['is_using']=supply.is_using
+        toReturn.append(s)
+    return toReturn
+
 def getSubDict(newdict, keys):
     return {key:newdict[key] for key in keys if (key in newdict.keys())}
 
@@ -36,8 +48,10 @@ def getScenarioData(user):
         'mom':mom,
         'baby':babyDict,
         'warmer':warmer,
-        'supplies':[]
+        'supplies':getSupplies(baby.id)
     }
     return returnDict
 
 def updateWarmer(user, warmer_dict):
+    warmer_dict=json.loads(warmer_dict)
+    #warmer=models.Warmer.query.filter_by(baby_)

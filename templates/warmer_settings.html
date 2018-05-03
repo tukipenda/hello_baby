@@ -111,12 +111,12 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">Fetch Supplies:</span>
                     </div>
-                    <v-select label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)" :options="supplySearchOptions" placeholder="search..."></v-select>
+                    <v-select label="name" v-model="supplyToFetch" @input="getSupply(supplyToFetch)" :options="supplySearchOptions" placeholder="search..."></v-select>
 
                 </div>
                 <h3>Available Supplies: </h3>
                 <ul class="col3" v-for="supply in availableSupplies">
-                    <li>[[supply.pp]]</li>
+                    <li>[[supply.name]]: [[supply.size]]</li>
                 </ul>
             </div>
 

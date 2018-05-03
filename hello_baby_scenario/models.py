@@ -158,7 +158,7 @@ class Supply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     baby_id = db.Column(db.Integer, db.ForeignKey('baby.id'),
         nullable=False)
-    supply_name=db.Column(db.Text)
+    name=db.Column(db.Text)
     is_available=db.Column(db.Boolean)
     is_using=db.Column(db.Boolean)
     size=db.Column(db.Text, nullable=True)
@@ -198,28 +198,12 @@ def create_baby(user, scenario):
         db.session.add(subPE)
     db.session.commit()
     for supply in supplies:
-        newSupply=Supply(baby_id=baby_id, supply_name=supply['name'], size=supply['size'], is_available=False, is_using=False)
+        newSupply=Supply(baby_id=baby_id, name=supply['name'], size=supply['size'], is_available=False, is_using=False)
         db.session.add(newSupply)
     db.session.commit()
     w=Warmer(baby_id=baby_id, **warmer)
     db.session.add(w)
     db.session.commit()
-
-def getPEAttribute(baby_id, pe_name, attribute):
-    model=PEDict[pe_name].query.filter_by(baby_id=baby_id).first()
-    if (model and hasattr(model, attribute)):
-        return getattr(model, attribute)
-    else:
-        return None
-
-def setPEAttribute(baby_id, pe_name, attribute, value):
-    model=PEDict[pe_name].query.filter_by(baby_id=baby_id).first()
-    if (model and hasattr(model, attribute)):
-        setattr(model, attribute, value)
-        db.session.commit()
-    else:
-        pass
-        #raise failure error
 
         
 db.create_all()

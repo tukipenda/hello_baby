@@ -16,6 +16,7 @@ def home():
 
 @app.route('/scenario')
 def scenario():
+    #need to account for possibility that session has user_id, but user is not defined
     if 'user_id' in session.keys():
         return render_template('scenario.html')
     else:
@@ -33,6 +34,15 @@ def prepwarmer():
 
 
 @app.route('/getscenario', methods=["get", "post"])
+def getScenario():
+    if 'user_id' in session.keys():
+        user_id=session['user_id']
+        user=models.User.query.filter_by(username=user_id).first()
+        scenarioData=ppv.getScenarioData(user)
+        return(json.dumps(scenarioData))
+
+
+@app.route('/dotask', methods=["post"])
 def getScenario():
     if 'user_id' in session.keys():
         user_id=session['user_id']
