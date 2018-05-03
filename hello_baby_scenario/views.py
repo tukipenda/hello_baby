@@ -43,7 +43,7 @@ def getScenario():
 
 
 @app.route('/dotask', methods=["post"])
-def getScenario():
+def doTask():
     if 'user_id' in session.keys():
         user_id=session['user_id']
         user=models.User.query.filter_by(username=user_id).first()
