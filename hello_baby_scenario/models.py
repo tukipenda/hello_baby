@@ -198,7 +198,7 @@ def create_baby(user, scenario):
         db.session.add(subPE)
     db.session.commit()
     for supply in supplies:
-        newSupply=Supply(baby_id=baby_id, name=supply['name'], size=supply['size'], is_available=False, is_using=False)
+        newSupply=Supply(baby_id=baby_id, name=supply['name'], size=supply['size'], is_available=supply['is_available'], is_using=supply['is_using'])
         db.session.add(newSupply)
     db.session.commit()
     w=Warmer(baby_id=baby_id, **warmer)

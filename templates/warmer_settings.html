@@ -29,17 +29,16 @@
                     <h4 class="col-md-auto">
                         Select mask:
                     </h4>
-<!--
-                    <div v-for="mask in supplyMGR.supplies.mask" class="col-3">
-                        <div v-if="mask.using">
+                    <div v-for="mask in getMasks" class="col-3">
+                        <div v-if="mask.is_using">
 
                             <button type="button" class="btn btn-primary">[[mask.size]] Mask</button>
 
                         </div>
                         <div v-else>
-                            <button type="button" class="btn btn-light" v-on:click="useMask(mask.size)">[[mask.size]] Mask</button>
+                            <button type="button" class="btn btn-light" v-on:click="doTask('use', {'name':mask.name, 'size':mask.size})">[[mask.size]] Mask</button>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
 
                 <div class="mt-5">

@@ -103,6 +103,16 @@ var app = new Vue({
                     };
                 }
                 return toReturn;
+            },
+            getMasks: function(){
+                var masks=[];
+                var supplyList=this.scenario.supplies;
+                for (var i=0;i<supplyList.length;i++){
+                    if(supplyList[i].name=="mask"){
+                        masks.push(supplyList[i]);
+                    };
+                }
+                return masks;
             }
         },
         methods: {

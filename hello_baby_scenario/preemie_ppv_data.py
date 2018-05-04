@@ -60,5 +60,9 @@ for size in ["0", "1", "00"]:
 for size in ["2.5", "3", "3.5", "4"]:
     supplyList.append({"name":'ett', "size":size})
 
-for maskType in ["Infant", "Preemie"]:
-    supplyList.append({"name":'mask', "size":size})
+for supply in supplyList:
+    supply["is_available"]=False
+    supply["is_using"]=False
+
+for size in ["Infant", "Preemie"]:
+    supplyList.append({"name":'mask', "size":size, "is_available":True, "is_using":False})

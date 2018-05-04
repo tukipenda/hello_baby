@@ -1,5 +1,6 @@
 import models
 from models import db
+from app import app
 import json
 import preemie_ppv_data as data
 
@@ -61,4 +62,9 @@ def doTask(baby_id, taskName, **kwargs):
     if taskName=="fetch":
         supply=models.Supply.query.filter_by(baby_id=baby_id, **kwargs).update(dict(is_available=True))
         db.session.commit()
-    
+    elif taskName=="use":
+        name=kwargs['name']
+        size=kwargs['size']
+        models.Supply.query.filter_by(baby_id=baby_id, name=name).update(dict(is_using=False))
+        models.Supply.query.filter_by(baby_id=baby_id, name=name, size=size).update(dict(is_using=True))
+        db.session.commit()
