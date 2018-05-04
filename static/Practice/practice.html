@@ -19,6 +19,9 @@
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+    <!-- vuetify -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script> <!-- polyfill for vuetify -->
     <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
 
 
@@ -54,10 +57,16 @@
 
 
     <main role="main" class="container" style="margin-top: 90px">
+        <div>
+            Hey
+        </div>
         <div id="HelloBabyApp">
             <h1>use refresh</h1>
-                    <vue-slider ref="slider" v-bind="options" v-model="test"></vue-slider>
+<vue-slider ref="slider" v-bind="options" v-model="test">
+    <div slot="label" scope="{ label, active }">
 
+                        </div>
+</vue-slider>
         </div>
 
     </main>

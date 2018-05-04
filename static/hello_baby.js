@@ -39,8 +39,37 @@ var app = new Vue({
             baby_timer_started: false,
             baby_delivered: false,
             scenario:{},
+            test: 0,
             showTab: "warmer",
-            supplyToFetch: null
+            supplyToFetch: null,
+            options:{
+                        eventType: 'auto',
+                        width: '50%',
+                        height: 6,
+                        data: null,
+                        dotHeight: null,
+                        dotWidth: null,
+                        min: 0,
+                        max: 100,
+                        show: true,
+                        speed: 0.4,
+                        disabled: false,
+                        piecewiseLabel: true,
+                        tooltip: "always",
+                        tooltipDir: 'top',
+                        reverse: false,
+                        clickable: true,
+                        realTime: false,
+                        lazy: true,
+                        formatter: null,
+                        bgStyle: null,
+                        processStyle: null,
+                        piecewiseActiveStyle: null,
+                        piecewiseStyle: null,
+                        tooltipStyle: null,
+                        labelStyle: null,
+                        labelActiveStyle: null
+                      }
         },
         components: {
            'vueSlider': window['vue-slider-component'],
@@ -83,29 +112,6 @@ var app = new Vue({
                         self.scenario=response.data;
                     });
                 },
-                getSupplyNames: function(){
-                  /*  console.log("options");
-                    var s=this.supplySearchOptions;
-                for (var i=0;i<s.length;i++){
-                    console.log(s[i].pp);
-
-                }
-
-                console.log("\nfetched");
-                s=this.availableSupplies;
-                for (var i=0;i<s.length;i++){
-                        console.log(s[i].pp);
-                }*/
-
-                console.log("\nall");
-                s=this.supplyList;
-                for (var i=0;i<s.length;i++){
-                    if(s[i].available==true){
-                        console.log(s[i].pp);
-                    };
-                }
-
-                },
                 startBabyTimer: function(){
                     this.baby_timer_started=true;
                     this.state="started";
@@ -117,8 +123,8 @@ var app = new Vue({
                 },
                 doTask: function(taskName, kwargs){
                     let self=this;
-                    axios.post("/dotask", 
-                             {'name':taskName, 
+                    axios.post("/dotask",
+                             {'name':taskName,
                              'kwargs':kwargs
                              }).then(function(response){
                         self.getScenario();
@@ -130,7 +136,8 @@ var app = new Vue({
                       supply.available=true;
                       this.doTask("fetch", {'name':name, 'size':size});
                   },
-                  helloSliderOptions: function(min, max, width='50%'){
+                  helloSliderOptions: function(min, max, width){
+                      width = typeof width !== 'undefined' ? width : '50%';
                       var options={
                         eventType: 'auto',
                         width: width,
