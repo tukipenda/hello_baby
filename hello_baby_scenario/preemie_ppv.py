@@ -55,7 +55,6 @@ def getScenarioData(user):
         'supplies':getSupplies(baby.id),
         'tasks': tasks
     }
-    app.logger.info(returnDict)
     return returnDict
 
 def updateWarmer(baby_id, warmer_dict):

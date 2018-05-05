@@ -138,6 +138,7 @@ var app = new Vue({
                     this.baby_delivered=true;
                 },
                 doTask: function(taskName, kwargs){
+                    kwargs = typeof kwargs !== 'undefined' ? kwargs:{};
                     let self=this;
                     axios.post("/dotask",
                              {'name':taskName,
