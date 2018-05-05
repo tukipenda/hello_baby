@@ -40,11 +40,13 @@
                 <div class="card col-6" id="resuscExam">
                     <div class="card-body">
                         <div class="row">
-                            baby appearance
+                            GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
+                            <span v-if="scenario.PE.resp.is_spontaneous">Infant is breathing spontaneously.</span> WOB: [[scenario.PE.resp.wob]].  Respiratory rate: [[scenario.PE.vitals.rr]].
                         </div>
-                        {% for examAction in ["Listen to heart", "Listen to lungs", "Examine Abdomen"] %}
+                        {% for examType, examAction in [('cardiac', "Examine heart"), ('resp', "Examine lungs"), ('abd', "Examine Abdomen")] %}
                         <div class="row">
-                            <button class="btn btn-primary" style="margin-top:20px">{{examAction}}</button>
+                            [[lastExam['{{examType}}'] ]]
+                            <button v-on:click="getLastExam('{{examType}}')" class="btn btn-primary" style="margin-top:20px">{{examAction}}</button>
                         </div>
                         {% endfor %}
                     </div>
@@ -67,8 +69,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">Interventions:</span>
                     </div>
-                    <v-select-intervene></v-select-intervene>
-
+                    <v-select-intervene v-model="task" :options="scenario.tasks" @input="doTask(task)" placeholder="search"></v-select-intervene>
                 </div>
 
             </div>
@@ -77,7 +78,10 @@
                 <div class="card col-6" id="resuscExam">
                     <div class="card-body">
                         <div class="row">
-                            baby appearance
+                              GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
+                        </div>
+                        <div class="row">
+                              Heart rate [[scenario.PE.vitals.hr]].  Respiratory rate [[scenario.PE.vitals.rr]]. Oxygen saturation [[scenario.PE.vitals.o2sat]]. Temperature [[scenario.PE.vitals.temp]]
                         </div>
                     </div>
 

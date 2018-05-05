@@ -62,11 +62,13 @@
         </div>
         <div id="HelloBabyApp">
             <h1>use refresh</h1>
-<vue-slider ref="slider" v-bind="options" v-model="test">
-    <div slot="label" scope="{ label, active }">
-
-                        </div>
-</vue-slider>
+        <vue-slider ref="slider" v-bind="options" v-model="test">
+            <div slot="label" scope="{ label, active }">
+                <span v-if="!is_IE" :class="['custom-label', { active }]" v-if="label % {% if pname=="PEEP"%} 5 {% else %} 10 {% endif %} === 0" >
+                                    [[ label ]]
+                                  </span>
+            </div>
+        </vue-slider>
         </div>
 
     </main>

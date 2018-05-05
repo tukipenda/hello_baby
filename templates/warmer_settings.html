@@ -6,7 +6,6 @@
         </div>
     </div>
 
-
     <div class="col-9">
         <div class="tab-content">
             {% set values=["warmer", "mask", "oxygen", "suction", "supplies"] %}
@@ -50,15 +49,18 @@
                                 <div class="col-2">
                                 <h4>{{pname}}: </h4>
                                 </div>
-                                <!--
+
                             <vue-slider id="{{pname}}-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, {% if pname=="PEEP" %} 20 {% else %} 50 {% endif %}, width='{% if pname=="PEEP"%} 50% {% else %} 75% {% endif %}', '50%')" v-model="{{pressure}}">
+                                {% if is_IE %}
+                                <div slot="label"></div>
+                                {% else %}
                                 <div slot="label" slot-scope="{ label, active }">
                                   <span :class="['custom-label', { active }]" v-if="label % {% if pname=="PEEP"%} 5 {% else %} 10 {% endif %} === 0" >
                                     [[ label ]]
                                   </span>
                                 </div>
+                              {% endif %}
                             </vue-slider>
-                            -->
                             </div>
                             </div>
 
@@ -76,15 +78,18 @@
                         <div class="col-2">
                         <h4>{{pname}}: </h4>
                         </div>
-                        <!--
                     <vue-slider id="{{pname}}-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, {% if pressure=="scenario.warmer.flow" %} 20 {% else %} 100 {% endif %}, '50%')" v-model="{{pressure}}">
+                        {% if is_IE %}
+                                <div slot="label"></div>
+                        {% else %}
                         <div slot="label" slot-scope="{ label, active }">
                           <span :class="['custom-label', { active }]" v-if="label % {% if pressure=="scenario.warmer.flow"%} 5 {% else %} 20 {% endif %} === 0" >
                             [[ label ]]
                           </span>
                         </div>
+                      {% endif %}
+
                     </vue-slider>
-                    -->
                     </div>
                     </div>
 
@@ -99,11 +104,15 @@
                         <h4>Suction: </h4>
                         </div>
                     <vue-slider id="suction-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, 140, '50%')" v-model="scenario.warmer.suction">
+                        {% if is_IE %}
+                                <div slot="label"></div>
+                        {% else %}
                         <div slot="label" scope="{ label, active }">
                           <span :class="['custom-label', { active }]" v-if="label % 20 === 0" >
                             [[ label ]]
                           </span>
                         </div>
+                          {% endif %}
                     </vue-slider>
                     </div>
                     </div>

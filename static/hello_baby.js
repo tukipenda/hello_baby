@@ -39,37 +39,14 @@ var app = new Vue({
             baby_timer_started: false,
             baby_delivered: false,
             scenario:{},
-            test: 0,
             showTab: "warmer",
             supplyToFetch: null,
-            options:{
-                        eventType: 'auto',
-                        width: '50%',
-                        height: 6,
-                        data: null,
-                        dotHeight: null,
-                        dotWidth: null,
-                        min: 0,
-                        max: 100,
-                        show: true,
-                        speed: 0.4,
-                        disabled: false,
-                        piecewiseLabel: true,
-                        tooltip: "always",
-                        tooltipDir: 'top',
-                        reverse: false,
-                        clickable: true,
-                        realTime: false,
-                        lazy: true,
-                        formatter: null,
-                        bgStyle: null,
-                        processStyle: null,
-                        piecewiseActiveStyle: null,
-                        piecewiseStyle: null,
-                        tooltipStyle: null,
-                        labelStyle: null,
-                        labelActiveStyle: null
-                      }
+            task: null,
+            lastExam: {
+                'abd':null,
+                'cardiac':null,
+                'resp':null
+            },
         },
         components: {
            'vueSlider': window['vue-slider-component'],
@@ -113,10 +90,39 @@ var app = new Vue({
                     };
                 }
                 return masks;
+            },
+            is_IE: function(){
+                        var ua = window.navigator.userAgent;
+
+                    var msie = ua.indexOf('MSIE ');
+                    if (msie > 0) {
+                        // IE 10 or older => return version number
+                        return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+                    }
+
+                    var trident = ua.indexOf('Trident/');
+                    if (trident > 0) {
+                        // IE 11 => return version number
+                        var rv = ua.indexOf('rv:');
+                        return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+                    }
+
+                    var edge = ua.indexOf('Edge/');
+                    if (edge > 0) {
+                       // Edge (IE 12+) => return version number
+                       return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+                    }
+
+                    // other browser
+                    return false;
             }
         },
         methods: {
+                getLastExam: function(PEtype){
+                    this.lastExam[PEtype]=JSON.stringify(this.scenario.PE[PEtype]);
+                },
                 getScenario: function(){
+                    this.updateWarmer(); /*This is super hacky and needs to be improved */
                     let self=this;
                     axios.get("/getscenario").then(function(response){
                         self.scenario=response.data;
