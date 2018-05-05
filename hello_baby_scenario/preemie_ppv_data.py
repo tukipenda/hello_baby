@@ -16,7 +16,7 @@ warmer={
     "temp_mode":"Manual",
     "peep":0,
     "pip":0,
-    "pop":0    
+    "pop":0
 }
 
 #I deleted APGAR for now,not including malformations, BP, EKG, or 4-extremity sats
@@ -66,3 +66,17 @@ for supply in supplyList:
 
 for size in ["Infant", "Preemie"]:
     supplyList.append({"name":'mask', "size":size, "is_available":True, "is_using":False})
+
+tasks=[
+    "fetch",
+    "use",
+    "dry",
+    "stimulate",
+    "warm",
+    "bulb suction",
+    "deep suction",
+    "intubate",
+    "Give PPV",
+    "start compressions",
+    "stop compressions"
+]

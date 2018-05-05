@@ -32,7 +32,12 @@ def scenario():
 
 @app.route('/prepwarmer')
 def prepwarmer():
-    return render_template('prepwarmer.html')
+    user_agent=request.headers.get('User-Agent')
+    is_IE=False
+    for test in ["msie", "trident", "edge"]:
+        if test in user_agent.lower():
+            is_IE=True
+    return render_template('prepwarmer.html', is_IE=is_IE)
 
 
 @app.route('/getscenario', methods=["get", "post"])
@@ -47,7 +52,7 @@ def getScenario():
 def updateWarmer():
     if 'baby_id' in session.keys():
         baby_id=session['baby_id']
-        warmer_dict=request.get_json()['warmer']
+        warmer_dict=json.loads(request.get_json()['warmer'])
         ppv.updateWarmer(baby_id, warmer_dict)
         return("")
 

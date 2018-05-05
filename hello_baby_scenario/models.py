@@ -129,7 +129,7 @@ class UVC(db.Model):
         nullable=False)
     is_uvc_placed=db.Column(db.Boolean)
     medications_given=db.Column(db.Text)
-    
+
 class Warmer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     baby_id = db.Column(db.Integer, db.ForeignKey('baby.id'),
@@ -162,7 +162,7 @@ class Supply(db.Model):
     is_available=db.Column(db.Boolean)
     is_using=db.Column(db.Boolean)
     size=db.Column(db.Text, nullable=True)
-    
+
 class Scenario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name=db.Column(db.Text) # needs to be unique
@@ -172,6 +172,7 @@ class Scenario(db.Model):
     baby_PE=db.Column(db.Text)
     warmer=db.Column(db.Text)
     supplies=db.Column(db.Text)
+    tasks=db.Column(db.Text)
 
 PEDict={
     'vitals':PEVitals,
@@ -206,5 +207,5 @@ def create_baby(user, scenario):
     db.session.commit()
     return b
 
-        
+
 db.create_all()
