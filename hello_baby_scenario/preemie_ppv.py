@@ -82,8 +82,9 @@ def doTask(baby_id, taskName, **kwargs):
         baby=models.Baby.query.filter_by(id=baby_id).update(dict(is_delivered=True))
         db.session.commit()
 
-def updateBaby(taskName, **kwargs):
-    pass
+def updateBaby(time, baby_id):#taskName, time, **kwargs):
+    models.PEVitals.query.filter_by(id=baby_id).update(dict(hr=time))
+    db.session.commit()
 
 def updateVent():
     pass

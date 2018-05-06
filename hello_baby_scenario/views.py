@@ -44,7 +44,11 @@ def prepwarmer():
 def getScenario():
     if 'user_id' in session.keys():
         user_id=session['user_id']
+        baby_id=session['baby_id'] # could be a source of bugs, need to watch
+        time=request.get_json()['time']
         user=models.User.query.filter_by(username=user_id).first()
+        if time>0:
+            ppv.updateBaby(time, baby_id)
         scenarioData=ppv.getScenarioData(user)
         return(json.dumps(scenarioData))
 

@@ -130,10 +130,14 @@ var app = new Vue({
                     this.lastExam[PEtype]=JSON.stringify(this.scenario.PE[PEtype]);
                 },
                 getScenario: function(){
-                    this.data_last_updated=Date.now()
+                    this.data_last_updated=Date.now();
                     this.updateWarmer(); /*This is super hacky and needs to be improved */
                     let self=this;
-                    axios.get("/getscenario").then(function(response){
+                    var dtime=0;
+                    if(typeof this.delivery_time !== 'undefined'){
+                        dtime=Date.now()-this.delivery_time;
+                    }
+                    axios.post("/getscenario", {"time":dtime}).then(function(response){
                         self.scenario=response.data;
                     });
                 },
@@ -141,9 +145,9 @@ var app = new Vue({
                     this.baby_timer_started=true;
                     this.baby_time=Date.now();
                     this.elapsed_baby_time="0:00";
-                    let self=this
+                    let self=this;
                     var timer=setInterval(function(){
-                        ctime=Date.now()
+                        ctime=Date.now();
                         self.elapsed_baby_time=formatTime(ctime-self.baby_time);
                     }, 1000);
                 },
@@ -219,7 +223,7 @@ var app = new Vue({
                   updateWarmer: function(){
                       let self=this;
                       axios.post("/updatewarmer", {
-                        warmer:JSON.stringify(self.scenario.warmer),
+                        'warmer':JSON.stringify(self.scenario.warmer),
                       });
                   }
             }
