@@ -116,7 +116,7 @@ class CPR(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     baby_id = db.Column(db.Integer, db.ForeignKey('baby.id'),
         nullable=False)
-    rate=db.Column(db.Integer)
+    event_rate=db.Column(db.Integer)
     btc_breaths=db.Column(db.Integer)
     btc_compressions=db.Column(db.Integer)
     cpr_depth=db.Column(db.Text)
@@ -173,6 +173,10 @@ class Scenario(db.Model):
     warmer=db.Column(db.Text)
     supplies=db.Column(db.Text)
     tasks=db.Column(db.Text)
+    vent=db.Column(db.Text)
+    cpr=db.Column(db.Text)
+    uvc=db.Column(db.Text)
+    health=db.Column(db.Text)
 
 PEDict={
     'vitals':PEVitals,

@@ -10,7 +10,11 @@ baby_PE=json.dumps(data.PE)
 supplies=json.dumps(data.supplyList)
 warmer=json.dumps(data.warmer)
 tasks=json.dumps(data.tasks)
-ppvScenario=models.Scenario(name="preemie_ppv", scenario=data.scenario, baby_data=baby_data, mom_data=mom_data, baby_PE=baby_PE, supplies=supplies, warmer=warmer, tasks=tasks)
+vent=json.dumps(data.vent)
+cpr=json.dumps(data.cpr)
+uvc=json.dumps(data.uvc)
+health=json.dumps(data.health)
+ppvScenario=models.Scenario(name="preemie_ppv", scenario=data.scenario, baby_data=baby_data, mom_data=mom_data, baby_PE=baby_PE, supplies=supplies, warmer=warmer, tasks=tasks, vent=vent, cpr=cpr, uvc=uvc, health=health)
 db.session.add(ppvScenario)
 db.session.commit()
 
@@ -62,6 +66,7 @@ def updateWarmer(baby_id, warmer_dict):
     db.session.commit()
     warmer=models.Warmer.query.filter_by(baby_id=baby_id).first()
 
+#need to restructure this to call methods, which is much more sustainable
 def doTask(baby_id, taskName, **kwargs):
     if taskName=="fetch":
         supply=models.Supply.query.filter_by(baby_id=baby_id, **kwargs).update(dict(is_available=True))
@@ -72,3 +77,28 @@ def doTask(baby_id, taskName, **kwargs):
         models.Supply.query.filter_by(baby_id=baby_id, name=name).update(dict(is_using=False))
         models.Supply.query.filter_by(baby_id=baby_id, name=name, size=size).update(dict(is_using=True))
         db.session.commit()
+
+    elif taskName=="deliver_baby":
+        baby=models.Baby.query.filter_by(id=baby_id).update(dict(is_delivered=True))
+        db.session.commit()
+
+def updateBaby(taskName, **kwargs):
+    pass
+
+def updateVent():
+    pass
+
+def updateUVC():
+    pass
+
+def updateCPR():
+    pass
+
+def updateHealth():
+    pass
+
+def updatePE():
+    pass
+
+
+

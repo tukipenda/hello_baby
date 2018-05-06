@@ -30,6 +30,15 @@ for (var i=0, max = hs.length; i < max; i++) {
 }
 }
 
+function formatTime(t){
+    t=Math.floor(t/1000);
+    var m = Math.floor(t / 60);
+    t -= m * 60;
+    if(t==0){ t="00";}
+    else if(t<10){ t="0"+t;}
+    return (m+":"+t);
+}
+
 
 var app = new Vue({
         el: '#HelloBabyApp',
@@ -37,8 +46,13 @@ var app = new Vue({
         data: {
             contents: '',
             baby_timer_started: false,
+            delivery_time:null,
+            baby_time:null,
+            elapsed_baby_time:null, /*in seconds*/
             baby_delivered: false,
             scenario:{},
+            data_last_updated:null,
+            data_updater:null, /*repeatedly update data */
             showTab: "warmer",
             supplyToFetch: null,
             task: null,
@@ -53,12 +67,6 @@ var app = new Vue({
         },
         created: function(){
             this.getScenario();
-        },
-        mounted: function() {
-            this.interval = setInterval(this.updateCurrentTime, 1000);
-        },
-        destroyed: function() {
-            clearInterval(this.interval);
         },
         computed: {
             availableSupplies: function(){
@@ -122,6 +130,7 @@ var app = new Vue({
                     this.lastExam[PEtype]=JSON.stringify(this.scenario.PE[PEtype]);
                 },
                 getScenario: function(){
+                    this.data_last_updated=Date.now()
                     this.updateWarmer(); /*This is super hacky and needs to be improved */
                     let self=this;
                     axios.get("/getscenario").then(function(response){
@@ -130,18 +139,26 @@ var app = new Vue({
                 },
                 startBabyTimer: function(){
                     this.baby_timer_started=true;
-                    this.state="started";
-                    this.startTime=Date.now();
-                    this.currentTime=Date.now();
+                    this.baby_time=Date.now();
+                    this.elapsed_baby_time="0:00";
+                    let self=this
+                    var timer=setInterval(function(){
+                        ctime=Date.now()
+                        self.elapsed_baby_time=formatTime(ctime-self.baby_time);
+                    }, 1000);
                 },
                 deliverBaby: function(){
                     this.baby_delivered=true;
+                    this.doTask("deliver_baby");
+                    this.delivery_time=Date.now();
+                    this.updateData();
                 },
                 doTask: function(taskName, kwargs){
                     kwargs = typeof kwargs !== 'undefined' ? kwargs:{};
                     let self=this;
                     axios.post("/dotask",
                              {'name':taskName,
+                             'time':(Date.now()-this.delivery_time),
                              'kwargs':kwargs
                              }).then(function(response){
                         self.getScenario();
@@ -189,6 +206,15 @@ var app = new Vue({
                   toggleHeat: function(){
                       this.scenario.warmer.is_turned_on=!this.scenario.warmer.is_turned_on;
                       this.updateWarmer();
+                  },
+                  updateData: function(){
+                      this.data_last_updated=Date.now();
+                      self=this;
+                      this.data_updater=setInterval(function(){
+                            if((Date.now()-self.data_last_updated)>5000){
+                                self.getScenario();
+                            }
+                        }, 3000);
                   },
                   updateWarmer: function(){
                       let self=this;

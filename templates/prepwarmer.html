@@ -14,10 +14,12 @@
                     {{name}}
                 </a> {% endfor %}
                 <div v-if="baby_delivered">
-                    <button class="btn btn-primary" v-on:click="startBabyTimer" style="margin-left:90px;"> Start Timer </button>
-                </div>
-                <div v-else-if="baby_timer_started">
-                    <a class="btn btn-warning" style="margin-left:90px;"> Time: <span id="time" v-html="time"></span> </a>
+                        <div v-if="baby_timer_started">
+                            <a class="btn btn-warning" style="margin-left:90px;"> Time: <span id="baby_time" v-html="elapsed_baby_time"></span> </a>
+                        </div>
+                        <div v-else>
+                            <button class="btn btn-primary" v-on:click="startBabyTimer" style="margin-left:90px;"> Start Timer </button>
+                        </div>
                 </div>
                 <div v-else>
                     <button class="btn btn-primary" style="margin-left:90px;" v-on:click="deliverBaby"> Baby Out! </button>

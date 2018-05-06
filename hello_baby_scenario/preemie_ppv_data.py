@@ -33,6 +33,36 @@ other={"scalp":'no caput', "clavicles":'no clavicular fracture', "ears":'normall
 
 PE={"vitals":vitals, "resp":resp, "cardiac":cardiac, "abd":abd, "skin":skin, "secretions":secretions, "neuro":neuro, "other":other}
 
+vent={
+    'efficacy':0,
+    'is_mouth_open':False,
+    'positioning': "lying flat, no chin lift or jaw thrust",
+    'is_airway_open': True,
+    'has_air_leak': False
+}
+
+cpr={
+    'event_rate':120,
+    'btc_breaths':3,
+    'btc_compressions':1,
+    'cpr_depth':"1/3",
+    'efficacy':0
+}
+
+uvc={
+    'is_uvc_placed':False,
+    'medications_given':[]
+}
+
+health={
+    'circ_eff':3,
+    'volume_status':3,
+    'card_health':3,
+    'brain_health':3,
+    'oxygenation':[],
+    'circulation':[]
+}
+
 simple_supplies=[
             "pulse_ox",
             "hat",
