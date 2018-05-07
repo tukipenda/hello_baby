@@ -25,11 +25,14 @@ def fetchSupply(baby_id, **kwargs):
     models.Supply.query.filter_by(baby_id=baby_id, **kwargs).update(dict(is_available=True))
 
 def useSupply(baby_id, **kwargs):
-    models.Supply.query.filter_by(baby_id=baby_id, **kwargs).update(dict(is_using=True))
+    supply=models.Supply.query.filter_by(baby_id=baby_id, **kwargs).first()
+    if(supply.is_available):
+        supply.is_using=True
 
 def dry(baby_id):
-    models.PESkin.query.filter_by(baby_id=baby_id).update(dict(is_dry=True))
-
+    skin=models.PESkin.query.filter_by(baby_id=baby_id).first()
+    skin.is_dry=True
+    
 def stimulate(baby_id):
     pass
 
@@ -59,7 +62,7 @@ class UpdateBaby:
 
     def getSupply(self, name, size=None):
         for supply in self.supplies:
-            if((supply.name==name) and (not supply.size or (supply.size==size))):
+            if((supply['name']==name) and (not supply['size'] or (supply['size']==size))):
                 return supply
         return None
 

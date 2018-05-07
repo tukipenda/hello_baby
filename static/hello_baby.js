@@ -153,7 +153,7 @@ var app = new Vue({
                 },
                 deliverBaby: function(){
                     this.baby_delivered=true;
-                    this.doTask("deliver_baby");
+                    this.doTask({'name':"deliver_baby"});
                     this.delivery_time=Date.now();
                     this.updateData();
                 },
