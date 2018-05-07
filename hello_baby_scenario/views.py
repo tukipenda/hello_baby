@@ -70,6 +70,11 @@ def doTask():
         time=request.get_json()['time']
         ub=ppv_update.UpdateBaby(baby_id)
         task=request.get_json()['task']
+        app.logger.info(task)
+        app.logger.info(type(task))
         taskName=task.pop('name')
-        ppv.doTask(ub, baby_id, taskName, **task)
+        if 'supply_name' in task.keys():
+            task['name']=task.pop('supply_name') #this is hacky too. 
+        task.pop('pp')
+        ppv.doTask(ub, baby_id, taskName, time, **task)
         return("")

@@ -112,10 +112,10 @@ for supply in supplyList:
     tasks.append(task)
 for supply in supplyList:
     task={
-        'name':'place',
+        'name':'use',
         'supply_name':supply['name'],
         'size':supply['size'],
-        'pp':'place '+supply['pp']
+        'pp':'use '+supply['pp']
     }
     tasks.append(task)
 

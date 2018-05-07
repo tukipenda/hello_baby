@@ -56,7 +56,7 @@ def updateWarmer(baby_id, warmer_dict):
 #need to restructure this to call methods, which is much more sustainable
 def doTask(ub, baby_id, taskName, time, **kwargs):
     task=ppv_update.taskDict[taskName]
-    task(**kwargs)
+    task(baby_id, **kwargs)
     db.session.commit()
     ub.update(time)
 

@@ -16,6 +16,7 @@ def getSupplies(baby_id):
         s['name']=supply.name
         s['is_available']=supply.is_available
         s['is_using']=supply.is_using
+        s['pp']=supply.pp
         toReturn.append(s)
     return toReturn
 

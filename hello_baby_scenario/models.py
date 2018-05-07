@@ -162,6 +162,7 @@ class Supply(db.Model):
     is_available=db.Column(db.Boolean)
     is_using=db.Column(db.Boolean)
     size=db.Column(db.Text, nullable=True)
+    pp=db.Column(db.Text)
 
 class Scenario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -203,7 +204,7 @@ def create_baby(user, scenario):
         db.session.add(subPE)
     db.session.commit()
     for supply in supplies:
-        newSupply=Supply(baby_id=baby_id, name=supply['name'], size=supply['size'], is_available=supply['is_available'], is_using=supply['is_using'])
+        newSupply=Supply(baby_id=baby_id, name=supply['name'], size=supply['size'], is_available=supply['is_available'], is_using=supply['is_using'], pp=supply['pp'])
         db.session.add(newSupply)
     db.session.commit()
     w=Warmer(baby_id=baby_id, **warmer)

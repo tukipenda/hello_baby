@@ -158,11 +158,12 @@ var app = new Vue({
                     this.updateData();
                 },
                 doTask: function(task){
+                    let self=this;
                     axios.post("/dotask",
                              {'task':task,
                              'time':(Date.now()-this.delivery_time),
                              }).then(function(response){
-                        self.getScenario();
+                       self.getScenario();
                     });
                 },
                   getSupply: function(supply){
