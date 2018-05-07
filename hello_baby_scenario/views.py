@@ -67,13 +67,12 @@ def doTask():
     if 'user_id' in session.keys():
         user_id=session['user_id']
         baby_id=session['baby_id']
-        time=request.get_json()['time']
-        ub=ppv_update.UpdateBaby(baby_id)
+        time=request.get_json()
         task=request.get_json()['task']
         taskName=task.pop('name')
         if 'supply_name' in task.keys():
-            task['name']=task.pop('supply_name') #this is hacky too. 
+            task['name']=task.pop('supply_name') #this is hacky too.
         if 'pp' in task.keys():
             task.pop('pp')
-        ppv.doTask(ub, baby_id, taskName, time, **task)
+        ppv.doTask(baby_id, taskName, time, **task)
         return("")

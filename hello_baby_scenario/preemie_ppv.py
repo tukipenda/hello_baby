@@ -53,10 +53,11 @@ def updateWarmer(baby_id, warmer_dict):
     db.session.commit()
     warmer=models.Warmer.query.filter_by(baby_id=baby_id).first()
 
-def doTask(ub, baby_id, taskName, time, **kwargs):
+def doTask(baby_id, taskName, time, **kwargs):
     task=ppv_update.taskDict[taskName]
     task(baby_id, **kwargs)
     db.session.commit()
+    ub=ppv_update.UpdateBaby(baby_id)
     ub.update(time)
 
 

@@ -32,7 +32,9 @@ def useSupply(baby_id, **kwargs):
 def dry(baby_id):
     skin=models.PESkin.query.filter_by(baby_id=baby_id).first()
     skin.is_dry=True
-    
+    db.session.commit()
+    test=models.PESkin.query.filter_by(baby_id=baby_id).first()
+
 def stimulate(baby_id):
     pass
 
@@ -106,10 +108,10 @@ class UpdateBaby:
                 if temp>33:
                     temp=round(temp-0.05, 2)
             else:
-                if ((self.PE['skin']['is_dry']) and (self.getSupply("hat").is_using==True)):
-                    if (self.warmer.tempMode=="manual" or temp<37):
+                if ((self.PE['skin']['is_dry']) and (self.getSupply("hat")['is_using']==True)):
+                    if (self.warmer.temp_mode=="manual" or temp<37):
                         temp=round(temp+0.05, 2)
-                    if (self.warmer.tempMode=="baby" and temp>37):
+                    if (self.warmer.temp_mode=="baby" and temp>37):
                         temp=round(temp-0.05, 2)
                 else:
                     if temp>34:
