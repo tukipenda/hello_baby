@@ -93,20 +93,41 @@ for size in ["2.5", "3", "3.5", "4"]:
 for supply in supplyList:
     supply["is_available"]=False
     supply["is_using"]=False
+    supply['pp']=supply['name']
+    if supply['size']:
+        supply["pp"]=supply['name']+": "+supply['size']
 
 for size in ["Infant", "Preemie"]:
-    supplyList.append({"name":'mask', "size":size, "is_available":True, "is_using":False})
+    supplyList.append({"name":'mask', "size":size, "is_available":True, "is_using":False, 'pp': ('mask: '+size)})
 
-tasks=[
-    "fetch",
-    "use",
+
+tasks=[]
+for supply in supplyList:
+    task={
+        'name':'fetch',
+        'supply_name':supply['name'],
+        'size':supply['size'],
+        'pp':'fetch '+supply['pp']
+    }
+    tasks.append(task)
+for supply in supplyList:
+    task={
+        'name':'place',
+        'supply_name':supply['name'],
+        'size':supply['size'],
+        'pp':'place '+supply['pp']
+    }
+    tasks.append(task)
+
+simpleTasks=[
     "dry",
     "stimulate",
-    "warm",
-    "bulb suction",
-    "deep suction",
-    "intubate",
-    "Give PPV",
-    "start compressions",
-    "stop compressions"
+    "bulb_suction",
+    "deep_suction"
 ]
+for taskName in simpleTasks:
+    task={
+        'name':taskName,
+        'pp':taskName
+    }
+    tasks.append(task)

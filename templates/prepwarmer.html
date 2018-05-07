@@ -71,7 +71,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">Interventions:</span>
                     </div>
-                    <v-select-intervene v-model="task" :options="scenario.tasks" @input="doTask(task)" placeholder="search"></v-select-intervene>
+                    <v-select-intervene v-model="task" label="pp" :options="scenario.tasks" @input="doTask(task)" placeholder="search..."></v-select-intervene>
                 </div>
 
             </div>
@@ -87,7 +87,7 @@
                         </div>
                     </div>
 
-                    CPR Vitals Oxygenation
+                    CPR Ventilation
 
                 </div>
             </div>

@@ -3,6 +3,8 @@ from models import db
 from app import app
 import json
 import preemie_ppv_data as data
+import preemie_ppv_update as ppv_update
+from preemie_ppv_update import getSubDict, getSupplies
 
 baby_data=json.dumps(data.baby_data)
 mom_data=json.dumps(data.mom_data)
@@ -21,21 +23,6 @@ db.session.commit()
 def PPVCreateBaby(user):
     ppvScenario=models.Scenario.query.filter_by(name="preemie_ppv").first()
     return models.create_baby(user, ppvScenario)
-
-def getSupplies(baby_id):
-    supplies=models.Supply.query.filter_by(baby_id=baby_id)
-    toReturn=[]
-    for supply in supplies:
-        s={}
-        s['size']=supply.size
-        s['name']=supply.name
-        s['is_available']=supply.is_available
-        s['is_using']=supply.is_using
-        toReturn.append(s)
-    return toReturn
-
-def getSubDict(newdict, keys):
-    return {key:newdict[key] for key in keys if (key in newdict.keys())}
 
 def getScenarioData(user):
     scenario=models.Scenario.query.filter_by(name="preemie_ppv").first()
@@ -67,39 +54,10 @@ def updateWarmer(baby_id, warmer_dict):
     warmer=models.Warmer.query.filter_by(baby_id=baby_id).first()
 
 #need to restructure this to call methods, which is much more sustainable
-def doTask(baby_id, taskName, **kwargs):
-    if taskName=="fetch":
-        supply=models.Supply.query.filter_by(baby_id=baby_id, **kwargs).update(dict(is_available=True))
-        db.session.commit()
-    elif taskName=="use":
-        name=kwargs['name']
-        size=kwargs['size']
-        models.Supply.query.filter_by(baby_id=baby_id, name=name).update(dict(is_using=False))
-        models.Supply.query.filter_by(baby_id=baby_id, name=name, size=size).update(dict(is_using=True))
-        db.session.commit()
-
-    elif taskName=="deliver_baby":
-        baby=models.Baby.query.filter_by(id=baby_id).update(dict(is_delivered=True))
-        db.session.commit()
-
-def updateBaby(time, baby_id):#taskName, time, **kwargs):
-    models.PEVitals.query.filter_by(id=baby_id).update(dict(hr=time))
+def doTask(ub, baby_id, taskName, time, **kwargs):
+    task=ppv_update.taskDict[taskName]
+    task(**kwargs)
     db.session.commit()
-
-def updateVent():
-    pass
-
-def updateUVC():
-    pass
-
-def updateCPR():
-    pass
-
-def updateHealth():
-    pass
-
-def updatePE():
-    pass
-
+    ub.update(time)
 
 

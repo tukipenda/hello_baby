@@ -35,7 +35,7 @@
 
                         </div>
                         <div v-else>
-                            <button type="button" class="btn btn-light" v-on:click="doTask('use', {'name':mask.name, 'size':mask.size})">[[mask.size]] Mask</button>
+                            <button type="button" class="btn btn-light" v-on:click="doTask({'name':'use', 'supply_name':mask.name, 'size':mask.size})">[[mask.size]] Mask</button>
                         </div>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">Fetch Supplies:</span>
                     </div>
-                    <v-select label="name" v-model="supplyToFetch" @input="getSupply(supplyToFetch)" :options="supplySearchOptions" placeholder="search..."></v-select>
+                    <v-select label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)" :options="supplySearchOptions" placeholder="search..."></v-select>
 
                 </div>
                 <h3>Available Supplies: </h3>

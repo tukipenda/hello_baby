@@ -4,6 +4,7 @@ import uuid
 import models
 import preemie_ppv as ppv
 import json
+import preemie_ppv_update as ppv_update
 
 @app.route('/debug')
 def debug():
@@ -48,7 +49,8 @@ def getScenario():
         time=request.get_json()['time']
         user=models.User.query.filter_by(username=user_id).first()
         if time>0:
-            ppv.updateBaby(time, baby_id)
+            ub=ppv_update.UpdateBaby(baby_id)
+            ub.update(time)
         scenarioData=ppv.getScenarioData(user)
         return(json.dumps(scenarioData))
 
@@ -65,7 +67,9 @@ def doTask():
     if 'user_id' in session.keys():
         user_id=session['user_id']
         baby_id=session['baby_id']
-        taskName=request.get_json()['name']
-        kwargs=request.get_json()['kwargs']
-        ppv.doTask(baby_id, taskName, **kwargs)
+        time=request.get_json()['time']
+        ub=ppv_update.UpdateBaby(baby_id)
+        task=request.get_json()['task']
+        taskName=task.pop('name')
+        ppv.doTask(ub, baby_id, taskName, **task)
         return("")

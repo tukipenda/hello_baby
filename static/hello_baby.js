@@ -157,13 +157,10 @@ var app = new Vue({
                     this.delivery_time=Date.now();
                     this.updateData();
                 },
-                doTask: function(taskName, kwargs){
-                    kwargs = typeof kwargs !== 'undefined' ? kwargs:{};
-                    let self=this;
+                doTask: function(task){
                     axios.post("/dotask",
-                             {'name':taskName,
+                             {'task':task,
                              'time':(Date.now()-this.delivery_time),
-                             'kwargs':kwargs
                              }).then(function(response){
                         self.getScenario();
                     });
@@ -172,7 +169,7 @@ var app = new Vue({
                       var name=supply.name;
                       var size=supply.size;
                       supply.available=true;
-                      this.doTask("fetch", {'name':name, 'size':size});
+                      this.doTask({'name':"fetch", 'supply_name':name, 'size':size});
                   },
                   helloSliderOptions: function(min, max, width){
                       width = typeof width !== 'undefined' ? width : '50%';
