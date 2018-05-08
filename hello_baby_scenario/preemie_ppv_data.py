@@ -13,7 +13,7 @@ warmer={
     "suction":0,
     "fio2":100,
     "flow":0,
-    "temp_mode":"Manual",
+    "temp_mode":"manual",
     "peep":0,
     "pip":0,
     "pop":0

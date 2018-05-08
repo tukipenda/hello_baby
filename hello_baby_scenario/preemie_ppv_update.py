@@ -25,8 +25,10 @@ def fetchSupply(baby_id, **kwargs):
     models.Supply.query.filter_by(baby_id=baby_id, **kwargs).update(dict(is_available=True))
 
 def useSupply(baby_id, **kwargs):
+    name=kwargs['name']
     supply=models.Supply.query.filter_by(baby_id=baby_id, **kwargs).first()
     if(supply.is_available):
+        models.Supply.query.filter_by(baby_id=baby_id, name=name).update(dict(is_using=False)) #remove other supplies already being used
         supply.is_using=True
 
 def dry(baby_id):

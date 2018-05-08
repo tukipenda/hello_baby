@@ -1,18 +1,3 @@
-
-/*
-heatOn: false,
-pip:0,
-peep:0,
-pop:0,
-pflow:0,
-fio2:100,
-suction:0,
-supplies: ["ETT","pulse ox", "laryngoscope"],
-appearance: "Infant is not crying.  Tone is poor. Infant is blue.  Not breathing.",
-staff: [{name:"Raquel",role:"RT"},{name:"Desmond",role:"RN"}],
-*/
-
-
 Vue.component('v-select', VueSelect.VueSelect);
 Vue.component('v-select-intervene', VueSelect.VueSelect);
 
@@ -54,6 +39,7 @@ var app = new Vue({
             data_last_updated:null,
             data_updater:null, /*repeatedly update data */
             showTab: "warmer",
+            mainTab: "history",
             supplyToFetch: null,
             task: null,
             lastExam: {
@@ -158,6 +144,7 @@ var app = new Vue({
                     this.updateData();
                 },
                 doTask: function(task){
+                    console.log(task);
                     let self=this;
                     axios.post("/dotask",
                              {'task':task,
@@ -169,8 +156,13 @@ var app = new Vue({
                   getSupply: function(supply){
                       var name=supply.name;
                       var size=supply.size;
-                      supply.available=true;
+                      supply.is_available=true;
                       this.doTask({'name':"fetch", 'supply_name':name, 'size':size});
+                  },
+                  useSupply: function(supply){
+                      var name=supply.name;
+                      var size=supply.size;
+                      this.doTask({'name':"use", 'supply_name':name, 'size':size});
                   },
                   helloSliderOptions: function(min, max, width){
                       width = typeof width !== 'undefined' ? width : '50%';
@@ -209,6 +201,16 @@ var app = new Vue({
                       this.scenario.warmer.is_turned_on=!this.scenario.warmer.is_turned_on;
                       this.updateWarmer();
                   },
+                  toggleTempMode: function(){
+                        if(this.scenario.warmer.temp_mode=="baby"){
+                            this.scenario.warmer.temp_mode="manual";
+                        }
+                            
+                        else {
+                            this.scenario.warmer.temp_mode="baby";
+                        }
+                        this.updateWarmer();
+                    },
                   updateData: function(){
                       this.data_last_updated=Date.now();
                       self=this;

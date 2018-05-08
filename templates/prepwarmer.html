@@ -6,14 +6,13 @@
 
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-
-
-                {% for value,name in [("resuscitation", "Resuscitation"),("history","History"), ("exam","Exam"), ("warmer", "Warmer"), ("intervene", "Intervene")] %}
-                <a {% if value in [ "resuscitation", "exam", "intervene"] %} v-if="baby_delivered" {% endif %} class="nav-item nav-link {% if value==" history " %} active {% endif %}" id="nav-{{value}}-tab" data-toggle="tab" href="#nav-{{value}}" role="tab" aria-controls="nav-{{value}}"
+                <div class="row">
+                    {% for value,name in [("history","History"), ("warmer", "Warmer"), ("resuscitation", "Resuscitation"), ("exam","Exam"), ("intervene", "Intervene")] %}
+                <a v-on:click="mainTab='{{value}}'" {% if value in [ "resuscitation", "exam", "intervene"] %} v-if="baby_delivered" {% endif %} class="nav-item nav-link {% if value==" history " %} active {% endif %}" id="nav-{{value}}-tab" href="#nav-{{value}}" role="tab" aria-controls="nav-{{value}}"
                     aria-selected="true">
                     {{name}}
                 </a> {% endfor %}
-                <div v-if="baby_delivered">
+				                <div v-if="baby_delivered">
                         <div v-if="baby_timer_started">
                             <a class="btn btn-warning" style="margin-left:90px;"> Time: <span id="baby_time" v-html="elapsed_baby_time"></span> </a>
                         </div>
@@ -24,21 +23,23 @@
                 <div v-else>
                     <button class="btn btn-primary" style="margin-left:90px;" v-on:click="deliverBaby"> Baby Out! </button>
                 </div>
-            </div>
 
-
+                    
+                </div>
+                
+                </div>
         </nav>
 
 
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
+            <div v-if="mainTab=='history'" class="tab-pane fade show active" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
                 <div id="prepWarmerHistory">
                     {% include "./history.html" %}
                 </div>
 
             </div>
 
-            <div class="tab-pane fade" id="nav-exam" role="tabpanel" aria-labelledby="nav-exam-tab">
+            <div v-if="mainTab=='exam'" class="tab-pane fade show active" id="nav-exam" role="tabpanel" aria-labelledby="nav-exam-tab">
                 <div class="card col-6" id="resuscExam">
                     <div class="card-body">
                         <div class="row">
@@ -48,7 +49,9 @@
                         {% for examType, examAction in [('cardiac', "Examine heart"), ('resp', "Examine lungs"), ('abd', "Examine Abdomen")] %}
                         <div class="row">
                             [[lastExam['{{examType}}'] ]]
-                            <button v-on:click="getLastExam('{{examType}}')" class="btn btn-primary" style="margin-top:20px">{{examAction}}</button>
+                        </div>
+                        <div class="row">
+                        	<button v-on:click="getLastExam('{{examType}}')" class="btn btn-primary" style="margin-top:20px">{{examAction}}</button>
                         </div>
                         {% endfor %}
                     </div>
@@ -56,7 +59,7 @@
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="nav-warmer" role="tabpanel" aria-labelledby="nav-prep-warmer-tab">
+            <div v-if="mainTab=='warmer'" class="tab-pane fade show active" id="nav-warmer" role="tabpanel" aria-labelledby="nav-prep-warmer-tab">
                 <div id="prepWarmerPrep" style="margin-top: 30px">
                     {% include "./warmer_settings.html" %}
 
@@ -65,7 +68,7 @@
 
 
 
-            <div class="tab-pane fade" id="nav-intervene" role="tabpanel" aria-labelledby="nav-intervene-tab">
+            <div v-if="mainTab=='intervene'" class="tab-pane fade show active" id="nav-intervene" role="tabpanel" aria-labelledby="nav-intervene-tab">
 
                 <div class="input-group mb-3" style="margin-top:30px">
                     <div class="input-group-prepend">
@@ -73,10 +76,15 @@
                     </div>
                     <v-select-intervene v-model="task" label="pp" :options="scenario.tasks" @input="doTask(task)" placeholder="search..."></v-select-intervene>
                 </div>
-
+				<div>
+                    <h3>Available Supplies: </h3>
+                <ul class="col3" v-for="supply in availableSupplies">
+                    <li>[[supply.name]]: [[supply.size]] <span v-if="supply.is_using" class="badge badge-success">currently using</span><span v-else v-on:click="useSupply(supply)" class="btn btn-primary">Use</span></li>
+                </ul>
+                </div>
             </div>
 
-            <div class="tab-pane fade show" id="nav-resuscitation" role="tabpanel" aria-labelledby="nav-resuscitation-tab">
+            <div v-if="mainTab=='resuscitation'" class="tab-pane fade show active" id="nav-resuscitation" role="tabpanel" aria-labelledby="nav-resuscitation-tab">
                 <div class="card col-6" id="resuscExam">
                     <div class="card-body">
                         <div class="row">
@@ -86,8 +94,6 @@
                               Heart rate [[scenario.PE.vitals.hr]].  Respiratory rate [[scenario.PE.vitals.rr]]. Oxygen saturation [[scenario.PE.vitals.o2sat]]. Temperature [[scenario.PE.vitals.temp]]
                         </div>
                     </div>
-
-                    CPR Ventilation
 
                 </div>
             </div>
