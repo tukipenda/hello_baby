@@ -91,7 +91,23 @@
                               GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
                         </div>
                         <div class="row">
-                              Heart rate [[scenario.PE.vitals.hr]].  Respiratory rate [[scenario.PE.vitals.rr]]. Oxygen saturation [[scenario.PE.vitals.o2sat]]. Temperature [[scenario.PE.vitals.temp]]
+                            Heart rate [[scenario.PE.vitals.hr]].  Respiratory rate [[scenario.PE.vitals.rr]]. Oxygen saturation <span class="badge badge-primary">[[scenario.PE.vitals.o2sat]]</span>. Temperature <span class="badge badge-success">[[scenario.PE.vitals.temp]]</span>
+                        </div>
+                        
+                        <h3>
+                            Ventilation
+                        </h3>
+                        <div class="row">
+                            {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
+                            <div class="col-3">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
+                            {% endfor %}
+                            
+                        </div>
+                        <div class="row">
+                            {% for pressure,pname in [("scenario.warmer.flow","Flow"), ("scenario.warmer.fio2","FIO2")]%}
+                            <div class="col-3">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
+                            {% endfor %}
+                            <div class="col-3">Suction: <span class="badge badge-primary">[[scenario.warmer.suction]]</span></div>
                         </div>
                     </div>
 
