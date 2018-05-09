@@ -38,7 +38,8 @@ vent={
     'is_mouth_open':False,
     'positioning': "lying flat, no chin lift or jaw thrust",
     'is_airway_open': True,
-    'has_air_leak': False
+    'has_air_leak': False,
+    'vent_type': "spontaneous"
 }
 
 cpr={

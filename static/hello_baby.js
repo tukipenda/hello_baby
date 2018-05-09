@@ -139,6 +139,7 @@ var app = new Vue({
                 },
                 deliverBaby: function(){
                     this.baby_delivered=true;
+                    this.mainTab="resuscitation";
                     this.doTask({'name':"deliver_baby"});
                     this.delivery_time=Date.now();
                     this.updateData();
