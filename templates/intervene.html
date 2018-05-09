@@ -1,0 +1,14 @@
+<div class="card" id="intervene">      
+<div class="input-group mb-3" style="margin-top:30px">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">Interventions:</span>
+                    </div>
+                    <v-select-intervene v-model="task" label="pp" :options="scenario.tasks" @input="doTask(task)" placeholder="search..."></v-select-intervene>
+                </div>
+				<div>
+                    <h3>Available Supplies: </h3>
+                <ul class="col3" v-for="supply in availableSupplies">
+                    <li>[[supply.name]]: [[supply.size]] <span v-if="supply.is_using" class="badge badge-success">currently using</span><span v-else v-on:click="useSupply(supply)" class="btn btn-primary">Use</span></li>
+                </ul>
+                </div>
+</div>

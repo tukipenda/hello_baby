@@ -35,23 +35,7 @@
             </div>
 
             <div v-if="mainTab=='exam'" class="tab-pane fade show active" id="nav-exam" role="tabpanel" aria-labelledby="nav-exam-tab">
-                <div class="card col-md-6" id="resuscExam">
-                    <div class="card-body">
-                        <div class="row">
-                            GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
-                            <span v-if="scenario.PE.resp.is_spontaneous">Infant is breathing spontaneously.</span> WOB: [[scenario.PE.resp.wob]].  Respiratory rate: [[scenario.PE.vitals.rr]].
-                        </div>
-                        {% for examType, examAction in [('cardiac', "Examine heart"), ('resp', "Examine lungs"), ('abd', "Examine Abdomen")] %}
-                        <div class="row">
-                            [[lastExam['{{examType}}'] ]]
-                        </div>
-                        <div class="row">
-                        	<button v-on:click="getLastExam('{{examType}}')" class="btn btn-primary" style="margin-top:20px">{{examAction}}</button>
-                        </div>
-                        {% endfor %}
-                    </div>
-
-                </div>
+                {% include "./exam.html" %}
             </div>
 
             <div v-if="mainTab=='warmer'" class="tab-pane fade show active" id="nav-warmer" role="tabpanel" aria-labelledby="nav-prep-warmer-tab">
@@ -64,54 +48,13 @@
 
 
             <div v-if="mainTab=='intervene'" class="tab-pane fade show active" id="nav-intervene" role="tabpanel" aria-labelledby="nav-intervene-tab">
+                {% include "./intervene.html" %}
 
-                <div class="input-group mb-3" style="margin-top:30px">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon3">Interventions:</span>
-                    </div>
-                    <v-select-intervene v-model="task" label="pp" :options="scenario.tasks" @input="doTask(task)" placeholder="search..."></v-select-intervene>
-                </div>
-				<div>
-                    <h3>Available Supplies: </h3>
-                <ul class="col3" v-for="supply in availableSupplies">
-                    <li>[[supply.name]]: [[supply.size]] <span v-if="supply.is_using" class="badge badge-success">currently using</span><span v-else v-on:click="useSupply(supply)" class="btn btn-primary">Use</span></li>
-                </ul>
-                </div>
             </div>
 
             <div v-if="mainTab=='resuscitation'" class="tab-pane fade show active" id="nav-resuscitation" role="tabpanel" aria-labelledby="nav-resuscitation-tab">
-                <div class="card" id="resuscExam">
-                    <div class="card-body">
-                        <div class="row">
-                              GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
-                        </div>
-                        <div class="row">
-                            Heart rate [[scenario.PE.vitals.hr]].  Respiratory rate [[scenario.PE.vitals.rr]].
-                            Oxygen saturation <span class="badge badge-primary">[[scenario.PE.vitals.o2sat]]</span>. 
-                            Temperature <span class="badge badge-success">[[scenario.PE.vitals.temp]]</span>
-                        </div>
-                        
-                        <h3>
-                            Ventilation
-                        </h3>
-                        <div class="row">
-                            {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
-                            <div class="col">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
-                            {% endfor %}
-                            
-                        </div>
-                        <div class="row">
-                            {% for pressure,pname in [("scenario.warmer.flow","Flow"), ("scenario.warmer.fio2","FIO2")]%}
-                            <div class="col">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
-                            {% endfor %}
-                            <div class="col">Suction: <span class="badge badge-primary">[[scenario.warmer.suction]]</span></div>
-                        </div>
-                    </div>
+                {% include "./resuscitation.html" %}
 
-                </div>
             </div>
-
-        </div>
-
-
+</div>
 {% endblock %}

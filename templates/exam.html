@@ -1,0 +1,17 @@
+                <div class="card col-md-6" id="resuscExam">
+                    <div class="card-body">
+                        <div class="row">
+                            GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
+                            <span v-if="scenario.PE.resp.is_spontaneous">Infant is breathing spontaneously.</span> WOB: [[scenario.PE.resp.wob]].  Respiratory rate: [[scenario.PE.vitals.rr]].
+                        </div>
+                        {% for examType, examAction in [('cardiac', "Examine heart"), ('resp', "Examine lungs"), ('abd', "Examine Abdomen")] %}
+                        <div class="row">
+                            [[lastExam['{{examType}}'] ]]
+                        </div>
+                        <div class="row">
+                        	<button v-on:click="getLastExam('{{examType}}')" class="btn btn-primary" style="margin-top:20px">{{examAction}}</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
