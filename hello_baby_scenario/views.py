@@ -69,8 +69,6 @@ def doTask():
         baby_id=session['baby_id']
         time=request.get_json()
         task=request.get_json()['task']
-        app.logger.info(task)
-        app.logger.info(type(task))
         taskName=task.pop('name')
         if 'supply_name' in task.keys():
             task['name']=task.pop('supply_name') #this is hacky too.

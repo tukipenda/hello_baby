@@ -1,9 +1,4 @@
 {% extends "layout.html" %} {% block body %}
-
-
-<div class="card">
-    <div class="card-body">
-
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <div class="row">
@@ -14,14 +9,14 @@
                 </a> {% endfor %}
 				                <div v-if="baby_delivered">
                         <div v-if="baby_timer_started">
-                            <a class="btn btn-warning" style="margin-left:90px;"> Time: <span id="baby_time" v-html="elapsed_baby_time"></span> </a>
+                            <a class="btn btn-warning"> Time: <span id="baby_time" v-html="elapsed_baby_time"></span> </a>
                         </div>
                         <div v-else>
-                            <button class="btn btn-primary" v-on:click="startBabyTimer" style="margin-left:90px;"> Start Timer </button>
+                            <button class="btn btn-primary" v-on:click="startBabyTimer"> Start Timer </button>
                         </div>
                 </div>
                 <div v-else>
-                    <button class="btn btn-primary" style="margin-left:90px;" v-on:click="deliverBaby"> Baby Out! </button>
+                    <button class="btn btn-primary" v-on:click="deliverBaby"> Baby Out! </button>
                 </div>
 
                     
@@ -40,7 +35,7 @@
             </div>
 
             <div v-if="mainTab=='exam'" class="tab-pane fade show active" id="nav-exam" role="tabpanel" aria-labelledby="nav-exam-tab">
-                <div class="card col-6" id="resuscExam">
+                <div class="card col-md-6" id="resuscExam">
                     <div class="card-body">
                         <div class="row">
                             GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
@@ -85,13 +80,15 @@
             </div>
 
             <div v-if="mainTab=='resuscitation'" class="tab-pane fade show active" id="nav-resuscitation" role="tabpanel" aria-labelledby="nav-resuscitation-tab">
-                <div class="card col-6" id="resuscExam">
+                <div class="card" id="resuscExam">
                     <div class="card-body">
                         <div class="row">
                               GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
                         </div>
                         <div class="row">
-                            Heart rate [[scenario.PE.vitals.hr]].  Respiratory rate [[scenario.PE.vitals.rr]]. Oxygen saturation <span class="badge badge-primary">[[scenario.PE.vitals.o2sat]]</span>. Temperature <span class="badge badge-success">[[scenario.PE.vitals.temp]]</span>
+                            Heart rate [[scenario.PE.vitals.hr]].  Respiratory rate [[scenario.PE.vitals.rr]].
+                            Oxygen saturation <span class="badge badge-primary">[[scenario.PE.vitals.o2sat]]</span>. 
+                            Temperature <span class="badge badge-success">[[scenario.PE.vitals.temp]]</span>
                         </div>
                         
                         <h3>
@@ -99,15 +96,15 @@
                         </h3>
                         <div class="row">
                             {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
-                            <div class="col-3">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
+                            <div class="col">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
                             {% endfor %}
                             
                         </div>
                         <div class="row">
                             {% for pressure,pname in [("scenario.warmer.flow","Flow"), ("scenario.warmer.fio2","FIO2")]%}
-                            <div class="col-3">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
+                            <div class="col">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
                             {% endfor %}
-                            <div class="col-3">Suction: <span class="badge badge-primary">[[scenario.warmer.suction]]</span></div>
+                            <div class="col">Suction: <span class="badge badge-primary">[[scenario.warmer.suction]]</span></div>
                         </div>
                     </div>
 
@@ -115,10 +112,6 @@
             </div>
 
         </div>
-
-    </div>
-</div>
-
 
 
 {% endblock %}

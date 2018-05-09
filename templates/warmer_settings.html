@@ -1,12 +1,11 @@
+
 <div class="row">
-    <div class="col-3">
-        <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+        <div class="nav nav-pills" role="tablist">
             {% for value,name in [("warmer","Warmer"), ("mask", "Bag Mask"), ("oxygen","Oxygen"), ("suction", "Suction"), ("supplies", "Supplies")] %}
             <a v-on:click="showTab='{{value}}'" class="nav-link {% if loop.first %} active {% endif %} " id="v-pills-{{value}}-tab" data-toggle="pill" href="#v-pills-{{value}}" role="tab" aria-controls="v-pills-{{value}}" aria-selected="true">{{name}}</a> {% endfor %}
         </div>
     </div>
-
-    <div class="col-9">
+<div class="row">
         <div class="tab-content">
             {% set values=["warmer", "mask", "oxygen", "suction", "supplies"] %}
             <div v-if="showTab=='warmer'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[0]}}-tab">
@@ -33,7 +32,7 @@
                     <h4 class="col-md-auto">
                         Select mask:
                     </h4>
-                    <div v-for="mask in getMasks" class="col-3">
+                    <div v-for="mask in getMasks" class="col-md-3">
                         <div v-if="mask.is_using">
 
                             <button type="button" class="btn btn-primary">[[mask.size]] Mask</button>
@@ -49,8 +48,6 @@
                     <div class="offset-md-1 col-md-4">
                         {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
                         <div class="row">
-                            <div class="card sliderCard">
-                            <div class="row">
                                 <div class="col-2">
                                 <h4>{{pname}}: </h4>
                                 </div>
@@ -67,9 +64,6 @@
                               {% endif %}
                             </vue-slider>
                             </div>
-                            </div>
-
-                        </div>
                         {% endfor %}
                     </div>
                 </div>
@@ -78,8 +72,6 @@
             <div v-if="showTab=='oxygen'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[2]}}-tab">
                 {% for pressure,pname in [("scenario.warmer.flow","Flow"), ("scenario.warmer.fio2","FIO2")]%}
                 <div class="row">
-                    <div class="card sliderCard">
-                    <div class="row">
                         <div class="col-2">
                         <h4>{{pname}}: </h4>
                         </div>
@@ -96,14 +88,10 @@
 
                     </vue-slider>
                     </div>
-                    </div>
-
-                </div>
                 {% endfor %}
             </div>
 
             <div v-if="showTab=='suction'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[3]}}-tab">
-                    <div class="card sliderCard">
                     <div class="row">
                         <div class="col-2">
                         <h4>Suction: </h4>
@@ -119,7 +107,6 @@
                         </div>
                           {% endif %}
                     </vue-slider>
-                    </div>
                     </div>
 
             </div>
@@ -142,5 +129,3 @@
 
         </div>
     </div>
-
-</div>
