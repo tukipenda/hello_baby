@@ -20,7 +20,7 @@ warmer={
 }
 
 #I deleted APGAR for now,not including malformations, BP, EKG, or 4-extremity sats
-vitals={'o2sat':55, 'hr':120, 'rr':40, 'sbp':75, 'dbp':50, 'temp':35, 'weight':2.25}
+vitals={'o2sat':55, 'hr':120, 'rr':0, 'sbp':75, 'dbp':50, 'temp':35, 'weight':2.25}
 resp={"breath_sounds":"None", "chest_rise":"None", "wob":"None", "is_grunting":False, "is_spontaneous":False}
 cardiac={"murmur":"no murmur", "femoral_pulse":"2+", "brachial_pulse":"2+"}
 abd={"bs":"+bs", "palpate":"soft, no HSM"}
@@ -42,10 +42,10 @@ vent={
 }
 
 cpr={
-    'event_rate':120,
-    'btc_breaths':3,
-    'btc_compressions':1,
-    'cpr_depth':"1/3",
+    'event_rate':0, #ideal is 120
+    'btc_breaths':0, #ideal is 1:3
+    'btc_compressions':0, #ideal is 3
+    'cpr_depth':"0", #ideal is 1/3
     'efficacy':0
 }
 
