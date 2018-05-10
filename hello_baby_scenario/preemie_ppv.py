@@ -32,14 +32,21 @@ def getScenarioData(user):
     for e, m in models.PEDict.items():
         result=m.query.filter_by(baby_id=baby.id).first()
         PE[e]=getSubDict(result.__dict__, data.PE[e].keys())
+    resusc={}
+    for r, m in models.resuscDict.items():
+        if r!="health":
+            result=m.query.filter_by(baby_id=baby.id).first()
+            resusc[r]=getSubDict(result.__dict__, getattr(data, r).keys())
     warmer=models.Warmer.query.filter_by(baby_id=baby.id).first()
     warmer=getSubDict(warmer.__dict__, data.warmer.keys())
+    
     scenario_text=scenario.scenario
     mom=json.loads(scenario.mom_data)
     tasks=json.loads(scenario.tasks)
     returnDict={
         'scenario_text':scenario_text,
         'PE':PE,
+        'resusc':resusc,
         'mom':mom,
         'baby':babyDict,
         'warmer':warmer,

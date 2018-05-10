@@ -180,6 +180,7 @@ class Scenario(db.Model):
     uvc=db.Column(db.Text)
     health=db.Column(db.Text)
 
+# probably should change the name as it now includes mechanical things like PE/UVC
 PEDict={
     'vitals':PEVitals,
     'resp':PEResp,
@@ -189,6 +190,13 @@ PEDict={
     'neuro':PENeuro,
     'skin':PESkin,
     'other':PEOther
+}
+
+resuscDict={
+    'vent':Ventilation,
+    'cpr':CPR,
+    'uvc':UVC,
+    'health':Health
 }
 
 def create_baby(user, scenario):
@@ -204,6 +212,13 @@ def create_baby(user, scenario):
         subPE=model(baby_id=baby_id, **baby_PE[name])
         db.session.add(subPE)
     db.session.commit()
+    for key in ["vent", "cpr", "uvc", "health"]:
+        kwargs=json.loads(getattr(scenario, key))
+        for k,v in kwargs.items():
+            if type(v)==list:
+                kwargs[k]=json.dumps(v)
+        resuscModel=resuscDict[key](baby_id=baby_id, **kwargs)
+        db.session.add(resuscModel)
     for supply in supplies:
         newSupply=Supply(baby_id=baby_id, name=supply['name'], size=supply['size'], is_available=supply['is_available'], is_using=supply['is_using'], pp=supply['pp'])
         db.session.add(newSupply)
