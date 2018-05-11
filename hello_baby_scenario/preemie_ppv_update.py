@@ -20,6 +20,13 @@ def getSupplies(baby_id):
         toReturn.append(s)
     return toReturn
 
+def getSupply(baby_id, name, size=None):
+    supplies=getSupplies(baby_id)
+    for supply in supplies:
+        if((supply['name']==name) and (not supply['size'] or (supply['size']==size))):
+            return supply
+    return None
+
 #tasks below still require db session commit
 def fetchSupply(baby_id, **kwargs):
     models.Supply.query.filter_by(baby_id=baby_id, **kwargs).update(dict(is_available=True))
@@ -43,12 +50,25 @@ def stimulate(baby_id):
 def deliver_baby(baby_id):
     baby=models.Baby.query.filter_by(id=baby_id).update(dict(is_delivered=True))
 
+
+def start_ppv(baby_id):
+    vent=models.Ventilation.query.filter_by(baby_id=baby_id).first()
+    vent.vent_type="PPV"
+    db.session.commit()
+
+def stop_ppv(baby_id):
+    vent=models.Ventilation.query.filter_by(baby_id=baby_id).first()
+    vent.vent_type="spontaneous"
+    db.session.commit()
+
 taskDict={
     "fetch":fetchSupply,
     "use":useSupply,
     "dry":dry,
     "stimulate":stimulate,
-    "deliver_baby":deliver_baby
+    "deliver_baby":deliver_baby,
+    "startPPV":start_ppv,
+    'stopPPV':stop_ppv
 }
 
 #this is hacky - need to fix this

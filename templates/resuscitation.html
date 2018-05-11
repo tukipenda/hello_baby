@@ -5,10 +5,12 @@
                         </div>
                         <div class="row">
                             Heart rate [[scenario.PE.vitals.hr]].  Respiratory rate [[scenario.PE.vitals.rr]].
-                            Oxygen saturation <span class="badge badge-primary">[[scenario.PE.vitals.o2sat]]</span>. 
-                            Temperature <span class="badge badge-success">[[scenario.PE.vitals.temp]]</span>
+                            Oxygen saturation<span v-if="checkSupplyByName('pulse_ox').is_using==true" class="badge badge-primary"> [[scenario.PE.vitals.o2sat]].</span>
+                            <span v-else class="badge badge-warning"> unavailable</span>
+                            Temperature<span v-if="checkSupplyByName('temp_probe').is_using==true" class="badge badge-success"> [[scenario.PE.vitals.temp]]</span>
+                            <span v-else class="badge badge-warning">unavailable</span>
                         </div>
-                        
+
                         <h3>
                             Ventilation
                         </h3>
@@ -16,7 +18,7 @@
                             {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
                             <div class="col">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
                             {% endfor %}
-                            
+
                         </div>
                         <div class="row">
                             {% for pressure,pname in [("scenario.warmer.flow","Flow"), ("scenario.warmer.fio2","FIO2")]%}

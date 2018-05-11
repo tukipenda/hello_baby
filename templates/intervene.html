@@ -1,10 +1,10 @@
-<div class="card" id="intervene">  
+<div class="card" id="intervene">
 
 <div class="row">
     <div class="col-12">
         <div class="nav nav-pills" role="tablist">
-            {% for value,name in [("supplies","Supplies"), ("ventilation", "Ventilation"), ("cpr","CPR"), ("procedures", "Procedures"), ("medications", "Medications")] %}
-            <a v-on:click="showTab='{{value}}'" class="nav-link {% if loop.first %} active {% endif %} " id="v-pills-{{value}}-tab" data-toggle="pill" href="#v-pills-{{value}}" role="tab" aria-controls="v-pills-{{value}}" aria-selected="true">{{name}}</a>            {% endfor %}
+            {% for value,name in [("supplies","Supplies"), ("simple_interventions", "Simple Interventions"), ("ventilation", "Ventilation"), ("cpr","CPR"), ("procedures", "Procedures"), ("medications", "Medications")] %}
+            <a v-on:click="interveneTab='{{value}}'" class="nav-link {% if loop.first %} active {% endif %} " id="v-pills-{{value}}-tab" data-toggle="pill" href="#v-pills-{{value}}" role="tab" aria-controls="v-pills-{{value}}" aria-selected="true">{{name}}</a>            {% endfor %}
         </div>
     </div>
 </div>
@@ -12,7 +12,7 @@
     <div class="col-12">
         <div class="tab-content">
             {% set values=["supplies", "ventilation", "cpr", "procedures", "medications"] %}
-            <div v-if="showTab=='supplies'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[0]}}-tab">
+            <div v-if="interveneTab=='supplies'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[0]}}-tab">
                 <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon3">Get More Supplies:</span>
@@ -27,24 +27,45 @@
                 </ul>
                 </div>
             </div>
+            <div v-if="interveneTab=='simple_interventions'" class="tab-pane show active container" role="tabpanel" aria-labelledby="v-pills-{{values[1]}}-tab">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <button v-if="!scenario.PE.skin.is_dry" v-on:click=doTask({'name':'dry'}) class="btn btn-primary">Dry</button>
+                    </div>
+                </div>
+            </div>
+            <div v-if="interveneTab=='ventilation'" class="tab-pane show active container" role="tabpanel" aria-labelledby="v-pills-{{values[1]}}-tab">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <span v-if="scenario.resusc.vent.vent_type=='spontaneous'" class="badge badge-success">Spontaneously Ventilating</span>
+                        <span v-else-if="scenario.resusc.vent.vent_type=='PPV'" v-on:click="doTask({'name':'stopPPV'})" class="btn btn-primary">Stop PPV</span>
+                        <span v-else class="btn btn-primary">Extubate to RA</span>
+                    </div>
+                    <div class="col-sm-2">
+                        <button v-if="scenario.resusc.vent.vent_type=='spontaneous'" v-on:click="doTask({'name':'startPPV'})" class="btn btn-primary">Start PPV</button>
+                        <span v-else-if="scenario.resusc.vent.vent_type=='mechanical'" class="btn btn-primary">Extubate to PPV</span>
+                        <div v-else class="badge badge-success">Giving PPV</div>
+                    </div>
+                    <div class="col-sm-2">
+                        <button v-if="scenario.resusc.vent.vent_type!='mechanical'" class="btn btn-primary">Intubate</button>
+                    </div>
 
-            <div v-if="showTab=='ventilation'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[1]}}-tab">
-                Ventilator mode: [[scenario.resusc.vent.vent_type]]
+                </div>
             </div>
 
-            <div v-if="showTab=='cpr'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[2]}}-tab">
+            <div v-if="interveneTab=='cpr'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[2]}}-tab">
                 CPR
             </div>
 
-        <div v-if="showTab=='procedures'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[3]}}-tab">
+        <div v-if="interveneTab=='procedures'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[3]}}-tab">
             Procedures
 
         </div>
 
-        <div v-if="showTab=='medications'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[4]}}-tab">
+        <div v-if="interveneTab=='medications'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[4]}}-tab">
 			Medications
         </div>
-        
+
         </div>
     </div>
 

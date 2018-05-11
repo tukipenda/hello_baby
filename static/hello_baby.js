@@ -40,6 +40,7 @@ var app = new Vue({
             data_updater:null, /*repeatedly update data */
             showTab: "warmer",
             mainTab: "history",
+            interveneTab:"supplies",
             supplyToFetch: null,
             task: null,
             lastExam: {
@@ -154,6 +155,16 @@ var app = new Vue({
                        self.getScenario();
                     });
                 },
+                checkSupplyByName: function(name, size){
+                    var toReturn=null;
+                    var s=this.scenario.supplies;
+                    for (var i=0;i<s.length;i++){
+                        if((s[i].name==name)){ /*and (s[i].size==size)){ need to implement this */
+                            toReturn=s[i];
+                        }
+                    }
+                    return toReturn;
+                },
                   getSupply: function(supply){
                       var name=supply.name;
                       var size=supply.size;
@@ -206,7 +217,7 @@ var app = new Vue({
                         if(this.scenario.warmer.temp_mode=="baby"){
                             this.scenario.warmer.temp_mode="manual";
                         }
-                            
+
                         else {
                             this.scenario.warmer.temp_mode="baby";
                         }
