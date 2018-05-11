@@ -12,19 +12,31 @@
                         </div>
 
                         <h3>
-                            Ventilation
+                            Warmer settings
                         </h3>
                         <div class="row">
+                            <div class="col-2">
+                          		 Warmer is <span v-if="scenario.warmer.turned_on">on</span><span v-else>off</span>.
+                       		 </div>
+                            <div class="col-2">
+                          		 Temp mode: [[scenario.warmer.temp_mode]]
+                       		 </div>
+                            <div v-for="mask in getMasks" class="col-2">
+                            <span v-if="mask.is_using">Using [[mask.size]] Mask </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
                             {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
-                            <div class="col">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
+                            <div class="col-sm-1">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
                             {% endfor %}
 
                         </div>
                         <div class="row">
                             {% for pressure,pname in [("scenario.warmer.flow","Flow"), ("scenario.warmer.fio2","FIO2")]%}
-                            <div class="col">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
+                            <div class="col-sm-1">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
                             {% endfor %}
-                            <div class="col">Suction: <span class="badge badge-primary">[[scenario.warmer.suction]]</span></div>
+                            <div class="col-sm-1">Suction: <span class="badge badge-primary">[[scenario.warmer.suction]]</span></div>
                         </div>
                     </div>
 </div>
