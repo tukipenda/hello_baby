@@ -39,7 +39,7 @@ vent={
     'positioning': "lying flat, no chin lift or jaw thrust",
     'is_airway_open': True,
     'has_air_leak': False,
-    'vent_type': "spontaneous" #options include ppv, mechanical
+    'vent_type': "spontaneous" #options include ppv, intubated
 }
 
 cpr={

@@ -57,18 +57,41 @@
 
 
     <main role="main" class="container" style="margin-top: 90px">
-        <div>
-            Hey
-        </div>
         <div id="HelloBabyApp">
-            <h1>use refresh</h1>
-        <vue-slider ref="slider" v-bind="options" v-model="test">
-            <div slot="label" scope="{ label, active }">
-                <span v-if="!is_IE" :class="['custom-label', { active }]" v-if="label % {% if pname=="PEEP"%} 5 {% else %} 10 {% endif %} === 0" >
-                                    [[ label ]]
-                                  </span>
+        <div class="container">
+            <div class="row">
+                <div class="col-1">
+
+                </div>
+                <div class="col-6">
+                    <div class="row" style="background-color:black; padding:20px; border-radius:5px;">
+                        <div class="col">
+                        </div>
+                        <div class="col-3">
+                            <span class="badge badge-primary">O2 Sat: Unavailable</span>
+                            <span class="badge badge-success">Temp: 36</span>
+                            <span class="badge badge-light">RR: 0</span>
+                        </div>
+                    </div>
+                    <div class="row" style="padding:20px;">
+                              GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
+                    </div>
+                    <div class="row">
+                        Last Cardiac exam
+                    </div>
+                    <div class="row">
+                        Last respiratory exam
+                    </div>
+                    <div class="row">Warmer</div>
+                    <div class="row">Appearance</div>
+                    <div class="row">Ventilation</div>
+                    <div class="row">CPR</div>
+                </div>
+                <div class="col-1">
+
+                </div>
             </div>
-        </vue-slider>
+        </div>
         </div>
 
     </main>

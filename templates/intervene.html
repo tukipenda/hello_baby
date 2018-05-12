@@ -43,11 +43,11 @@
                     </div>
                     <div class="col-sm-2">
                         <button v-if="scenario.resusc.vent.vent_type=='spontaneous'" v-on:click="doTask({'name':'startPPV'})" class="btn btn-primary">Start PPV</button>
-                        <span v-else-if="scenario.resusc.vent.vent_type=='mechanical'" class="btn btn-primary">Extubate to PPV</span>
+                        <span v-else-if="scenario.resusc.vent.vent_type=='intubated'" class="btn btn-primary">Extubate to PPV</span>
                         <div v-else class="badge badge-success">Giving PPV</div>
                     </div>
                     <div class="col-sm-2">
-                        <button v-if="scenario.resusc.vent.vent_type!='mechanical'" class="btn btn-primary">Intubate</button>
+                        <button v-if="scenario.resusc.vent.vent_type!='intubated'" class="btn btn-primary">Intubate</button>
                     </div>
 
                 </div>

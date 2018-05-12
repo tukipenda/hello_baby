@@ -1,0 +1,32 @@
+Dashboard: (provide only the necessary information, minimize the size to optimize for phone?)
+(responsive design - more information on desktop website than on iphone website)
+Start timer
+Appearance
+Last PE
+O2sat, temperature, RR, last HR
+Warmer settings:
+warmer on?, temp_mode
+PIP/PEEP/POP, flow, fiO2, suction
+Resp mode - if giving breaths (how frequently) (can make a video later)
+CPR - if given compressions how frequently/how deep (can make a video later)
+medications - UVC in place, meds given w/ timing (later can add a time-keeper).
+supplies at bedside
+
+Additional information - mom's history
+Interventions - adjust warmer, get supplies, simple actions (dry/stim), adjust ventilation, adjust CPR, procedures, give meds
+
+35w male infant, not breathing, cyanotic, dry skin
+O2sat - unavailable. Temp 36.  RR 0.  Last HR 100.
+Last resp exam - no breath sounds
+Last CV exam - 2+ femoral pulses, no murmurs
+(more exams)
+PIP - 20, PEEP - 5, POP - 40
+Flow - 10, FiO2 - 21, suction - 100
+Resp mode - spontaneous
+Available supplies
+(some actions from main board)
+
+Actions - review history, adjust warmer, vent (start PPV or intubate), start cpr, place UVC (give meds), supplies, simple actions (dry, stim, suction).
+hx/warmer/vent/cpr (left) procedures/meds/simple actions/supplies (right) - overlay with modal window?
+
+Get UI kit?
