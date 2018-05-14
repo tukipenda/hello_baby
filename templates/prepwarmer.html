@@ -1,60 +1,65 @@
 {% extends "layout.html" %} {% block body %}
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <div class="row">
-                    {% for value,name in [("history","History"), ("warmer", "Warmer"), ("resuscitation", "Resuscitation"), ("exam","Exam"), ("intervene", "Intervene")] %}
-                <a v-on:click="mainTab='{{value}}'" {% if value in [ "resuscitation", "exam", "intervene"] %} v-if="baby_delivered" {% endif %} class="nav-item nav-link {% if value==" history " %} active {% endif %}" id="nav-{{value}}-tab" href="#nav-{{value}}" role="tab" aria-controls="nav-{{value}}"
-                    aria-selected="true">
-                    {{name}}
-                </a> {% endfor %}
-				                <div v-if="baby_delivered">
-                        <div v-if="baby_timer_started">
-                            <a class="btn btn-warning"> Time: <span id="baby_time" v-html="elapsed_baby_time"></span> </a>
+    <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    <div class="container">
+                     <div class="card">
+                          <div class="card-body">
+                            History
+                          </div>
                         </div>
-                        <div v-else>
-                            <button class="btn btn-primary" v-on:click="startBabyTimer"> Start Timer </button>
+
+                        <div class="card">
+                              <div class="card-body">
+                                PE
+                              </div>
                         </div>
+                        <div class="card">
+                              <div class="card-body">
+                                Warmer
+                              </div>
+                        </div>
+                        <div class="card">
+                              <div class="card-body">
+                                Supplies
+                              </div>
+                        </div>
+                    </div>
                 </div>
-                <div v-else>
-                    <button class="btn btn-primary" v-on:click="deliverBaby"> Baby Out! </button>
+                <div class="col-4">
+                    {% include "resuscitation.html" %}
                 </div>
+                <div class="col-4">
+                    <div class="container">
+                     <div class="card">
+                          <div class="card-body">
+                            Simple Interventions
+                          </div>
+                        </div>
 
-                    
+                        <div class="card">
+                              <div class="card-body">
+                                Ventilation
+                              </div>
+                        </div>
+                        <div class="card">
+                              <div class="card-body">
+                                CPR
+                              </div>
+                        </div>
+                        <div class="card">
+                              <div class="card-body">
+                                Procedures
+                              </div>
+                        </div>
+                        <div class="card">
+                              <div class="card-body">
+                                Medications
+                              </div>
+                        </div>
+                    </div>
                 </div>
-                
-                </div>
-        </nav>
-
-
-        <div class="tab-content" id="nav-tabContent">
-            <div v-if="mainTab=='history'" class="tab-pane fade show active" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
-                <div id="prepWarmerHistory">
-                    {% include "./history.html" %}
-                </div>
-
             </div>
+        </div>
 
-            <div v-if="mainTab=='exam'" class="tab-pane fade show active" id="nav-exam" role="tabpanel" aria-labelledby="nav-exam-tab">
-                {% include "./exam.html" %}
-            </div>
-
-            <div v-if="mainTab=='warmer'" class="tab-pane fade show active" id="nav-warmer" role="tabpanel" aria-labelledby="nav-prep-warmer-tab">
-                <div id="prepWarmerPrep" style="margin-top: 30px">
-                    {% include "./warmer_settings.html" %}
-
-                </div>
-            </div>
-
-
-
-            <div v-if="mainTab=='intervene'" class="tab-pane fade show active" id="nav-intervene" role="tabpanel" aria-labelledby="nav-intervene-tab">
-                {% include "./intervene.html" %}
-
-            </div>
-
-            <div v-if="mainTab=='resuscitation'" class="tab-pane fade show active" id="nav-resuscitation" role="tabpanel" aria-labelledby="nav-resuscitation-tab">
-                {% include "./resuscitation.html" %}
-
-            </div>
-</div>
 {% endblock %}
