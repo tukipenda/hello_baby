@@ -13,10 +13,10 @@
             <div v-if="showTab=='warmer'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[0]}}-tab">
                 <div class="row">
                     <span v-if="scenario.warmer.is_turned_on">
-                    <h3> Heat is: <span v-on:click="toggleHeat" class="btn badge badge-danger">on</span> </h3>
+                     Heat is: <span v-on:click="toggleHeat" class="btn badge badge-danger">on</span>
                     </span>
                     <span v-else>
-                    <h3> Heat is: <span v-on:click="toggleHeat" class="btn badge badge-secondary">off</span> </h3>
+                    Heat is: <span v-on:click="toggleHeat" class="btn badge badge-secondary">off</span>
                     </span>
                 </div>
                 <h3>

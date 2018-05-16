@@ -33,8 +33,15 @@
       GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
  	</div>
 	<div class="row">
-      		 Warmer is <span v-if="scenario.warmer.turned_on">on</span><span v-else>off</span>.
-      		 Temp mode: [[scenario.warmer.temp_mode]]
+        <span v-if="scenario.warmer.is_turned_on">
+            Heat is: <span v-on:click="toggleHeat" class="btn badge badge-danger">on</span>
+        </span>
+        <span v-else>
+            Heat is: <span v-on:click="toggleHeat" class="btn badge badge-secondary">off</span>
+        </span>
+      	 Temperature mode: <span v-on:click="toggleTempMode" class="btn badge badge-primary">
+                    [[scenario.warmer.temp_mode]]
+                    </span>
         <div v-for="mask in getMasks" class="col-2">
         <span v-if="mask.is_using">Using [[mask.size]] Mask </span>
         </div>
@@ -54,7 +61,7 @@
     </div>
 	
 	<div class="row">
-		Ventilation mode: PPV using infant mask.
+		Ventilation mode: [[scenario.resusc.vent.vent_type]]
 	</div>
 	<div class="row">
 		No chest compressions
