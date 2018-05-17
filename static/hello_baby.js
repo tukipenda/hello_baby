@@ -43,6 +43,8 @@ var app = new Vue({
             interveneTab:"supplies",
             supplyToFetch: null,
             task: null,
+            show_message:true,
+            hb_message:"The baby is about to be delivered.  Time to get the warmer ready.", /*need to make this part of the scenario text*/
             lastExam: {
                 'abd':null,
                 'cardiac':null,
@@ -112,6 +114,13 @@ var app = new Vue({
                     return false;
             }
         },
+        mounted: function(){ /*should really set this up so clicking the close button starts this timer*/
+            self=this;
+            setTimeout(
+                function() {
+                  self.deliverBaby();
+                }, 60000);
+        },
         methods: {
                 getLastExam: function(PEtype){
                     this.lastExam[PEtype]=JSON.stringify(this.scenario.PE[PEtype]);
@@ -144,6 +153,8 @@ var app = new Vue({
                     this.doTask({'name':"deliver_baby"});
                     this.delivery_time=Date.now();
                     this.updateData();
+                    this.hb_message="The baby was just delivered!";
+                    this.show_message=true;
                 },
                 doTask: function(task){
                     console.log(task);

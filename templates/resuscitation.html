@@ -1,20 +1,25 @@
 <div class="container">
-		<div class="row">
-			 <div v-if="baby_delivered"> 
+    	<div class="row">        
+            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+              <button type="button" class="btn btn-light">History</button>
+              <button type="button" class="btn btn-light">Prep</button>
+              <button type="button" class="btn btn-light">Exam</button>              
+              <button type="button" class="btn btn-light">Actions</button>
+              <button type="button" class="btn btn-light">Meds</button>
+            </div>
+	    </div>
+		<div class="row" style="background-color:black; padding:5px; border-radius:5px;">
+			<div class="col" style="padding-left:0px;">
+				<div v-if="baby_delivered"> 
                          <div v-if="baby_timer_started"> 
-                             <a class="btn btn-warning"> Time: <span id="baby_time" v-html="elapsed_baby_time"></span> </a> 
+                             <a class="btn btn-sm btn-warning"><span id="baby_time" v-html="elapsed_baby_time"></span> </a> 
                          </div> 
                          <div v-else> 
-                             <button class="btn btn-primary" v-on:click="startBabyTimer"> Start Timer </button> 
+                             <button class="btn btn-sm btn-primary" v-on:click="startBabyTimer"> Start Timer </button> 
                          </div> 
-                 </div> 
-                 <div v-else> 
-                     <button class="btn btn-primary" v-on:click="deliverBaby"> Baby Out! </button> 
-                 </div> 
-
-		</div>
-		<div class="row" style="background-color:black; padding:20px; border-radius:5px;">
-			<div class="col"></div>
+                 </div>
+                
+			</div>
 			<div class="col-auto">
 			    <div class="row">
                 <span class="badge badge-light">RR [[scenario.PE.vitals.rr]]</span>
