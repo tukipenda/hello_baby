@@ -24,7 +24,6 @@ function formatTime(t){
     return (m+":"+t);
 }
 
-
 var app = new Vue({
         el: '#HelloBabyApp',
         delimiters: ['[[',']]'],
@@ -38,7 +37,7 @@ var app = new Vue({
             scenario:{},
             data_last_updated:null,
             data_updater:null, /*repeatedly update data */
-            showTab: "warmer",
+            showTab: "None",
             mainTab: "history",
             interveneTab:"supplies",
             supplyToFetch: null,
@@ -148,13 +147,15 @@ var app = new Vue({
                     }, 1000);
                 },
                 deliverBaby: function(){
-                    this.baby_delivered=true;
-                    this.mainTab="resuscitation";
-                    this.doTask({'name':"deliver_baby"});
-                    this.delivery_time=Date.now();
-                    this.updateData();
-                    this.hb_message="The baby was just delivered!";
-                    this.show_message=true;
+                    if(!this.baby_delivered){
+                        this.baby_delivered=true;
+                        this.mainTab="resuscitation";
+                        this.doTask({'name':"deliver_baby"});
+                        this.delivery_time=Date.now();
+                        this.updateData();
+                        this.hb_message="The baby was just delivered!";
+                        this.show_message=true;
+                    }
                 },
                 doTask: function(task){
                     console.log(task);
@@ -223,6 +224,14 @@ var app = new Vue({
                   toggleHeat: function(){
                       this.scenario.warmer.is_turned_on=!this.scenario.warmer.is_turned_on;
                       this.updateWarmer();
+                  },
+                  toggleShowTab: function(name){
+                      if(this.showTab===name){
+                          this.showTab="None";
+                      }
+                      else {
+                          this.showTab=name;
+                      }
                   },
                   toggleTempMode: function(){
                         if(this.scenario.warmer.temp_mode=="baby"){
