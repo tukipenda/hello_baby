@@ -28,7 +28,6 @@
                 <button v-if="!baby_delivered" v-on:click="deliverBaby" type="button" class="btn btn-danger">Ready!</button>
               <button v-if="baby_delivered" v-on:click="toggleShowTab('exam')" v-bind:class="(showTab==='exam') ? 'btn btn-primary' : 'btn btn-light'" type="button">Exam</button>              
               <button v-if="baby_delivered" v-on:click="toggleShowTab('actions')" v-bind:class="(showTab==='actions') ? 'btn btn-primary' : 'btn btn-light'" type="button" >Actions</button>
-              <button v-if="baby_delivered" v-on:click="toggleShowTab('meds')" v-bind:class="(showTab==='meds') ? 'btn btn-primary' : 'btn btn-light'" type="button" >Meds</button>
             </div>
 	    </div>
 		<div class="row" style="background-color:black; padding:5px; border-radius:5px;">

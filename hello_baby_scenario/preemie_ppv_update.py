@@ -43,7 +43,7 @@ def dry(baby_id):
     skin.is_dry=True
     db.session.commit()
     test=models.PESkin.query.filter_by(baby_id=baby_id).first()
-
+    
 def stimulate(baby_id):
     pass
 
@@ -53,7 +53,7 @@ def deliver_baby(baby_id):
 
 def start_ppv(baby_id):
     vent=models.Ventilation.query.filter_by(baby_id=baby_id).first()
-    vent.vent_type="PPV"
+    vent.vent_type="ppv"
     db.session.commit()
 
 def stop_ppv(baby_id):
@@ -61,6 +61,12 @@ def stop_ppv(baby_id):
     vent.vent_type="spontaneous"
     db.session.commit()
 
+def set_rate(baby_id, set_rate):
+    vent=models.Ventilation.query.filter_by(baby_id=baby_id).first()
+    vent.set_rate=set_rate
+    db.session.commit()
+    app.logger.info(vent)
+    
 taskDict={
     "fetch":fetchSupply,
     "use":useSupply,
@@ -68,7 +74,8 @@ taskDict={
     "stimulate":stimulate,
     "deliver_baby":deliver_baby,
     "startPPV":start_ppv,
-    'stopPPV':stop_ppv
+    'stopPPV':stop_ppv,
+    'set_rate':set_rate
 }
 
 #this is hacky - need to fix this
@@ -76,13 +83,20 @@ class UpdateBaby:
     def __init__(self, baby_id):
         self.baby_id=baby_id
         self.PE={}
+        self.resusc={}
+        self.taskName=None
+        self.time=0
+        self.db=db
+    
+    def getData(self):
         for e, m in models.PEDict.items():
             result=m.query.filter_by(baby_id=self.baby_id).first()
             self.PE[e]=getSubDict(result.__dict__, data.PE[e].keys())
+        for e, m in models.resuscDict.items():
+            result=m.query.filter_by(baby_id=self.baby_id).first()
+            self.resusc[e]=getSubDict(result.__dict__, data.resusc[e].keys())
         self.warmer=models.Warmer.query.filter_by(baby_id=self.baby_id).first()
         self.supplies=getSupplies(self.baby_id)
-        self.time=0
-        self.db=db
 
     def getSupply(self, name, size=None):
         for supply in self.supplies:
@@ -90,16 +104,32 @@ class UpdateBaby:
                 return supply
         return None
 
-    def update(self, time):#taskName, **kwargs):
+    def update(self, time, **kwargs):#taskName, **kwargs):
+        self.getData()
         self.time=time
-        self.updateVitals(time)
+        self.updateVent()
+        self.updateUVC()
+        self.updateCPR()
+        self.updateHealth()
+        self.updatePE()
+        self.updateVitals()
         for e, m in models.PEDict.items():
             result=m.query.filter_by(baby_id=self.baby_id)
             result.update(self.PE[e])
         self.db.session.commit()
+    
+    def taskUpdate(self, time, taskName, **kwargs):
+        self.taskName=taskName
+        if taskName in taskDict:
+            taskDict[taskName](self.baby_id, **kwargs)
+        self.db.session.commit()
+        self.getData()
+        app.logger.info(self.resusc['vent'])
+        self.update(time, **kwargs)
 
-    def updateVent(self):
-        pass
+    def updateVent(self):      
+        if self.resusc['vent']['vent_type'] in ['ppv', 'intubated']:
+            self.PE['vitals']['rr']=self.resusc['vent']['set_rate']
 
     def updateUVC(self):
         pass
@@ -113,7 +143,7 @@ class UpdateBaby:
     def updatePE(self):
         pass
 
-    def updateVitals(self, time):
+    def updateVitals(self):
         def updateHR():
             pass
 
@@ -122,8 +152,6 @@ class UpdateBaby:
 
         def updateTemp():
             temp=self.PE['vitals']['temp']
-            app.logger.info(temp)
-            app.logger.info(self.warmer.temp_mode)
             #if warmer not on, lose 0.05 C every 5 seconds until temp is 33
             #if warmer on and hat on, baby dry, GA high enough, gain 0.1 C every 5 seconds until temp is 37 (if baby mode is on)
             #if baby mode is off, temp keeps increasing to 39
@@ -141,6 +169,9 @@ class UpdateBaby:
                 else:
                     if temp>34:
                         temp=round(temp-0.05, 2)
+                        
+                    else:
+                        temp=round(temp+0.05, 2)
             self.PE['vitals']['temp']=temp
 
 

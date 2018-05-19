@@ -107,43 +107,7 @@
 <div class="modal navModal" v-if="(showTab==='actions')" id="actionsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
   <div class="modal-dialog" role="document">
     <div class="modal-content" v-on:click.stop="">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Actions</h5>
-        <button v-on:click="showTab='None'" type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-       
-       <div class="modal-body">
-           <div class="row">
-                    <div class="col-4">
-                        <button v-if="!scenario.PE.skin.is_dry" v-on:click=doTask({'name':'dry'}) class="btn btn-sm btn-primary">Dry</button>
-                    </div>
-               <div class="col-4">
-                        <button v-on:click=doTask({'name':'stimulate'}) class="btn btn-sm btn-primary">Stimulate</button>
-                    </div>
-                </div>
-            <div class="row">
-                    <div class="col-4">
-                        <span v-if="scenario.resusc.vent.vent_type=='spontaneous'" class="badge badge-success">Spontaneously Ventilating</span>
-                        <span v-else-if="scenario.resusc.vent.vent_type=='PPV'" v-on:click="doTask({'name':'stopPPV'})" class="btn btn-sm btn-primary">Stop PPV</span>
-                        <span v-else class="btn btn-sm btn-primary">Extubate to RA</span>
-                    </div>
-                    <div class="col-4">
-                        <button v-if="scenario.resusc.vent.vent_type=='spontaneous'" v-on:click="doTask({'name':'startPPV'})" class="btn btn-sm btn-primary">Start PPV</button>
-                        <span v-else-if="scenario.resusc.vent.vent_type=='intubated'" class="btn btn-sm btn-primary">Extubate to PPV</span>
-                        <div v-else class="badge badge-success">Giving PPV</div>
-                    </div>
-                    <div class="col-2">
-                        <button v-if="scenario.resusc.vent.vent_type!='intubated'" class="btn btn-sm btn-primary">Intubate</button>
-                    </div>
-
-                </div>
-        </div>
-      
-      <div class="modal-footer">
-        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
+      {% include "actions.html" %}
     </div>
   </div>
 </div>

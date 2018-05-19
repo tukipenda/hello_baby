@@ -39,6 +39,7 @@ vent={
     'positioning': "lying flat, no chin lift or jaw thrust",
     'is_airway_open': True,
     'has_air_leak': False,
+    'set_rate':0,
     'vent_type': "spontaneous" #options include ppv, intubated
 }
 
@@ -62,6 +63,13 @@ health={
     'brain_health':3,
     'oxygenation':[],
     'circulation':[]
+}
+
+resusc={
+    'vent':vent,
+    'cpr':cpr,
+    'uvc':uvc,
+    'health':health
 }
 
 simple_supplies=[

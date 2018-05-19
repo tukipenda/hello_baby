@@ -112,6 +112,7 @@ class Ventilation(db.Model):
     is_airway_open=db.Column(db.Boolean)
     has_air_leak=db.Column(db.Boolean)
     vent_type=db.Column(db.Text)
+    set_rate=db.Column(db.Text)
 
 class CPR(db.Model):
     id = db.Column(db.Integer, primary_key=True)

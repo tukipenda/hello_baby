@@ -38,6 +38,7 @@ var app = new Vue({
             data_last_updated:null,
             data_updater:null, /*repeatedly update data */
             showTab: "None",
+            actionTab: "simple",
             mainTab: "history",
             interveneTab:"supplies",
             supplyToFetch: null,
@@ -264,10 +265,9 @@ var app = new Vue({
                               return 0;
                           };
                       }
-                     
                       let self=this;
                       axios.post("/updatewarmer", {
-                        'warmer':JSON.stringify(self.scenario.warmer),
+                        'warmer':JSON.stringify(self.scenario.warmer)
                       }).then(callbackFxn());
                   }
             }

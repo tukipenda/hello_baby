@@ -6,6 +6,8 @@ import preemie_ppv as ppv
 import json
 import preemie_ppv_update as ppv_update
 
+#need to adjust session safety - multiple tabs - have same id!
+
 @app.route('/debug')
 def debug():
     if 'user_id' in session.keys():
@@ -52,7 +54,6 @@ def getScenario():
             ub=ppv_update.UpdateBaby(baby_id)
             ub.update(time)
         scenarioData=ppv.getScenarioData(user)
-        app.logger.info(scenarioData['warmer'])
         return(json.dumps(scenarioData))
 
 @app.route('/updatewarmer', methods=["post"])
@@ -61,7 +62,6 @@ def updateWarmer():
         baby_id=session['baby_id']
         warmer_dict=json.loads(request.get_json()['warmer'])
         ppv.updateWarmer(baby_id, warmer_dict)
-        app.logger.info(warmer_dict)
         return("")
 
 @app.route('/dotask', methods=["post"])
