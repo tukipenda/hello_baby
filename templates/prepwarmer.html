@@ -1,7 +1,7 @@
 {% extends "layout.html" %} {% block body %}
-<div class="modal" v-bind:style="show_message ? 'display:block':'display:none'" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" v-bind:style="show_message ? 'display:block':'display:none'" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="show_message=false">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
+    <div class="modal-content" v-on:click.stop="">
       <div class="modal-body">
         [[hb_message]]
       </div>

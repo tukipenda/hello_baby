@@ -122,6 +122,8 @@ class UpdateBaby:
 
         def updateTemp():
             temp=self.PE['vitals']['temp']
+            app.logger.info(temp)
+            app.logger.info(self.warmer.temp_mode)
             #if warmer not on, lose 0.05 C every 5 seconds until temp is 33
             #if warmer on and hat on, baby dry, GA high enough, gain 0.1 C every 5 seconds until temp is 37 (if baby mode is on)
             #if baby mode is off, temp keeps increasing to 39
@@ -132,7 +134,8 @@ class UpdateBaby:
             else:
                 if ((self.PE['skin']['is_dry']) and (self.getSupply("hat")['is_using']==True)):
                     if (self.warmer.temp_mode=="manual" or temp<37):
-                        temp=round(temp+0.05, 2)
+                        if(temp<39):
+                            temp=round(temp+0.05, 2)
                     if (self.warmer.temp_mode=="baby" and temp>37):
                         temp=round(temp-0.05, 2)
                 else:

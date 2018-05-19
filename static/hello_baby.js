@@ -126,15 +126,20 @@ var app = new Vue({
                 },
                 getScenario: function(){
                     this.data_last_updated=Date.now();
-                    this.updateWarmer(); /*This is super hacky and needs to be improved */
                     let self=this;
                     var dtime=0;
                     if(typeof this.delivery_time !== 'undefined'){
                         dtime=Date.now()-this.delivery_time;
                     }
-                    axios.post("/getscenario", {"time":dtime}).then(function(response){
+                    var w=this.scenario.warmer;
+                    this.updateWarmer(function(){
+                        axios.post("/getscenario", {"time":dtime}).then(function(response){
                         self.scenario=response.data;
+                        if(typeof w !== "undefined"){
+                            self.scenario.warmer=w; /* terrible*/   
+                        }
                     });
+                    }); /*This is super hacky and needs to be improved */
                 },
                 startBabyTimer: function(){
                     this.baby_timer_started=true;
@@ -154,6 +159,7 @@ var app = new Vue({
                         this.delivery_time=Date.now();
                         this.updateData();
                         this.hb_message="The baby was just delivered!";
+                        this.showTab="None";
                         this.show_message=true;
                     }
                 },
@@ -252,11 +258,17 @@ var app = new Vue({
                             }
                         }, 3000);
                   },
-                  updateWarmer: function(){
+                  updateWarmer: function(callbackFxn){
+                      if(typeof callbackFxn === 'undefined'){
+                          callbackFxn=function(){
+                              return 0;
+                          };
+                      }
+                     
                       let self=this;
                       axios.post("/updatewarmer", {
                         'warmer':JSON.stringify(self.scenario.warmer),
-                      });
+                      }).then(callbackFxn());
                   }
             }
         });
