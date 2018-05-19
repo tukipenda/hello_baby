@@ -21,9 +21,10 @@
         <div class="col-lg-4 col-md-6 col-sm-7">
              
     	<div class="row">        
-            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+            <div id="HelloBabyNav" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
               <button type="button" v-on:click="toggleShowTab('history')" v-bind:class="(showTab==='history') ? 'btn btn-primary' : 'btn btn-light'">History</button>
               <button type="button" v-on:click="toggleShowTab('prep')" v-bind:class="(showTab==='prep') ? 'btn btn-primary' : 'btn btn-light'">Prep</button>
+                <button type="button" v-on:click="toggleShowTab('supplies')" v-bind:class="(showTab==='supplies') ? 'btn btn-primary' : 'btn btn-light'">Supply</button>
                 <button v-if="!baby_delivered" v-on:click="deliverBaby" type="button" class="btn btn-danger">Ready!</button>
               <button v-if="baby_delivered" v-on:click="toggleShowTab('exam')" v-bind:class="(showTab==='exam') ? 'btn btn-primary' : 'btn btn-light'" type="button">Exam</button>              
               <button v-if="baby_delivered" v-on:click="toggleShowTab('actions')" v-bind:class="(showTab==='actions') ? 'btn btn-primary' : 'btn btn-light'" type="button" >Actions</button>
@@ -56,7 +57,7 @@
 			    </div>
 			</div>
 		</div>
-	<div class="row" style="padding:20px;">
+	<div class="row">
       GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
  	</div>
 	<div class="row">
@@ -69,22 +70,24 @@
       	 Temperature mode: <span v-on:click="toggleTempMode" class="btn badge badge-primary">
                     [[scenario.warmer.temp_mode]]
                     </span>
-        <div v-for="mask in getMasks" class="col-2">
+        <div class="row">
+        <div class="col" v-for="mask in getMasks">
         <span v-if="mask.is_using">Using [[mask.size]] Mask </span>
+        </div>
         </div>
 	</div>
 	
 	<div class="row">
         {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
-        <div class="col-sm-2">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
+        <div class="col-4">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
         {% endfor %}
 
     </div>
     <div class="row">
         {% for pressure,pname in [("scenario.warmer.flow","Flow"), ("scenario.warmer.fio2","FIO2")]%}
-        <div class="col-sm-2">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
+        <div class="col-4">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
         {% endfor %}
-        <div class="col-sm-2">Suction: <span class="badge badge-primary">[[scenario.warmer.suction]]</span></div>
+        <div class="col-4">Suction: <span class="badge badge-primary">[[scenario.warmer.suction]]</span></div>
     </div>
 	
 	<div class="row">

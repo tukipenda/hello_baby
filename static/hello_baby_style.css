@@ -1,3 +1,10 @@
+#HelloBabyNav {
+    margin-left:-4px;
+}
+#HelloBabyNav .btn {
+    padding: 0.25rem 0.35rem;
+}
+
 #HelloBabyApp .v-select .open-indicator {display:none}
 
 #HelloBabyApp .v-select input {

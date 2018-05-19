@@ -1,66 +1,13 @@
-<div class="row">
-    <div class="col-12">
-        <div class="nav nav-pills" role="tablist">
-            {% for value,name in [("warmer","Warmer"), ("mask", "Bag Mask"), ("oxygen","Oxygen"), ("suction", "Suction"), ("supplies", "Supplies")] %}
-            <a v-on:click="showTab='{{value}}'" class="nav-link {% if loop.first %} active {% endif %} " id="v-pills-{{value}}-tab" data-toggle="pill" href="#v-pills-{{value}}" role="tab" aria-controls="v-pills-{{value}}" aria-selected="true">{{name}}</a>            {% endfor %}
-        </div>
-    </div>
-</div>
-<div class="row" style="margin-top:20px;">
-    <div class="col-12">
-        <div class="tab-content">
-            {% set values=["warmer", "mask", "oxygen", "suction", "supplies"] %}
-            <div v-if="showTab=='warmer'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[0]}}-tab">
-                <div class="row">
-                    <span v-if="scenario.warmer.is_turned_on">
-                     Heat is: <span v-on:click="toggleHeat" class="btn badge badge-danger">on</span>
-                    </span>
-                    <span v-else>
-                    Heat is: <span v-on:click="toggleHeat" class="btn badge badge-secondary">off</span>
-                    </span>
-                </div>
-                <h3>
-                Temperature mode: <span v-on:click="toggleTempMode" class="btn badge badge-primary">
-                    [[scenario.warmer.temp_mode]]
-                    </span>
-            </h3>
-
-            </div>
-
-            <div v-if="showTab=='mask'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[1]}}-tab">
-
-
-                <div class="row">
-                    <div class="col-md-2">
-                        <h4>Select mask:</h4>
-                    </div>
-                    <div class="col-md-9">
-                        <div v-for="mask in getMasks" class="col-md-3">
-                            <div v-if="mask.is_using">
-
-                                <button type="button" class="btn btn-primary">[[mask.size]] Mask</button>
-
-                            </div>
-                            <div v-else>
-                                <button type="button" class="btn btn-light" v-on:click="doTask({'name':'use', 'supply_name':mask.name, 'size':mask.size})">[[mask.size]] Mask</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-5" style="margin-left:20px;">
-                    {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
-                    <div class="row mt-4">
-                        <div class="col-md-2">
-                            <h4>{{pname}}: </h4>
-                        </div>
-                        <div class="col-md-9">
-                            <vue-slider id="{{pname}}-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, {% if pname==" PEEP " %} 20 {% else %} 50 {% endif %}, width='{% if pname=="PEEP "%} 50% {% else %} 75% {% endif %}', '50%')" v-model="{{pressure}}">
+{% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
+                    <div class="row mt-3">
+                        <p class="col-3">{{pname}}: </p>
+                        <div class="col-9">
+                            <vue-slider id="{{pname}}-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, {% if pname=="PEEP" %} 20 {% else %} 50 {% endif %}, width='100%', '50%')" v-model="{{pressure}}">
                                 {% if is_IE %}
                                 <div slot="label"></div>
                                 {% else %}
                                 <div slot="label" slot-scope="{ label, active }">
-                                    <span :class="['custom-label', { active }]" v-if="label % {% if pname==" PEEP "%} 5 {% else %} 10 {% endif %} === 0">
+                                    <span :class="['custom-label', { active }]" v-if="label % {% if pname=="PEEP"%} 5 {% else %} 10 {% endif %} === 0">
                                     [[ label ]]
                                   </span>
                                 </div>
@@ -69,24 +16,16 @@
                         </div>
                     </div>
                     {% endfor %}
-                </div>
-            </div>
-
-            <div v-if="showTab=='oxygen'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[2]}}-tab">
-                <div class="mt-5" style="margin-left:20px;">
-
-                    {% for pressure,pname in [("scenario.warmer.flow","Flow"), ("scenario.warmer.fio2","FIO2")]%}
-                    <div class="row mt-4">
-                        <div class="col-md-2">
-                            <h4>{{pname}}: </h4>
-                        </div>
-                        <div class="col-md-9">
-                            <vue-slider id="{{pname}}-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, {% if pressure==" scenario.warmer.flow " %} 20 {% else %} 100 {% endif %}, width='75%', '50%')" v-model="{{pressure}}">
+          {% for pressure,pname in [("scenario.warmer.flow","Flow"), ("scenario.warmer.fio2","FIO2")]%}
+                    <div class="row mt-3">
+                        <p class="col-3">{{pname}}: </p>
+                        <div class="col-9">
+                            <vue-slider id="{{pname}}-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, {% if pressure=="scenario.warmer.flow" %} 20 {% else %} 100 {% endif %}, width='100%', '50%')" v-model="{{pressure}}">
                                 {% if is_IE %}
                                 <div slot="label"></div>
                                 {% else %}
                                 <div slot="label" slot-scope="{ label, active }">
-                                    <span :class="['custom-label', { active }]" v-if="label % {% if pressure==" scenario.warmer.flow "%} 5 {% else %} 20 {% endif %} === 0">
+                                    <span :class="['custom-label', { active }]" v-if="label % {% if pressure=="scenario.warmer.flow"%} 5 {% else %} 20 {% endif %} === 0">
                             [[ label ]]
                           </span>
                                 </div>
@@ -95,24 +34,18 @@
                             </vue-slider>
                         </div>
                     </div>
-
-                </div>
                 {% endfor %}
-            </div>
-
-        <div v-if="showTab=='suction'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[3]}}-tab">
-            <div class="mt-5" style="margin-left:20px;">
-                <div class="row">
-                <div class="col-md-2">
-                    <h4>Suction: </h4>
+        <div class="row mt-3">
+                <div class="col-3">
+                    <p>Suction: </p>
                 </div>
-                <div class="col-md-9">
-                    <vue-slider id="suction-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, 140, width='75%', '50%')" v-model="scenario.warmer.suction">
+                <div class="col col-md-9">
+                    <vue-slider id="suction-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, 150, width='100%', '50%')" v-model="scenario.warmer.suction">
                         {% if is_IE %}
                         <div slot="label"></div>
                         {% else %}
                         <div slot="label" slot-scope="{ label, active }">
-                            <span :class="['custom-label', { active }]" v-if="label % 20 === 0">
+                            <span :class="['custom-label', { active }]" v-if="label % 30 === 0">
                             [[ label ]]
                           </span>
                         </div>
@@ -121,26 +54,3 @@
                     </vue-slider>
                 </div>
                 </div>
-            </div>
-
-        </div>
-
-        <div v-if="showTab=='supplies'" class="tab-pane show active" role="tabpanel" aria-labelledby="v-pills-{{values[4]}}-tab">
-
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon3">Fetch Supplies:</span>
-                </div>
-                <v-select label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)" :options="supplySearchOptions" placeholder="search..."></v-select>
-
-            </div>
-            <h3>Available Supplies: </h3>
-            <ul class="col3" v-for="supply in availableSupplies">
-                <li>[[supply.name]]: [[supply.size]]</li>
-            </ul>
-        </div>
-        
-        </div>
-    </div>
-
-</div>

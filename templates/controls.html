@@ -1,4 +1,4 @@
-<div class="modal" style="top:110px;" v-bind:style="(showTab==='history') ? 'display:block' : 'display:None'" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" style="top:110px; display:block;" v-if="(showTab==='history')" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -8,11 +8,108 @@
         </button>
       </div>
       <div class="modal-body">
-        	<div v-for="(value, key, i) in scenario.mom" class="row">
-                <button class="btn btn-sm btn-primary">Get [[key]]</button> <!--[[value]]-->
-                [[value]]
+        	<div v-for="(value, key, i) in scenario.mom" class="row" style="margin-bottom:5px;">
+                <div class="col">
+                    <button class="btn btn-sm btn-primary" data-toggle="collapse" :data-target="'#collapse'+i" aria-expanded="false" aria-controls="collapse">Get [[key]]</button> <!--[[value]]-->
+                </div>
+                <div class="col collapse" :id="'collapse'+i">
+                    [[value]]
+                </div>
             </div>
       </div>
+      <div class="modal-footer">
+        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" style="top:110px; display:block" v-if="(showTab==='prep')" id="prepModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+          {% include "warmer_settings.html" %}
+      </div> 
+      
+      <div class="modal-footer">
+        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" style="top:110px; display:block" v-if="(showTab==='supplies')" id="supplyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        
+      <div class="modal-body">
+          <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon3">Fetch Supplies:</span>
+                </div>
+                <v-select label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)" :options="supplySearchOptions" placeholder="search..."></v-select>
+
+            </div>
+          	<p>
+                Available Supplies:
+          </p>
+            <ul class="col3" v-for="supply in availableSupplies">
+                    <li v-if="baby_delivered">[[supply.name]]: [[supply.size]] <span v-if="supply.is_using" class="badge badge-success">currently using</span><span v-else v-on:click="useSupply(supply)" class="btn btn-sm btn-primary">Use</span></li>
+                	<li v-else>[[supply.name]]: [[supply.size]]</li>
+                </ul>
+        </div> 
+      
+      <div class="modal-footer">
+        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" style="top:110px; display: block" v-if="(showTab==='exam')" id="examModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Exam</h5>
+        <button v-on:click="showTab='None'" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" style="top:110px; display:block" v-if="(showTab==='actions')" id="actionsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Actions</h5>
+        <button v-on:click="showTab='None'" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" style="top:110px; display:block" v-if="(showTab==='meds')" id="medsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Medications</h5>
+        <button v-on:click="showTab='None'" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
       <div class="modal-footer">
         <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
