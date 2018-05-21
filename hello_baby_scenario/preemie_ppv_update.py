@@ -43,7 +43,7 @@ def dry(baby_id):
     skin.is_dry=True
     db.session.commit()
     test=models.PESkin.query.filter_by(baby_id=baby_id).first()
-    
+
 def stimulate(baby_id):
     pass
 
@@ -65,8 +65,7 @@ def set_rate(baby_id, set_rate):
     vent=models.Ventilation.query.filter_by(baby_id=baby_id).first()
     vent.set_rate=set_rate
     db.session.commit()
-    app.logger.info(vent)
-    
+
 taskDict={
     "fetch":fetchSupply,
     "use":useSupply,
@@ -87,7 +86,7 @@ class UpdateBaby:
         self.taskName=None
         self.time=0
         self.db=db
-    
+
     def getData(self):
         for e, m in models.PEDict.items():
             result=m.query.filter_by(baby_id=self.baby_id).first()
@@ -120,7 +119,7 @@ class UpdateBaby:
             result=m.query.filter_by(baby_id=self.baby_id)
             result.update(self.resusc[e])
         self.db.session.commit()
-    
+
     def taskUpdate(self, time, taskName, **kwargs):
         self.taskName=taskName
         if taskName in taskDict:
@@ -129,23 +128,23 @@ class UpdateBaby:
         self.getData()
         self.update(time, **kwargs)
 
-    def updateVent(self):     
+    def updateVent(self):
         if self.resusc['vent']['vent_type'] in ['ppv', 'intubated']:
             self.PE['vitals']['rr']=self.resusc['vent']['set_rate']
-        
+
         if self.taskName=="adjustMask":
             self.resusc['vent']['has_air_leak']=False
-            
-        
+
+
         if self.taskName=="reposition":
             self.resusc['vent']['positioning']="chin lift, jaw thrust"
-        
+
         if self.taskName=="openMouth":
             self.resusc['vent']['is_mouth_open']=True
-            
+
         if self.taskName=="suction":
             self.PE['secretions']['quantity']='minimal'
-        
+
         v=self.resusc['vent']
         if((not v['has_air_leak']) and (v['is_mouth_open'])):
            v['efficacy']=0.7
@@ -162,9 +161,8 @@ class UpdateBaby:
         oxygenation=json.loads(self.resusc['health']['oxygenation'])
         ndelta=len(oxygenation)
         tdelta=self.time//5
-        app.logger.info(tdelta)
         if tdelta>ndelta:
-            for x in range(tdelta-ndelta):   
+            for x in range(tdelta-ndelta):
                 oxygenation.append(self.resusc['vent']['efficacy'])
         self.resusc['health']['oxygenation']=json.dumps(oxygenation)
 
@@ -197,7 +195,7 @@ class UpdateBaby:
                 else:
                     if temp>34:
                         temp=round(temp-0.05, 2)
-                        
+
                     else:
                         temp=round(temp+0.05, 2)
             self.PE['vitals']['temp']=temp
