@@ -41,24 +41,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-2">
-                        <button v-if="scenario.resusc.vent.vent_type!='intubated'" class="btn btn-sm btn-primary">Intubate</button>
-                    </div>
 
                 </div>
            <div class="row">
                <div v-if="scenario.resusc.vent.vent_type==='ppv'" class="col">
-                   <button class="btn btn-primary btn-sm">
+                   <button v-on:click="simpleTask('adjustMask')" class="btn btn-primary btn-sm">
                        Adjust Mask
                    </button>
-                   <button class="btn btn-primary btn-sm">
+                   <button v-on:click="simpleTask('reposition')" class="btn btn-primary btn-sm">
                        Reposition
                    </button>
-                   <button class="btn btn-primary btn-sm">
+                   <button v-on:click="simpleTask('suction')" class="btn btn-primary btn-sm">
                        Suction
                    </button>
-                   <button class="btn btn-primary btn-sm">
+                   <button v-on:click="simpleTask('openMouth')" class="btn btn-primary btn-sm">
                        Open Mouth
+                   </button>
+                   <button v-on:click="" class="btn btn-primary btn-sm">
+                       Intubate
                    </button>
                </div>
               

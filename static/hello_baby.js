@@ -31,6 +31,7 @@ var app = new Vue({
             contents: '',
             baby_timer_started: false,
             delivery_time:null,
+            elapsed_delivery_time:0, /*in seconds*/
             baby_time:null,
             elapsed_baby_time:null, /*in seconds*/
             baby_delivered: false,
@@ -129,7 +130,7 @@ var app = new Vue({
                     this.data_last_updated=Date.now();
                     let self=this;
                     var dtime=0;
-                    if(typeof this.delivery_time !== 'undefined'){
+                    if(typeof this.baby_delivered){
                         dtime=Date.now()-this.delivery_time;
                     }
                     var w=this.scenario.warmer;
@@ -167,12 +168,20 @@ var app = new Vue({
                 doTask: function(task){
                     console.log(task);
                     let self=this;
+                    var current_time=0;
+                    if (this.baby_delivered) {
+                        current_time=(Date.now()-this.delivery_time)/1000;
+                    }
+                    this.elapsed_delivery_time=current_time
                     axios.post("/dotask",
                              {'task':task,
-                             'time':(Date.now()-this.delivery_time),
+                             'time':current_time,
                              }).then(function(response){
                        self.getScenario();
                     });
+                },
+                simpleTask: function(taskName){
+                    this.doTask({'name':taskName})
                 },
                 checkSupplyByName: function(name, size){
                     var toReturn=null;

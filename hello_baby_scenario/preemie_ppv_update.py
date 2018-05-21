@@ -116,6 +116,9 @@ class UpdateBaby:
         for e, m in models.PEDict.items():
             result=m.query.filter_by(baby_id=self.baby_id)
             result.update(self.PE[e])
+        for e, m in models.resuscDict.items():
+            result=m.query.filter_by(baby_id=self.baby_id)
+            result.update(self.resusc[e])
         self.db.session.commit()
     
     def taskUpdate(self, time, taskName, **kwargs):
@@ -124,12 +127,30 @@ class UpdateBaby:
             taskDict[taskName](self.baby_id, **kwargs)
         self.db.session.commit()
         self.getData()
-        app.logger.info(self.resusc['vent'])
         self.update(time, **kwargs)
 
-    def updateVent(self):      
+    def updateVent(self):     
         if self.resusc['vent']['vent_type'] in ['ppv', 'intubated']:
             self.PE['vitals']['rr']=self.resusc['vent']['set_rate']
+        
+        if self.taskName=="adjustMask":
+            self.resusc['vent']['has_air_leak']=False
+            
+        
+        if self.taskName=="reposition":
+            self.resusc['vent']['positioning']="chin lift, jaw thrust"
+        
+        if self.taskName=="openMouth":
+            self.resusc['vent']['is_mouth_open']=True
+            
+        if self.taskName=="suction":
+            self.PE['secretions']['quantity']='minimal'
+        
+        v=self.resusc['vent']
+        if((not v['has_air_leak']) and (v['is_mouth_open'])):
+           v['efficacy']=0.7
+           if(self.PE['secretions']['quantity'])=='minimal':
+               v['efficacy']=1
 
     def updateUVC(self):
         pass
@@ -138,7 +159,14 @@ class UpdateBaby:
         pass
 
     def updateHealth(self):
-        pass
+        oxygenation=json.loads(self.resusc['health']['oxygenation'])
+        ndelta=len(oxygenation)
+        tdelta=self.time//5
+        app.logger.info(tdelta)
+        if tdelta>ndelta:
+            for x in range(tdelta-ndelta):   
+                oxygenation.append(self.resusc['vent']['efficacy'])
+        self.resusc['health']['oxygenation']=json.dumps(oxygenation)
 
     def updatePE(self):
         pass

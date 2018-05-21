@@ -56,7 +56,7 @@
 			    </div>
 			</div>
 		</div>
-	<div class="row">
+	<div class="row" v-if="baby_delivered">
       GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
  	</div>
 	<div class="row">
