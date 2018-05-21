@@ -5,6 +5,8 @@ import models
 import preemie_ppv as ppv
 import json
 import preemie_ppv_update as ppv_update
+import os
+
 
 #need to adjust session safety - multiple tabs - have same id!
 
@@ -49,6 +51,7 @@ def getScenario():
         user_id=session['user_id']
         baby_id=session['baby_id'] # could be a source of bugs, need to watch
         time=request.get_json()['time']
+        app.logger.info(time)
         user=models.User.query.filter_by(username=user_id).first()
         if time>0:
             ub=ppv_update.UpdateBaby(baby_id)

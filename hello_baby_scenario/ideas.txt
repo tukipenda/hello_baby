@@ -1,3 +1,6 @@
+The line below can be used if I need to run git from the terminal
+#os.system("cd /mnt/project ; git push origin")
+
 Have variables that I need to fetch, variables I need to update, and update logic.
 
 To fetch - baby data, scenario_text, mom_data
