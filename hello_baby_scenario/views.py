@@ -63,9 +63,13 @@ def getScenario():
 def updateWarmer():
     if 'baby_id' in session.keys():
         baby_id=session['baby_id']
-        warmer_dict=json.loads(request.get_json()['warmer'])
-        ppv.updateWarmer(baby_id, warmer_dict)
-        return("")
+        try:
+            warmer_dict=json.loads(request.get_json()['warmer'])
+            ppv.updateWarmer(baby_id, warmer_dict)
+            return("")
+        except:
+            app.logger.info("warmer not a valid key")
+            return ("error")
 
 @app.route('/dotask', methods=["post"])
 def doTask():
