@@ -130,7 +130,7 @@ var app = new Vue({
                     this.data_last_updated=Date.now();
                     let self=this;
                     var dtime=0;
-                    if(typeof this.baby_delivered){
+                    if(this.baby_delivered){
                         dtime=Date.now()-this.delivery_time;
                     }
                     var w=this.scenario.warmer;
@@ -157,8 +157,8 @@ var app = new Vue({
                     if(!this.baby_delivered){
                         this.baby_delivered=true;
                         this.mainTab="resuscitation";
-                        this.doTask({'name':"deliver_baby"});
                         this.delivery_time=Date.now();
+                        this.doTask({'name':"deliver_baby"});
                         this.updateData();
                         this.hb_message="The baby was just delivered!";
                         this.showTab="None";
@@ -166,7 +166,6 @@ var app = new Vue({
                     }
                 },
                 doTask: function(task){
-                    console.log(task);
                     let self=this;
                     var current_time=0;
                     if (this.baby_delivered) {

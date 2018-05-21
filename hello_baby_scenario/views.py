@@ -51,13 +51,14 @@ def getScenario():
         user_id=session['user_id']
         baby_id=session['baby_id'] # could be a source of bugs, need to watch
         time=request.get_json()['time']
-        app.logger.info(time)
         user=models.User.query.filter_by(username=user_id).first()
         if time>0:
             ub=ppv_update.UpdateBaby(baby_id)
             ub.update(time)
         scenarioData=ppv.getScenarioData(user)
         return(json.dumps(scenarioData))
+    else:
+        return "" #ugh
 
 @app.route('/updatewarmer', methods=["post"])
 def updateWarmer():
@@ -70,13 +71,15 @@ def updateWarmer():
         except:
             app.logger.info("warmer not a valid key")
             return ("error")
+    else:
+        return "baby unavailable" # this is so hacky!!
 
 @app.route('/dotask', methods=["post"])
 def doTask():
     if 'user_id' in session.keys():
         user_id=session['user_id']
         baby_id=session['baby_id']
-        time=request.get_json()
+        time=request.get_json()['time']
         task=request.get_json()['task']
         taskName=task.pop('name')
         if 'supply_name' in task.keys():

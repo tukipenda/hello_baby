@@ -84,7 +84,7 @@ class UpdateBaby:
         self.PE={}
         self.resusc={}
         self.taskName=None
-        self.time=0
+        self.time=0 #remember time is in ms
         self.db=db
 
     def getData(self):
@@ -105,7 +105,7 @@ class UpdateBaby:
 
     def update(self, time, **kwargs):#taskName, **kwargs):
         self.getData()
-        self.time=time
+        self.time=time 
         self.updateVent()
         self.updateUVC()
         self.updateCPR()
@@ -157,15 +157,71 @@ class UpdateBaby:
     def updateCPR(self):
         pass
 
-    def updateHealth(self):
+    #maybe I can start to include some formulas - like the O2 delivery formula at some point
+    def updateHealth(self): #this is going to need some serious testing!!!  
+        # this is a disaster!!!!!!
+        # 
+        #update oxygenation
+        """
         oxygenation=json.loads(self.resusc['health']['oxygenation'])
         ndelta=len(oxygenation)
-        tdelta=self.time//5
+        tdelta=self.time//5000
         if tdelta>ndelta:
             for x in range(tdelta-ndelta):
                 oxygenation.append(self.resusc['vent']['efficacy'])
         self.resusc['health']['oxygenation']=json.dumps(oxygenation)
-
+        
+        
+        #update circ_eff
+        card_health=self.resusc['health']['card_health']
+        if card_health==4:
+            circ_eff=1.0
+        elif card_health==3:
+            circ_eff=0.75
+        elif card_health==2:
+            circ_eff=0.25
+        else:
+            circ_eff=0
+        self.resusc['health']['circ_eff']=circ_eff
+        
+        #update circulation
+        circulation=json.loads(self.resusc['health']['circulation'])
+        ndelta=len(circulation)
+        tdelta=self.time//5000
+        if tdelta>ndelta:
+            for x in range(tdelta-ndelta):
+                circulation.append(circ_eff)
+        self.resusc['health']['circulation']=json.dumps(circulation)
+        
+        oxygen_delivery=[a*b for a,b in zip(oxygenation,circulation)]
+        def get_last_od(seconds): #average oxygen delivery over the last seconds (seconds should be divisible by 5)
+            count=seconds/5
+            last=oxygen_delivery[-count:]
+            last=sum(last)/float(len(last))
+            return last
+  
+        #currently this function does not account for the time being less than 30 or 60 seconds
+        if card_health==4:
+            if get_last_od(60)<0.2:
+                card_health=3
+        elif card_health==3:
+            if get_last_od(30)>.8:
+                card_health=4
+            elif get_last_od(60)<0.4:
+                card_health=2
+            else:
+                card_health=3
+        elif card_health==2:
+            if get_last_od(30)>.8:
+                card_health=3
+            elif get_last_od(60)<0.4:
+                card_health=1
+            else:
+                card_health=2
+        
+        # now we need to update brain health
+        """
+        
     def updatePE(self):
         pass
 

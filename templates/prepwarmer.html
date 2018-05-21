@@ -70,23 +70,24 @@
                     [[scenario.warmer.temp_mode]]
                     </span>
         <div class="row">
-        <div class="col" v-for="mask in getMasks">
-        <span v-if="mask.is_using">Using [[mask.size]] Mask </span>
-        </div>
+            <div class="col-6" v-for="mask in getMasks">
+            <span v-if="mask.is_using" class="badge badge-large badge-primary">Using [[mask.size]] Mask </span>
+              <span v-else class="btn badge badge-large badge-light" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
+            </div>
         </div>
 	</div>
 	
 	<div class="row">
         {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
-        <div class="col-4">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
+        <div class="col-4">{{pname}}: <span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[{{pressure}}]]</span></div>
         {% endfor %}
 
     </div>
     <div class="row">
         {% for pressure,pname in [("scenario.warmer.flow","Flow"), ("scenario.warmer.fio2","FIO2")]%}
-        <div class="col-4">{{pname}}: <span class="badge badge-primary">[[{{pressure}}]]</span></div>
+        <div class="col-4">{{pname}}: <span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[{{pressure}}]]</span></div>
         {% endfor %}
-        <div class="col-4">Suction: <span class="badge badge-primary">[[scenario.warmer.suction]]</span></div>
+        <div class="col-4">Suction: <span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.suction]]</span></div>
     </div>
 	
 	<div class="row">

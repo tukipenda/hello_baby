@@ -57,10 +57,10 @@ uvc={
 }
 
 health={
-    'circ_eff':3,
+    'circ_eff':1.0,
     'volume_status':3,
-    'card_health':3,
-    'brain_health':3,
+    'card_health':4, #4 is great, 3 is HR<100 but >60 (mild injury), 2 is HR<60 (significant injury), 1 is pulseless but heart can recover, 0 is death
+    'brain_health':3, #3 is good, 2 is minor injury, 1 is severe injury, 0 is death
     'oxygenation':[],
     'circulation':[]
 }
