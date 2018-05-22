@@ -1,0 +1,42 @@
+
+<div class="modal-body">
+     		<div class="row">
+            <div class="col-4" v-for="mask in getMasks">
+            <span v-if="mask.is_using" class="badge badge-large badge-primary">Using [[mask.size]] Mask </span>
+              <span v-else class="btn badge badge-large badge-light" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
+            </div>
+     	   </div>
+    		
+    		<div class="row mt-3">
+                <div v-if="!drawer_opened" class="col">
+                    <button class="btn btn-sm btn-primary" v-on:click="drawer_opened=true">
+                        Check Drawer for Available Supplies
+                    </button>
+                </div>
+                <div v-else class="col">
+                    <h4 class="row">
+                        Available Supplies:
+                    </h4>
+                    <div class="row">
+                     <div v-for="supply in availableSupplies" class="col">                        
+                    <div v-if="baby_delivered">[[supply.name]] <span v-if="supply.is_using" class="badge badge-success">using</span><span v-else v-on:click="useSupply(supply)" class="btn badge badge-primary">Use</span></div>
+                	<div v-else>[[supply.name]]</div>
+                    </div>
+                    </div>
+                    
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon3">Fetch Additional Supplies:</span>
+                        </div>
+                        <v-select label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)"	:options="supplySearchOptions" placeholder="search..."></v-select>
+
+                    </div>
+                </div>
+    </div>
+    		
+
+</div>
+     
+      <div class="modal-footer">
+        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>

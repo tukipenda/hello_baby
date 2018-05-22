@@ -29,6 +29,9 @@ var app = new Vue({
         delimiters: ['[[',']]'],
         data: {
             contents: '',
+            toggle_values:{
+            },
+            drawer_opened: false,
             baby_timer_started: false,
             delivery_time:null,
             elapsed_delivery_time:0, /*in seconds*/
@@ -64,7 +67,9 @@ var app = new Vue({
                 var s=this.scenario.supplies;
                 for (var i=0;i<s.length;i++){
                     if(s[i].is_available==true){
-                        toReturn.push(s[i]);
+                        if (s[i].name!="mask"){
+                            toReturn.push(s[i]);
+                        }
                     }
                 }
                 return toReturn;
@@ -171,7 +176,7 @@ var app = new Vue({
                     if (this.baby_delivered) {
                         current_time=(Date.now()-this.delivery_time)/1000;
                     }
-                    this.elapsed_delivery_time=current_time
+                    this.elapsed_delivery_time=current_time;
                     axios.post("/dotask",
                              {'task':task,
                              'time':current_time,
@@ -180,7 +185,7 @@ var app = new Vue({
                     });
                 },
                 simpleTask: function(taskName){
-                    this.doTask({'name':taskName})
+                    this.doTask({'name':taskName});
                 },
                 checkSupplyByName: function(name, size){
                     var toReturn=null;
@@ -235,6 +240,18 @@ var app = new Vue({
                       };
 
                     return options;
+                  },
+                  toggleEl: function(el_id){
+                      this.toggle_values[el_id]=!this.toggle_values[el_id];
+                      return this.toggle_values[el_id];
+                  },
+                  get_toggle_values: function(el_id){
+                       if ( this.toggle_values.hasOwnProperty(el_id)){
+                          return this.toggle_values[el_id];
+                      }
+                      else{
+                          Vue.set(this.toggle_values, el_id, false);
+                      }
                   },
                   toggleHeat: function(){
                       this.scenario.warmer.is_turned_on=!this.scenario.warmer.is_turned_on;

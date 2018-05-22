@@ -96,7 +96,7 @@ for supply in simple_supplies:
 for size in ["0", "1", "00"]:
     supplyList.append({"name":'laryngoscope', "size":size})
 
-for size in ["2.5", "3", "3.5", "4"]:
+for size in ["2.5", "3", "3.5"]:
     supplyList.append({"name":'ett', "size":size})
 
 for supply in supplyList:
@@ -110,6 +110,25 @@ for size in ["Infant", "Preemie"]:
     supplyList.append({"name":'mask', "size":size, "is_available":True, "is_using":False, 'pp': ('mask: '+size)})
 
 
+availableSupplies=[
+            "temp_probe",
+            "blankets",
+            "meconium_aspirator",
+            "stethoscope",
+            "cord_clamp",
+]
+
+for supply in supplyList:
+    if supply['name'] in availableSupplies:
+        supply['is_available']=True
+    if supply['name']=="ETT":
+        if supply['size'] in ["3", "3.5"]:
+            supply['is_available']=True
+    if supply['name']=='laryngoscope':
+        if supply['size']=="1":
+            supply['is_available']=True
+
+        
 tasks=[]
 for supply in supplyList:
     task={
