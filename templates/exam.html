@@ -5,11 +5,14 @@
                         </div>
           </div>
 <div class="row">
-       <button v-on:click="getLastExam('vitals')" class="col-2 btn btn-primary">
-           Check Heart Rate
-	    </button> 
-    	<span badge="col-1 badge badge-danger">[[lastExam.vitals.hr]</span>
-
+        <div class="col-4">
+       <button class="btn btn-primary">
+           Check HR
+	    </button>
+	    </div>
+	    <div class="col-1">
+    	<span class=" badge badge-danger">[[scenario.PE.vitals.hr]]</span>
+        </div>
 </div>
 <!--
                         {% for examType, examAction in [('cardiac', "Examine heart"), ('resp', "Examine lungs"), ('abd', "Examine Abdomen")] %}
@@ -20,7 +23,7 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                             
+
                         	<button v-on:click="getLastExam('{{examType}}')" class="btn btn-primary" style="margin-top:20px">{{examAction}}</button>
                             </div>
                         </div>
