@@ -23,20 +23,20 @@
                 	<div v-else>[[supply.name]]</div>
                     </div>
                     </div>
-                    <div class="Row">
+                    <div class="row">
                         <div class="col-2">
                             ETTs: 
                         </div>
-                        <div class="col-2" v-for="supply in scenario.supplies">
-                            <span v-if="(supply.name==='ett') && (supply.is_available)" class="badge badge-light">[[supply.size]]</span>
+                        <div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='ett') && (supply.is_available)">
+                            <span class="badge badge-light">[[supply.size]]</span>
                         </div>
                     </div>
-                    <div class="Row">
-                        <div class="col-3">
+                    <div class="row">
+                        <div class="col-5">
                             Laryngoscopes: 
                         </div>
-                        <div class="col-2" v-for="supply in scenario.supplies">
-                            <span v-if="(supply.name==='laryngoscope') && (supply.is_available)" class="badge badge-light">[[supply.size]]</span>
+                        <div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='laryngoscope') && (supply.is_available)">
+                            <span class="badge badge-light">[[supply.size]]</span>
                         </div>
                     </div>
                     

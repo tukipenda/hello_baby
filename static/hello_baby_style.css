@@ -8,6 +8,7 @@
 
 .navModal {
     display:block;
+    overflow-y:scroll;
 }
 
 .navModal .modal-dialog {
