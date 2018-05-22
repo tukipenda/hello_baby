@@ -67,7 +67,7 @@ var app = new Vue({
                 var s=this.scenario.supplies;
                 for (var i=0;i<s.length;i++){
                     if(s[i].is_available==true){
-                        if (s[i].name!="mask"){
+                        if ((s[i].name!="mask") && (s[i].name!="ETT") && (s[i].name!="laryngoscope")){
                             toReturn.push(s[i]);
                         }
                     }

@@ -121,7 +121,7 @@ availableSupplies=[
 for supply in supplyList:
     if supply['name'] in availableSupplies:
         supply['is_available']=True
-    if supply['name']=="ETT":
+    if supply['name']=="ett":
         if supply['size'] in ["3", "3.5"]:
             supply['is_available']=True
     if supply['name']=='laryngoscope':
