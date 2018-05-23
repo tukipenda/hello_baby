@@ -1,9 +1,9 @@
 <div class="row">
                             <div class="col">
-                            [[scenario.baby.ga]] week infant.  Color is [[scenario.PE.skin.color]].  Skin is <span v-if="!scenario.PE.skin.is_dry">not </span>dry. Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
-                            <span v-if="scenario.PE.resp.is_spontaneous">Infant is breathing spontaneously.</span> WOB: [[scenario.PE.resp.wob]].  Respiratory rate: [[scenario.PE.vitals.rr]].
+                            scenario.PEtext.appearance
                         </div>
           </div>
+{% for exam in ['hr', 'resp', 'cardiac', 'abd', 'neuro', 'other'] %}
 <div v-if="!lastPE['hr'].has_examined" class="row mt-3">
         <div class="col-4">
        <button class="btn btn-primary" v-on:click="updateLastPE('hr')">
@@ -26,118 +26,4 @@
             </div>
         </div>
 </div>
-
-<div v-if="!lastPE['cardiac'].has_examined" class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('cardiac')">
-           Examine Heart
-	    </button>
-	    </div>
-</div>
-<div v-else class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('cardiac')">
-           Reexamine Heart
-	    </button>
-	    </div>
-	    <div class="col">
-         <div class="row">
-         	    <span class="col">The infant has [[lpe('cardiac').cardiac.murmur]]. Pulses are [[lpe('cardiac').cardiac.brachial_pulse]] brachial and [[lpe('cardiac').cardiac.femoral_pulse]] femoral. </span>
-            </div>
-          <div v-if="lpe('hr').time!=0" class="row">
-           	<span class="col">Last checked: [[lpe('cardiac').time]] seconds ago. </span>
-            </div>
-        </div>
-</div>
-
-<div v-if="!lastPE['resp'].has_examined" class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('resp')">
-           Examine Lungs
-	    </button>
-	    </div>
-</div>
-<div v-else class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('resp')">
-           Reexamine Lungs
-	    </button>
-	    </div>
-	    <div class="col">
-         <div class="row">
-                 	<span class="col-1 badge badge-danger">[[lpe('resp').vitals.hr]]</span>
-            </div>
-          <div v-if="lpe('resp').time!=0" class="row">
-           	<span class="col">Last checked: [[lpe('resp').time]] seconds ago. </span>
-            </div>
-        </div>
-</div>
-
-<div v-if="!lastPE['abd'].has_examined" class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('abd')">
-           Examine Abdomen
-	    </button>
-	    </div>
-</div>
-<div v-else class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('abd')">
-           Reexamine Abdomen
-	    </button>
-	    </div>
-	    <div class="col">
-         <div class="row">
-                 	<span class="col-1 badge badge-danger">[[lpe('abd').vitals.hr]]</span>
-            </div>
-          <div v-if="lpe('abd').time!=0" class="row">
-           	<span class="col">Last checked: [[lpe('abd').time]] seconds ago. </span>
-            </div>
-        </div>
-</div>
-
-<div v-if="!lastPE['neuro'].has_examined" class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('neuro')">
-           Check Neuro Exam
-	    </button>
-	    </div>
-</div>
-<div v-else class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('neuro')">
-           Recheck Neuro Exam
-	    </button>
-	    </div>
-	    <div class="col">
-         <div class="row">
-                 	<span class="col-1 badge badge-danger">[[lpe('neuro').vitals.hr]]</span>
-            </div>
-          <div v-if="lpe('resp').time!=0" class="row">
-           	<span class="col">Last checked: [[lpe('neuro').time]] seconds ago. </span>
-            </div>
-        </div>
-</div>
-
-<div v-if="!lastPE['other'].has_examined" class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('other')">
-           Other Exams
-	    </button>
-	    </div>
-</div>
-<div v-else class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('other')">
-           Repeat Other Exams
-	    </button>
-	    </div>
-	    <div class="col">
-         <div class="row">
-                 	<span class="col-1 badge badge-danger">[[lpe('other').vitals.hr]]</span>
-            </div>
-          <div v-if="lpe('other').time!=0" class="row">
-           	<span class="col">Last checked: [[lpe('other').time]] seconds ago. </span>
-            </div>
-        </div>
-</div>
+{% endfor %}

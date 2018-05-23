@@ -83,6 +83,7 @@ class PENeuro(db.Model):
     baby_id = db.Column(db.Integer, db.ForeignKey('baby.id'),
         nullable=False)
     loc=db.Column(db.Text)
+    motor_activity=db.Column(db.Text)
     motor_deficit=db.Column(db.Text)
 
 
@@ -231,3 +232,115 @@ def create_baby(user, scenario):
 
 
 db.create_all()
+
+# this is a catch-all class that needs to be improved along with the data coming in. Ugh!
+def getExams(baby_id):
+    ed={}
+    rd={}
+    resultDict={}
+    for name,model in PEDict.items():
+        ed[name]=model.query.filter_by(baby_id=baby_id).first()
+    for name,model in resuscDict.items():
+        rd[name]=model.query.filter_by(baby_id=baby_id).first()
+    baby=Baby.query.filter_by(id=baby_id).first()
+    s=ed['skin']
+    r=ed['resp']
+    sec=ed['secretions']
+    v=ed['vitals']
+    c=ed['cardiac']
+    abd=ed['abd']
+    n=ed['neuro']
+    o=ed['other']
+    vent=rd['vent']
+    
+    #appearance
+    dry=" and dry" if s.is_dry else ", but not dry"
+    if r.chest_rise=="None":
+            chest_rise="no chest rise"
+    else:
+        chest_rise==r.chest_rise
+    grunting="Infant is grunting. " if r.is_grunting else ""
+    spontaneous="Infant is breathing spontaneously" if r.is_spontaneous else ""
+    breathing=""
+    vent_type=""
+    if vent.vent_type=="intubated":
+        vent_type="Infant is intubated. "
+    elif vent.vent_type=="ppv":
+        vent_type="Infnat is being bag-mask ventilated. "
+    else:
+        breathing="Infant is breathing spontaneously."
+        if v.rr==0:
+            breathing="Infant is not breathing. "
+        elif v.rr<40:
+            breathing="Infant is bradypneic. "
+        elif v.rr>60:
+            breathing="Infant is tachypneic. "
+    wob=""
+    if r.wob!="None":
+        wob="Infant has "+r.wob+" work of breathing. "
+    d={
+        'ga':baby.ga,
+        's':ed['skin'],
+        'dry':dry,
+        'breathing':breathing,
+        'chest_rise':chest_rise,
+        'grunting':grunting,
+        'spontaneous':spontaneous,
+        'vent_type':vent_type,
+        'wob':wob
+        
+    }
+    resultDict['appearance']="{ga} week old infant.  Skin is {s.color}{dry}. Skin is {s.texture}. {breathing}{vent_type}There is {chest_rise}.{wob}{grunting}".format(**d)
+    
+    #respiratory
+    breath_sounds="There are no breath sounds. "
+    if r.breath_sounds!="None":
+        breath_sounds="Breath sounds are "+r.breath_sounds+". "
+    
+    d={
+        'breathing':breathing,
+        'breath_sounds':breath_sounds,
+        'chest_rise':chest_rise,
+        'grunting':grunting,
+        'spontaneous':spontaneous,
+        'vent_type':vent_type,
+        'wob':wob,
+        'sec':sec
+        
+    }
+    resultDict['resp']="{breathing}{breath_sounds}{vent_type}There is {chest_rise}. {wob}{grunting}Secretions are {sec.quantity}, {sec.thickness}, and {sec.color}. ".format(**d)
+    
+    #cardiac
+    d={
+        'murmur':c.murmur,
+        'b':c.brachial_pulse,
+        'f':c.femoral_pulse,
+        'hr':v.hr
+    }
+    resultDict['cardiac']="There is {murmur}. Pulses are {b} brachial and {f} femoral. Heart rate is {hr}.".format(**d)
+   
+    #abdomen
+    resultDict['abd']="Abdomen is {abd.palpate}. {abd.bs}.".format(abd=abd)
+   
+    #neuro
+    cry="not crying"
+    if not n.loc=="no cry":
+        cry=n.loc     
+    moving=n.motor_activity
+    d={
+        'cry':cry,
+        'moving':moving
+    }
+    resultDict['neuro']="Infant is {cry}. Infant is {moving}.".format(**d)
+    
+    #other
+    d={
+        'o':o,
+        'scalp':"does not have a caput" if (o.scalp=="no caput") else ("has a "+o.scalp),
+    }
+    for key in ['clavicles', 'eyes', 'umbilical_cord', 'palate', 'lips', 'gu', 'hips', 'spine', 'anus']:
+        d[key]=getattr(o, key).capitalize()
+    resultDict['other']="Infant {scalp}. {clavicles}. Ears are {o.ears}. {eyes}. {umbilical_cord}. {palate}. {lips}. {gu}. {hips}. {spine}. {anus}".format(**d)
+    return resultDict
+        
+        

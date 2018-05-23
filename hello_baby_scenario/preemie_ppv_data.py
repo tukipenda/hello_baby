@@ -19,7 +19,7 @@ warmer={
     "pop":0
 }
 
-#Desperately need a PP version of these exams
+#Need to change the exams so they are less text-based.  
 #I deleted APGAR for now,not including malformations, BP, EKG, or 4-extremity sats
 vitals={'o2sat':55, 'hr':120, 'rr':0, 'sbp':75, 'dbp':50, 'temp':35, 'weight':2.25}
 resp={"breath_sounds":"None", "chest_rise":"None", "wob":"None", "is_grunting":False, "is_spontaneous":False}
@@ -27,7 +27,7 @@ cardiac={"murmur":"no murmur", "femoral_pulse":"2+", "brachial_pulse":"2+"}
 abd={"bs":"+bs", "palpate":"soft, no HSM"}
 skin={"color":'blue', "is_dry":False, "texture":"term infant skin"}
 secretions={"quantity":'moderate', "below_cords":False, "color":'clear', "thickness":'thin'}
-neuro={"loc":'weak cry', "motor_deficit":"none"}
+neuro={"loc":'no cry', "motor_activity":"not moving", "motor_deficit":"none"}
 other={"scalp":'no caput', "clavicles":'no clavicular fracture', "ears":'normally positioned',
              "eyes":'red reflex intact bilaterally', "umbilical_cord":"normal 3 vessel cord", "palate":'palate intact', "lips":'no cleft lips', "gu":'normal genitalia',
              "hips":'no hip click', "spine":'no dimple', "anus":'patent anus'}
