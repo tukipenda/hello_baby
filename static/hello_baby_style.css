@@ -14,7 +14,7 @@
 .navModal .modal-dialog {
     top:110px; 
 }
-    
+
 #HelloBabyApp .v-select .open-indicator {display:none}
 
 #HelloBabyApp .v-select input {
@@ -28,6 +28,11 @@
 #HelloBabyApp .v-select .dropdown-toggle{
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+}
+
+#HelloBabyApp .supply-fetch input.form-control {
+    padding-left: .50rem;
+    padding-right: .50rem;
 }
 
 #HelloBabyApp .custom-label {

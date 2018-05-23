@@ -16,7 +16,7 @@
 
 <div class="container">
     	<div class="row">
-        <div class="col-sm">
+        <div class="col-sm"><!--Needed to keep make app in the center of the screen -->
         </div>
         <div class="col-lg-4 col-md-6 col-sm-7">
              
@@ -56,50 +56,48 @@
 			    </div>
 			</div>
 		</div>
-	<div class="row" v-if="baby_delivered">
-      GA: [[scenario.baby.ga]] infant.  Color is [[scenario.PE.skin.color]].  Chest rise: [[scenario.PE.resp.chest_rise]]. <span v-if="scenario.PE.resp.is_grunting">Infant is grunting.</span>
+	<div class="row mt-2" v-if="baby_delivered">
+      [[scenario.PEtext.appearance]]
  	</div>
-	<div class="row">
-        <span v-if="scenario.warmer.is_turned_on">
-            Heat is: <span v-on:click="toggleHeat" class="btn badge badge-danger">on</span>
-        </span>
-        <span v-else>
-            Heat is: <span v-on:click="toggleHeat" class="btn badge badge-secondary">off</span>
-        </span>
-      	 Temperature mode: <span v-on:click="toggleTempMode" class="btn badge badge-primary">
+	<div class="row mt-3">
+            <span class="col-auto px-1">Heat is:</span>
+        	<span v-if="scenario.warmer.is_turned_on" v-on:click="toggleHeat" class="px-1 col-auto btn badge badge-danger">on</span>
+            <span v-if="!scenario.warmer.is_turned_on" v-on:click="toggleHeat" class="px-1 col-auto btn badge badge-secondary">off</span>
+         <span class="col-auto px-1">Temperature mode: </span><span v-on:click="toggleTempMode" class="col-auto btn badge badge-primary">
                     [[scenario.warmer.temp_mode]]
                     </span>
-        <div class="row">
-            <div class="col-6" v-for="mask in getMasks">
-            <span v-if="mask.is_using" class="badge badge-large badge-primary">Using [[mask.size]] Mask </span>
-              <span v-else class="btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
+        <div class="row mt-2">
+            <div class="col-auto" v-for="mask in getMasks">
+            <span v-if="mask.is_using" class="p-2 badge badge-large badge-primary">Using [[mask.size]] Mask </span>
+              <span v-else class="p-2 btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
             </div>
         </div>
 	</div>
 	
-	<div class="row">
+	<div class="row mt-2">
         {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
-        <div class="col-4">{{pname}}: <span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[{{pressure}}]]</span></div>
+        <div class="col-auto px-2"><span class="pr-1">{{pname}}: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[{{pressure}}]]</span></div>
         {% endfor %}
 
     </div>
     <div class="row">
         {% for pressure,pname in [("scenario.warmer.flow","Flow"), ("scenario.warmer.fio2","FIO2")]%}
-        <div class="col-4">{{pname}}: <span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[{{pressure}}]]</span></div>
+        <div class="col-auto px-2"><span class="pr-1">{{pname}}: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[{{pressure}}]]</span></div>
         {% endfor %}
-        <div class="col-4">Suction: <span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.suction]]</span></div>
+        <div class="col-auto px-2"><span class="pr-1">Suction: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.suction]]</span></div>
     </div>
 	
-	<div class="row">
+	<div class="row mt-3">
 		Ventilation mode: [[scenario.resusc.vent.vent_type]]
 	</div>
 	<div class="row">
-		No chest compressions
+		Not giving chest compressions
 	</div>
 </div>
-            <div class="col-sm">
-                
+<div class="col-sm"> <!--Needed to keep make app in the center of the screen -->
+    
             </div>
+            
 </div>
 </div>
 {% endblock %}

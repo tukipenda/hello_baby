@@ -1,28 +1,32 @@
 <div class="row">
                             <div class="col">
-                            scenario.PEtext.appearance
+                            [[scenario.PEtext.appearance]]
                         </div>
           </div>
-{% for exam in ['hr', 'resp', 'cardiac', 'abd', 'neuro', 'other'] %}
-<div v-if="!lastPE['hr'].has_examined" class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('hr')">
-           Check HR
+{% for exam, pp in [('hr', 'Heart Rate'), ('resp', 'Lungs'), ('cardiac', 'Heart'), ('abd', "Abdomen"), ('neuro', "Neuro Exam"), ('other', 'Other Exams')] %}
+<div v-if="!lastPE['{{exam}}'].has_examined" class="row mt-3">
+        <div class="col-auto">
+       <button class="btn btn-primary" v-on:click="updateLastPE('{{exam}}')">
+           {% if exam in ['hr', 'neuro', 'other'] %}Check{% else %}Examine{% endif %} {{pp}}
 	    </button>
 	    </div>
 </div>
 <div v-else class="row mt-3">
-        <div class="col-4">
-       <button class="btn btn-primary" v-on:click="updateLastPE('hr')">
-           Recheck HR
+        <div class="col-auto">
+       <button class="btn btn-primary" v-on:click="updateLastPE('{{exam}}')">
+           {% if exam in ['hr', 'neuro', 'other'] %}Recheck{% else %}Rexamine{% endif %} {{pp}}
 	    </button>
 	    </div>
 	    <div class="col">
          <div class="row">
-              <span class="col-1 badge badge-danger">[[lpe('hr').vitals.hr]]</span>
+             {% if exam=='hr' %}
+             <span class="col-auto"> Heart rate is </span><span class="col-auto badge badge-danger">[[lpe('{{exam}}').text]]</span>
+             {% else %}
+             <span> [[lpe('{{exam}}').text]]</span>
+             {% endif %}
             </div>
-          <div v-if="lpe('hr').time!=0" class="row">
-           	<span class="col">Last checked: [[lpe('hr').time]] seconds ago. </span>
+          <div v-if="lpe('{{exam}}').time!=0" class="row">
+           	<span class="col">Last checked: [[lpe('{{exam}}').time]] seconds ago. </span>
             </div>
         </div>
 </div>

@@ -266,7 +266,7 @@ def getExams(baby_id):
     if vent.vent_type=="intubated":
         vent_type="Infant is intubated. "
     elif vent.vent_type=="ppv":
-        vent_type="Infnat is being bag-mask ventilated. "
+        vent_type="Infant is being bag-mask ventilated. "
     else:
         breathing="Infant is breathing spontaneously."
         if v.rr==0:
@@ -282,6 +282,7 @@ def getExams(baby_id):
         'ga':baby.ga,
         's':ed['skin'],
         'dry':dry,
+        'texture':s.texture.capitalize(),
         'breathing':breathing,
         'chest_rise':chest_rise,
         'grunting':grunting,
@@ -290,7 +291,7 @@ def getExams(baby_id):
         'wob':wob
         
     }
-    resultDict['appearance']="{ga} week old infant.  Skin is {s.color}{dry}. Skin is {s.texture}. {breathing}{vent_type}There is {chest_rise}.{wob}{grunting}".format(**d)
+    resultDict['appearance']="{ga} week old infant.  Skin is {s.color}{dry}. {texture}. {breathing}{vent_type}There is {chest_rise}.{wob}{grunting}".format(**d)
     
     #respiratory
     breath_sounds="There are no breath sounds. "

@@ -33,12 +33,12 @@ var app = new Vue({
             },
             lastPE:{ /*each contains a copy of the full scenario.PE that is checked at different times, to use in the description of the PE
                       * Note that e.g. resp does not map 1:1 onto scenario.PE.resp as it includes secretions data as well*/
-                'hr':{'has_examined':false, 'PE':{}, 'time':0},
-                'cardiac':{'has_examined':false, 'PE':{}, 'time':0},
-                'resp':{'has_examined':false, 'PE':{}, 'time':0},
-                'abd':{'has_examined':false, 'PE':{}, 'time':0},
-                'neuro':{'has_examined':false, 'PE':{}, 'time':0},
-                'other':{'has_examined':false, 'PE':{}, 'time':0}
+                'hr':{'has_examined':false, 'text':"", 'time':0},
+                'cardiac':{'has_examined':false, 'text':'', 'time':0},
+                'resp':{'has_examined':false, 'text':'', 'time':0},
+                'abd':{'has_examined':false, 'text':'', 'time':0},
+                'neuro':{'has_examined':false, 'text':'', 'time':0},
+                'other':{'has_examined':false, 'text':'', 'time':0}
             },
             drawer_opened: false,
             baby_timer_started: false,
@@ -58,11 +58,6 @@ var app = new Vue({
             task: null,
             show_message:true,
             hb_message:"The baby is about to be delivered.  Time to get the warmer ready.", /*need to make this part of the scenario text*/
-            lastExam: {
-                'abd':null,
-                'cardiac':null,
-                'resp':null
-            },
         },
         components: {
            'vueSlider': window['vue-slider-component'],
@@ -139,11 +134,17 @@ var app = new Vue({
         methods: {
                 updateLastPE: function(PEtype){
                     this.lastPE[PEtype].has_examined=true;
-                    this.lastPE[PEtype].PE=this.scenario.PE;
+                    if (PEtype=='hr'){
+                        this.lastPE[PEtype].text=this.scenario.PE.vitals.hr;
+                    }
+                    else {
+                        this.lastPE[PEtype].text=this.scenario.PEtext[PEtype];
+                    }
                     this.lastPE[PEtype].time=Date.now();
                 },
                  lpe: function(PEtype){
-                    var toReturn=this.lastPE[PEtype].PE;
+                    var toReturn={};
+                    toReturn['text']=this.lastPE[PEtype].text;
                     t=15*Math.floor((Date.now()-this.lastPE[PEtype]['time'])/15000);
                     toReturn['time']=t;
                     return toReturn;
