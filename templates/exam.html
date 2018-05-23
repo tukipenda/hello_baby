@@ -21,8 +21,8 @@
              {% endif %}
             </div>
           <div v-if="lpe('{{exam}}').time!=0" class="row">
-           	<span class="col-auto">Last checked: [[lpe('{{exam}}').time]] seconds ago. </span>
-              <button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('{{exam}}')">Recheck</button>
+           	<span class="col">Last checked: [[lpe('{{exam}}').time]] seconds ago. </span>
+              <button class="col btn badge badge-primary" v-on:click="updateLastPE('{{exam}}')">Recheck</button>
             </div>
         </div>
 </div>
