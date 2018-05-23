@@ -1,4 +1,4 @@
-<div class="modal-header">
+<div class="modal-header pb-0">
     	<div class="row">
             <div class="col p-0 btn-group btn-group-sm" role="group" aria-label="Basic example">
               <button type="button" v-on:click="actionTab='simple'" v-bind:class="(actionTab==='simple') ? 'btn btn-primary' : 'btn btn-light'">Simple</button>
@@ -36,7 +36,7 @@
                     <span v-else="scenario.resusc.vent.vent_type==='intubated'">Infant is <span class="badge badge-sm badge-success">intubated</span></span>
                 </div>
            </div>
-            <div v-if="scenario.resusc.vent.vent_type==='spontaneous'" class="row">
+            <div v-if="scenario.resusc.vent.vent_type==='spontaneous'" class="row mt-3">
                 	<div class="col">
                         <button v-on:click="doTask({'name':'startPPV'})" class="btn btn-sm btn-primary">Start PPV</button>
 	                </div>
@@ -44,7 +44,7 @@
                         <button class="btn btn-sm btn-primary">Intubate</button>                    
 	                </div>
             </div>
-            <div v-else-if="scenario.resusc.vent.vent_type==='ppv'" class="row">
+            <div v-else-if="scenario.resusc.vent.vent_type==='ppv'" class="row mt-3">
                 <div class="col">
                 	<button v-on:click="doTask({'name':'stopPPV'})" class="btn btn-sm btn-primary">Stop PPV</button>                  
                 </div>
@@ -52,7 +52,7 @@
                     <button class="btn btn-sm btn-primary">Intubate</button>
                 </div>
             </div>
-            <div v-else="scenario.resusc.vent.vent_type==='intubated'" class="row">
+            <div v-else="scenario.resusc.vent.vent_type==='intubated'" class="row mt-3">
                 <div class="col">
                     <button class="btn btn-sm btn-primary">Extubate to RA</button>
                 </div>
@@ -61,7 +61,7 @@
                 </div>
             </div>
                
-           <div class="row">
+           <div class="row mt-3">
                <div v-if="scenario.resusc.vent.vent_type==='ppv'" class="col">
                    <button v-on:click="simpleTask('adjustMask')" class="btn btn-primary btn-sm">
                        Adjust Mask
