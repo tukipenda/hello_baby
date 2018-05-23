@@ -19,6 +19,7 @@ warmer={
     "pop":0
 }
 
+#Desperately need a PP version of these exams
 #I deleted APGAR for now,not including malformations, BP, EKG, or 4-extremity sats
 vitals={'o2sat':55, 'hr':120, 'rr':0, 'sbp':75, 'dbp':50, 'temp':35, 'weight':2.25}
 resp={"breath_sounds":"None", "chest_rise":"None", "wob":"None", "is_grunting":False, "is_spontaneous":False}

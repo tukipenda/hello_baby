@@ -19,7 +19,7 @@
 	    </div>
 	    <div class="col">
          <div class="row">
-                 	<span class="col-1 badge badge-danger">[[lpe('hr').vitals.hr]]</span>
+              <span class="col-1 badge badge-danger">[[lpe('hr').vitals.hr]]</span>
             </div>
           <div v-if="lpe('hr').time!=0" class="row">
            	<span class="col">Last checked: [[lpe('hr').time]] seconds ago. </span>
@@ -42,7 +42,7 @@
 	    </div>
 	    <div class="col">
          <div class="row">
-                 	<span class="col-1 badge badge-danger">[[lpe('cardiac').vitals.hr]]</span>
+         	    <span class="col">The infant has [[lpe('cardiac').cardiac.murmur]]. Pulses are [[lpe('cardiac').cardiac.brachial_pulse]] brachial and [[lpe('cardiac').cardiac.femoral_pulse]] femoral. </span>
             </div>
           <div v-if="lpe('hr').time!=0" class="row">
            	<span class="col">Last checked: [[lpe('cardiac').time]] seconds ago. </span>
