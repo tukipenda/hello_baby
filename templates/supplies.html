@@ -1,9 +1,9 @@
 
 <div class="modal-body">
      		<div class="row">
-            <div class="col-4" v-for="mask in getMasks">
+            <div class="col-6" v-for="mask in getMasks">
             <span v-if="mask.is_using" class="badge badge-large badge-primary">Using [[mask.size]] Mask </span>
-              <span v-else class="btn badge badge-large badge-light" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
+              <span v-else class="btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
             </div>
      	   </div>
     		

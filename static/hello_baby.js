@@ -31,6 +31,15 @@ var app = new Vue({
             contents: '',
             toggle_values:{
             },
+            lastPE:{ /*each contains a copy of the full scenario.PE that is checked at different times, to use in the description of the PE
+                      * Note that e.g. resp does not map 1:1 onto scenario.PE.resp as it includes secretions data as well*/
+                'hr':{'has_examined':false, 'PE':{}, 'time':0},
+                'cardiac':{'has_examined':false, 'PE':{}, 'time':0},
+                'resp':{'has_examined':false, 'PE':{}, 'time':0},
+                'abd':{'has_examined':false, 'PE':{}, 'time':0},
+                'neuro':{'has_examined':false, 'PE':{}, 'time':0},
+                'other':{'has_examined':false, 'PE':{}, 'time':0}
+            },
             drawer_opened: false,
             baby_timer_started: false,
             delivery_time:null,
@@ -128,8 +137,16 @@ var app = new Vue({
                 }, 60000);
         },
         methods: {
-                getLastExam: function(PEtype){
-                    this.lastExam[PEtype]=JSON.stringify(this.scenario.PE[PEtype]);
+                updateLastPE: function(PEtype){
+                    this.lastPE[PEtype].has_examined=true;
+                    this.lastPE[PEtype].PE=this.scenario.PE;
+                    this.lastPE[PEtype].time=Date.now();
+                },
+                 lpe: function(PEtype){
+                    var toReturn=this.lastPE[PEtype].PE;
+                    t=15*Math.floor((Date.now()-this.lastPE[PEtype]['time'])/15000);
+                    toReturn['time']=t;
+                    return toReturn;
                 },
                 getScenario: function(){
                     this.data_last_updated=Date.now();
