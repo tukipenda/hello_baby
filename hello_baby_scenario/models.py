@@ -254,7 +254,7 @@ def getExams(baby_id):
     vent=rd['vent']
     
     #appearance
-    dry=" and dry" if s.is_dry else ", but not dry"
+    dry=" and dry" if s.is_dry else " and not dry"
     if r.chest_rise=="None":
             chest_rise="no chest rise"
     else:

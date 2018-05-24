@@ -29,76 +29,7 @@
 		</div>
        
        <div v-if="actionTab==='vent'" class="modal-body">
-            <div class="row">
-                <div class="col-auto">
-                    <span v-if="scenario.resusc.vent.vent_type==='spontaneous'">Infant is <span class="badge badge-sm badge-success">spontaneously ventilating</span></span>
-                    <span v-else-if="scenario.resusc.vent.vent_type==='ppv'">Infant is getting <span class="badge badge-sm badge-success">bag-mask ventilated</span></span>
-                    <span v-else="scenario.resusc.vent.vent_type==='intubated'">Infant is <span class="badge badge-sm badge-success">intubated</span></span>
-                </div>
-           </div>
-            <div v-if="scenario.resusc.vent.vent_type==='spontaneous'" class="row mt-3">
-                	<div class="col">
-                        <button v-on:click="doTask({'name':'startPPV'})" class="btn btn-sm btn-primary">Start PPV</button>
-	                </div>
-                	<div class="col">
-                        <button class="btn btn-sm btn-primary">Intubate</button>                    
-	                </div>
-            </div>
-            <div v-else-if="scenario.resusc.vent.vent_type==='ppv'" class="row mt-3">
-                <div class="col">
-                	<button v-on:click="doTask({'name':'stopPPV'})" class="btn btn-sm btn-primary">Stop PPV</button>                  
-                </div>
-                <div class="col">
-                    <button class="btn btn-sm btn-primary">Intubate</button>
-                </div>
-            </div>
-            <div v-else="scenario.resusc.vent.vent_type==='intubated'" class="row mt-3">
-                <div class="col">
-                    <button class="btn btn-sm btn-primary">Extubate to RA</button>
-                </div>
-                <div class="col">
-                    <button class="btn btn-sm btn-primary">Extubate to PPV</button>
-                </div>
-            </div>
-               
-           <div class="row mt-3">
-               <div v-if="scenario.resusc.vent.vent_type==='ppv'" class="col">
-                   <button v-on:click="simpleTask('adjustMask')" class="btn btn-primary btn-sm">
-                       Adjust Mask
-                   </button>
-                   <button v-on:click="simpleTask('reposition')" class="btn btn-primary btn-sm">
-                       Reposition
-                   </button>
-                   <button v-on:click="simpleTask('suction')" class="btn btn-primary btn-sm">
-                       Suction
-                   </button>
-                   <button v-on:click="simpleTask('openMouth')" class="btn btn-primary btn-sm">
-                       Open Mouth
-                   </button>
-                   <button v-on:click="" class="btn btn-primary btn-sm">
-                       Intubate
-                   </button>
-               </div>
-              
-           </div>
-           <div class="row">
-               <div v-if="scenario.resusc.vent.vent_type!='spontaneous'" class="col">
-                   <p class="col-3">Set vent rate: </p>
-                        <div class="col-9" v-on:click="doTask({'name':'set_rate', 'set_rate':scenario.resusc.vent.set_rate})">
-                            <vue-slider id="vent_rate-slider" ref="slider" v-bind="helloSliderOptions(0, 60, width='100%', '50%')" v-model="scenario.resusc.vent.set_rate">
-                                {% if is_IE %}
-                                <div slot="label"></div>
-                                {% else %}
-                                <div slot="label" slot-scope="{ label, active }">
-                                    <span :class="['custom-label', { active }]" v-if="label % 10 === 0">
-                                    [[ label ]]
-                                  </span>
-                                </div>
-                                {% endif %}
-                            </vue-slider>
-                        </div>
-               </div>
-        </div>
+            {% include 'vent_settings.html' %}
 		</div>
            
 		<div v-if="actionTab==='cpr'" class="modal-body">
@@ -114,5 +45,17 @@
 		</div>
       
       <div class="modal-footer">
-        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <div class="container">
+              <div class="row" v-if="(actionTab==='vent')&&(ventTab!='start')">
+              <div class="col">
+              		<button class="btn btn-secondary" type="button" v-on:click="ventTab='start'">Cancel</button>
+              </div>
+              <div class="col">
+                  <button v-if="ventTab==='prep_ppv'" class="btn btn-primary" type="button" v-on:click="simpleTask('startPPV'); ventTab='start'">Start PPV</button>
+              <button v-else-if="ventTab==='prep_intubate'" class="btn btn-primary" type="button" v-on:click="simpleTask('intubate'); ventTab='start'" >Intubate</button>
+              <button v-else class="btn btn-primary" type="button" v-on:click="simpleTask('extubate'); ventTab='start'">Extubate</button> <!-- note that only 'prep_extubate' remains as start defaults to v-else below -->
+              </div>
+          </div>
+          </div>
+		 <button v-else type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>

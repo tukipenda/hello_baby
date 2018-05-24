@@ -40,6 +40,7 @@ var app = new Vue({
                 'neuro':{'has_examined':false, 'text':'', 'time':0},
                 'other':{'has_examined':false, 'text':'', 'time':0}
             },
+            ventTab:"start",
             drawer_opened: false,
             baby_timer_started: false,
             delivery_time:null,

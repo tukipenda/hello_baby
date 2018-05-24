@@ -32,7 +32,8 @@
       </div> 
       
       <div class="modal-footer">
-        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button v-if="ventTab=='start'" type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button v-else type="button" v-on:click="showTab='action'" class="btn btn-secondary" data-dismiss="modal">Back</button>
       </div>
     </div>
   </div>
