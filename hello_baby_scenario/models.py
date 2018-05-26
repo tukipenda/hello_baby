@@ -154,6 +154,8 @@ class Health(db.Model):
     volume_status=db.Column(db.Integer)
     card_health=db.Column(db.Integer)
     brain_health=db.Column(db.Integer)
+    card_health_updated=db.Column(db.Integer)
+    brain_health_updated=db.Column(db.Integer)
     oxygenation=db.Column(db.Text) #oxygenation baby_data
     circulation=db.Column(db.Text)
 

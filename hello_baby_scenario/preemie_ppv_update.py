@@ -159,10 +159,7 @@ class UpdateBaby:
 
     #maybe I can start to include some formulas - like the O2 delivery formula at some point
     def updateHealth(self): #this is going to need some serious testing!!!  
-        # this is a disaster!!!!!!
-        # 
-        #update oxygenation
-        """
+        
         oxygenation=json.loads(self.resusc['health']['oxygenation'])
         ndelta=len(oxygenation)
         tdelta=self.time//5000
@@ -170,9 +167,8 @@ class UpdateBaby:
             for x in range(tdelta-ndelta):
                 oxygenation.append(self.resusc['vent']['efficacy'])
         self.resusc['health']['oxygenation']=json.dumps(oxygenation)
-        
-        
-        #update circ_eff
+               
+        #update circ_eff - this needs some editing to account for other things like CPR, etc...
         card_health=self.resusc['health']['card_health']
         if card_health==4:
             circ_eff=1.0
@@ -195,32 +191,46 @@ class UpdateBaby:
         
         oxygen_delivery=[a*b for a,b in zip(oxygenation,circulation)]
         def get_last_od(seconds): #average oxygen delivery over the last seconds (seconds should be divisible by 5)
-            count=seconds/5
+            count=int(seconds/5)
+            app.logger.info(count)
             last=oxygen_delivery[-count:]
-            last=sum(last)/float(len(last))
+            last=sum(last)/float(len(last)) if last!=0 else 0
             return last
   
+        ctime=self.resusc['health']['card_health_updated']
+        btime=self.resusc['health']['brain_health_updated']
+
         #currently this function does not account for the time being less than 30 or 60 seconds
-        if card_health==4:
+        def get_card_health(card_health):
             if get_last_od(60)<0.2:
-                card_health=3
-        elif card_health==3:
-            if get_last_od(30)>.8:
-                card_health=4
-            elif get_last_od(60)<0.4:
-                card_health=2
-            else:
-                card_health=3
-        elif card_health==2:
-            if get_last_od(30)>.8:
-                card_health=3
-            elif get_last_od(60)<0.4:
-                card_health=1
-            else:
-                card_health=2
+                if (card_health>0) and (self.time-ctime)>60000:
+                    card_health=card_health-1
+                    self.resusc['health']['card_health_updated']=self.time
+                elif (card_health<4) and (self.time-ctime)>60000:
+                    card_health=card_health+1
+                    self.resusc['health']['card_health_updated']=self.time
+            return card_health
+        
+        self.resusc['health']['card_health']=get_card_health(self.resusc['health']['card_health'])
         
         # now we need to update brain health
-        """
+        def get_brain_health(brain_health):
+            if ((brain_health==4) and (get_last_od(120)<0.2) and (self.time-btime))>120000:
+                brain_health=brain_health-1
+            elif get_last_od(60)<0.2:
+                if (brain_health>0) and (self.time-btime)>60000:
+                    brain_health=brain_health-1
+                    self.resusc['health']['brain_health_updated']=self.time
+                elif (brain_health<4) and (brain_health>1) and (self.time-btime)>60000:
+                    brain_health=brain_health+1
+                    self.resusc['health']['brain_health_updated']=self.time
+            return brain_health
+        
+        self.resusc['health']['brain_health']=get_brain_health(self.resusc['health']['brain_health'])
+        
+        app.logger.info(self.time)
+        app.logger.info(card_health)
+        app.logger.info(self.resusc['health']['brain_health'])
         
     def updatePE(self):
         pass
