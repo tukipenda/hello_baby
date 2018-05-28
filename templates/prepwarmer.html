@@ -22,7 +22,6 @@
              
     	<div class="row">        
             <div id="HelloBabyNav" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button type="button" v-on:click="toggleShowTab('history')" v-bind:class="(showTab==='history') ? 'btn btn-primary' : 'btn btn-light'">History</button>
               <button type="button" v-on:click="toggleShowTab('prep')" v-bind:class="(showTab==='prep') ? 'btn btn-primary' : 'btn btn-light'">Prep</button>
                 <button type="button" v-on:click="toggleShowTab('supplies')" v-bind:class="(showTab==='supplies') ? 'btn btn-primary' : 'btn btn-light'">Supply</button>
                 <button v-if="!baby_delivered" v-on:click="deliverBaby" type="button" class="btn btn-danger">Ready!</button>

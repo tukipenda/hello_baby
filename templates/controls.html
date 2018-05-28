@@ -1,29 +1,3 @@
-<div class="modal navModal" v-if="(showTab==='history')" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content" v-on:click.stop="">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">History</h5>
-        <button v-on:click="showTab='None'" type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        	<div v-for="(value, key, i) in scenario.mom" class="row" style="margin-bottom:5px;">
-                <div class="col">
-                    <button class="btn btn-sm btn-primary" v-on:click="toggleEl('history'+i)">Get [[key]]</button> <!--[[value]]-->
-                </div>
-                <div class="col" v-show="get_toggle_values('history'+i)">
-                    [[value]]
-                </div>
-            </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="modal navModal" v-if="(showTab==='prep')" id="prepModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
   <div class="modal-dialog" role="document">
     <div class="modal-content" v-on:click.stop="">

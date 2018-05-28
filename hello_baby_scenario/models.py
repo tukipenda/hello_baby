@@ -33,6 +33,7 @@ class PEVitals(db.Model):
     sbp=db.Column(db.Integer)
     dbp=db.Column(db.Integer)
     o2sat=db.Column(db.Integer)
+    o2sat_updated=db.Column(db.Integer)
     temp=db.Column(db.Integer)
     weight=db.Column(db.Float)
 
@@ -53,6 +54,7 @@ class PECardiac(db.Model):
     murmur=db.Column(db.Text)
     femoral_pulse=db.Column(db.Text)
     brachial_pulse=db.Column(db.Text)
+    sounds=db.Column(db.Text)
 
 class PEAbdomen(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -109,7 +111,7 @@ class Ventilation(db.Model):
         nullable=False)
     efficacy=db.Column(db.Float)
     is_mouth_open=db.Column(db.Boolean)
-    positioning=db.Column(db.Text)
+    positioning=db.Column(db.Integer)
     is_airway_open=db.Column(db.Boolean)
     has_air_leak=db.Column(db.Boolean)
     vent_type=db.Column(db.Text)
@@ -258,9 +260,9 @@ def getExams(baby_id):
     #appearance
     dry=" and dry" if s.is_dry else " and not dry"
     if r.chest_rise=="None":
-            chest_rise="no chest rise"
+        chest_rise="no chest rise"
     else:
-        chest_rise==r.chest_rise
+        chest_rise=r.chest_rise
     grunting="Infant is grunting. " if r.is_grunting else ""
     spontaneous="Infant is breathing spontaneously" if r.is_spontaneous else ""
     breathing=""
@@ -280,6 +282,14 @@ def getExams(baby_id):
     wob=""
     if r.wob!="None":
         wob="Infant has "+r.wob+" work of breathing. "
+    if vent.is_mouth_open:
+        mouth_open="open"
+    else:
+        mouth_open="closed"
+    if vent.positioning==0:
+        positioning="Infant is lying flat, no chin lift or jaw thrust"
+    else: #vent.positioning should be 1
+        positioning="Infant is in chin-lift position with jaw thrust"
     d={
         'ga':baby.ga,
         's':ed['skin'],
@@ -290,10 +300,12 @@ def getExams(baby_id):
         'grunting':grunting,
         'spontaneous':spontaneous,
         'vent_type':vent_type,
-        'wob':wob
+        'wob':wob,
+        'mouth_open': mouth_open,
+        'positioning':positioning
         
     }
-    resultDict['appearance']="{ga} week old infant.  Skin is {s.color}{dry}. {texture}. {breathing}{vent_type}There is {chest_rise}.{wob}{grunting}".format(**d)
+    resultDict['appearance']="{ga} week old infant.  Skin is {s.color}{dry}. {texture}. {breathing}{vent_type}There is {chest_rise}.{wob}{grunting} Mouth is {mouth_open}. {positioning}.".format(**d)
     
     #respiratory
     breath_sounds="There are no breath sounds. "
@@ -318,9 +330,10 @@ def getExams(baby_id):
         'murmur':c.murmur,
         'b':c.brachial_pulse,
         'f':c.femoral_pulse,
-        'hr':v.hr
+        'hr':v.hr,
+        'sounds':c.sounds.capitalize()
     }
-    resultDict['cardiac']="There is {murmur}. Pulses are {b} brachial and {f} femoral. Heart rate is {hr}.".format(**d)
+    resultDict['cardiac']="{sounds}. There is {murmur}. Pulses are {b} brachial and {f} femoral. Heart rate is {hr}.".format(**d)
    
     #abdomen
     resultDict['abd']="Abdomen is {abd.palpate}. {abd.bs}.".format(abd=abd)

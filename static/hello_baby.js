@@ -127,10 +127,12 @@ var app = new Vue({
         },
         mounted: function(){ /*should really set this up so clicking the close button starts this timer*/
             self=this;
+            /* baby does not automatically deliver for now
             setTimeout(
                 function() {
                   self.deliverBaby();
                 }, 60000);
+              */
         },
         methods: {
                 updateLastPE: function(PEtype){

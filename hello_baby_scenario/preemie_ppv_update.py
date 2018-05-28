@@ -3,6 +3,7 @@ from models import db
 from app import app
 import preemie_ppv_data as data
 import json
+import numpy as np
 
 def getSubDict(newdict, keys):
     return {key:newdict[key] for key in keys if (key in newdict.keys())}
@@ -77,7 +78,7 @@ taskDict={
     'set_rate':set_rate
 }
 
-#this is hacky - need to fix this
+#this is hacky - need to fix this - also needs major testing!!!
 class UpdateBaby:
     def __init__(self, baby_id):
         self.baby_id=baby_id
@@ -126,8 +127,21 @@ class UpdateBaby:
             taskDict[taskName](self.baby_id, **kwargs)
         self.db.session.commit()
         self.getData()
-        self.update(time, **kwargs)
-
+        self.time=time 
+        self.updateVent()
+        self.updateUVC()
+        self.updateCPR()
+        self.updateHealth()
+        self.updatePE()
+        self.updateVitals()
+        for e, m in models.PEDict.items():
+            result=m.query.filter_by(baby_id=self.baby_id)
+            result.update(self.PE[e])
+        for e, m in models.resuscDict.items():
+            result=m.query.filter_by(baby_id=self.baby_id)
+            result.update(self.resusc[e])
+        self.db.session.commit()
+        
     def updateVent(self):
         if self.resusc['vent']['vent_type'] in ['ppv', 'intubated']:
             self.PE['vitals']['rr']=self.resusc['vent']['set_rate']
@@ -137,19 +151,26 @@ class UpdateBaby:
 
 
         if self.taskName=="reposition":
-            self.resusc['vent']['positioning']="chin lift, jaw thrust"
+            self.resusc['vent']['positioning']=1
 
         if self.taskName=="openMouth":
             self.resusc['vent']['is_mouth_open']=True
 
-        if self.taskName=="suction":
+        if self.taskName=="deep_suction":
             self.PE['secretions']['quantity']='minimal'
 
         v=self.resusc['vent']
+        r=self.PE['resp']
         if((not v['has_air_leak']) and (v['is_mouth_open'])):
-           v['efficacy']=0.7
-           if(self.PE['secretions']['quantity'])=='minimal':
-               v['efficacy']=1
+            v['efficacy']=0.4
+            r['chest_rise']='poor chest rise'
+            if v['positioning']==1:
+                v['efficacy']=0.8
+                r['breath_sounds']="breath sounds present bilaterally, difficult to hear"
+                r['chest_rise']="good chest rise"
+                if(self.PE['secretions']['quantity'])=='minimal':
+                    v['efficacy']=1
+                    r['breath_sounds']="clear breath sounds bilaterally"
 
     def updateUVC(self):
         pass
@@ -157,6 +178,15 @@ class UpdateBaby:
     def updateCPR(self):
         pass
 
+    def get_last_od(self, seconds):
+        oxygenation=json.loads(self.resusc['health']['oxygenation'])
+        circulation=json.loads(self.resusc['health']['circulation'])
+        oxygen_delivery=[a*b for a,b in zip(oxygenation,circulation)]
+        count=int(seconds/5)
+        last=oxygen_delivery[-count:]
+        last=sum(last)/float(len(last)) if len(last)!=0 else 0
+        return last
+        
     #maybe I can start to include some formulas - like the O2 delivery formula at some point
     def updateHealth(self): #this is going to need some serious testing!!!  
         
@@ -188,21 +218,13 @@ class UpdateBaby:
             for x in range(tdelta-ndelta):
                 circulation.append(circ_eff)
         self.resusc['health']['circulation']=json.dumps(circulation)
-        
-        oxygen_delivery=[a*b for a,b in zip(oxygenation,circulation)]
-        def get_last_od(seconds): #average oxygen delivery over the last seconds (seconds should be divisible by 5)
-            count=int(seconds/5)
-            app.logger.info(count)
-            last=oxygen_delivery[-count:]
-            last=sum(last)/float(len(last)) if last!=0 else 0
-            return last
   
         ctime=self.resusc['health']['card_health_updated']
         btime=self.resusc['health']['brain_health_updated']
 
         #currently this function does not account for the time being less than 30 or 60 seconds
         def get_card_health(card_health):
-            if get_last_od(60)<0.2:
+            if self.get_last_od(60)<0.2:
                 if (card_health>0) and (self.time-ctime)>60000:
                     card_health=card_health-1
                     self.resusc['health']['card_health_updated']=self.time
@@ -215,9 +237,9 @@ class UpdateBaby:
         
         # now we need to update brain health
         def get_brain_health(brain_health):
-            if ((brain_health==4) and (get_last_od(120)<0.2) and (self.time-btime))>120000:
+            if ((brain_health==4) and (self.get_last_od(120)<0.2) and (self.time-btime))>120000:
                 brain_health=brain_health-1
-            elif get_last_od(60)<0.2:
+            elif self.get_last_od(60)<0.2:
                 if (brain_health>0) and (self.time-btime)>60000:
                     brain_health=brain_health-1
                     self.resusc['health']['brain_health_updated']=self.time
@@ -228,19 +250,97 @@ class UpdateBaby:
         
         self.resusc['health']['brain_health']=get_brain_health(self.resusc['health']['brain_health'])
         
-        app.logger.info(self.time)
-        app.logger.info(card_health)
-        app.logger.info(self.resusc['health']['brain_health'])
-        
     def updatePE(self):
-        pass
-
+        
+        def updateResp():
+            pass
+            
+        def updateCardiac():
+            if self.resusc['health']['card_health']<2:
+                self.PE['cardiac']['sounds']="no heart sounds audible"
+                self.PE['cardiac']['femoral_pulse']="absent"
+                self.PE['cardiac']['brachial_pulse']="absent"
+            if self.resusc['health']['card_health']==2:
+                self.PE['cardiac']['sounds']="normal S1/S2"
+                self.PE['cardiac']['femoral_pulse']="1+"
+                self.PE['cardiac']['brachial_pulse']="1+"
+            if self.resusc['health']['card_health']>2:
+                self.PE['cardiac']['sounds']="normal S1/S2"
+                self.PE['cardiac']['femoral_pulse']="2+"
+                self.PE['cardiac']['brachial_pulse']="2+"
+            
+        def updateSecretions():
+            pass
+        
+        def updateNeuro():
+            pass
+       
+        updateResp()
+        updateCardiac()
+        updateSecretions()
+        updateNeuro()    
+        
     def updateVitals(self):
         def updateHR():
-            pass
+            if (not self.taskName): #I don't want to update HR for a task update, just q5s.
+                hr=self.PE['vitals']['hr']
+                card_health=self.resusc['health']['card_health']
+                ox_eff=self.resusc['vent']['efficacy']
+                if card_health in [0, 1]:
+                    hr=0
+                sign=0
+                if ox_eff>0.8:
+                    sign=1
+                elif ox_eff<0.5:
+                    sign=-1
+                if card_health==2:
+                    if (hr>40) or (sign==1):
+                        hr=hr+np.random.normal(sign*5, 4)
+                    elif hr>30:
+                        hr=hr+np.random.normal(0, 2)
+                    else:
+                        hr=hr+np.random.normal(5, 4)
+                if card_health==3:
+                    if hr>100:
+                        hr=hr-np.random.normal(5, 4)
+                    elif hr>70:
+                        hr=hr+np.random.normal(sign*5, 4)
+                    elif (hr>60) and (sign!=1):
+                        hr=hr+np.random.normal(0, 4)
+                    else:
+                        hr=hr+np.random.normal(2, 4)
+                if card_health==4:
+                    if (hr>140) and (sign==1):
+                        hr=hr+np.random.normal(0, 3)
+                    elif hr>90:
+                        hr=hr+np.random.normal(sign*5, 4)
+                    else:
+                        hr=hr+np.random.normal(5, 4)
+                hr=int(hr)
+                self.PE['vitals']['hr']=hr
+
 
         def updateRR():
-            pass
+            if not self.taskName: #updating when not a specific task (will need another for extubation/stopping PPV)
+                card_health=self.resusc['health']['card_health']
+                rr=self.PE['vitals']['rr']
+                if self.resusc['vent']['vent_type']=='spontaneous':
+                    if self.get_last_od(45)>0.8:                        
+                        if card_health==4:
+                            if rr==0:
+                                rr=40
+                            else:
+                                rr=rr+np.random.normal(0, 3)
+                        if card_health==3:
+                            if rr==0:
+                                rr=30
+                            else:
+                                rr=rr+np.random.normal(0, 3)
+                    elif rr!=0:
+                        rr=rr-np.random.normal(4, 4)
+                    self.PE['vitals']['rr']=int(rr)
+                else:
+                    self.PE['vitals']['rr']=self.resusc['vent']['set_rate'] 
 
         def updateTemp():
             temp=self.PE['vitals']['temp']
@@ -270,7 +370,26 @@ class UpdateBaby:
 
 
         def updateO2sat():
-            pass
+            o2sat=self.PE['vitals']['o2sat']
+            otime=self.PE['vitals']['o2sat_updated']
+            if self.get_last_od(30)>0.8:
+                if (self.time-otime)>30000:
+                    self.otime=self.time
+                    if o2sat>95:
+                        o2sat=o2sat+np.random.normal(0, 2)
+                    else:
+                        o2sat=o2sat+np.random.normal(5, 2)
+                    
+            if self.get_last_od(30)<0.2:
+                if (self.time-otime)>30000:
+                    self.otime=self.time
+                    o2sat=o2sat-np.random.normal(5, 2)
+            if o2sat>100:
+                o2sat=100
+            if o2sat<0:
+                o2sat=0
+            self.PE['vitals']['o2sat']=int(o2sat)
+               
 
         updateHR()
         updateRR()

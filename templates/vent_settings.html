@@ -30,21 +30,20 @@
                
            <div class="row mt-3">
                <div v-if="scenario.resusc.vent.vent_type==='ppv'" class="col">
-                   <button v-on:click="simpleTask('adjustMask')" class="btn btn-primary btn-sm">
+				   <div class="row">
+                   <button v-on:click="simpleTask('adjustMask')" class="col-auto btn btn-primary btn-sm">
                        Adjust Mask
                    </button>
-                   <button v-on:click="simpleTask('reposition')" class="btn btn-primary btn-sm">
+                   <button v-on:click="simpleTask('reposition')" class="col-auto btn btn-primary btn-sm">
                        Reposition
                    </button>
-                   <button v-on:click="simpleTask('suction')" class="btn btn-primary btn-sm">
+                   <button v-on:click="simpleTask('deep_suction')" class="col-auto btn btn-primary btn-sm">
                        Suction
                    </button>
-                   <button v-on:click="simpleTask('openMouth')" class="btn btn-primary btn-sm">
+                   <button v-on:click="simpleTask('openMouth')" class="col-auto btn btn-primary btn-sm">
                        Open Mouth
                    </button>
-                   <button v-on:click="" class="btn btn-primary btn-sm">
-                       Intubate
-                   </button>
+				   </div>
                </div>
               
            </div>
@@ -75,12 +74,6 @@
                         Prepare to Start PPV
                     </h6>
                 </div>
-   		 <div class="col">
-                    <button v-on:click="ventTab='start'" class="btn btn-sm btn-secondary">
-                        	Cancel
-                                </button>
-                </div>
-      
            </div>
     	<div class="row mt-1">
             
