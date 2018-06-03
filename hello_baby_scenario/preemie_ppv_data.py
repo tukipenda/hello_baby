@@ -19,7 +19,7 @@ warmer={
     "pop":0
 }
 
-#Need to change the exams so they are less text-based.  
+#Need to change the exams so they are less text-based.
 #I deleted APGAR for now,not including malformations, BP, EKG, or 4-extremity sats
 vitals={'o2sat':55, 'o2sat_updated':0, 'hr':120, 'rr':0, 'sbp':75, 'dbp':50, 'temp':35, 'weight':2.25}
 resp={"breath_sounds":"None", "chest_rise":"None", "wob":"None", "is_grunting":False, "is_spontaneous":False}
@@ -112,26 +112,6 @@ for supply in supplyList:
 for size in ["Infant", "Preemie"]:
     supplyList.append({"name":'mask', "size":size, "is_available":True, "is_using":False, 'pp': ('mask: '+size)})
 
-
-availableSupplies=[
-            "temp_probe",
-            "blankets",
-            "meconium_aspirator",
-            "stethoscope",
-            "cord_clamp",
-]
-
-for supply in supplyList:
-    if supply['name'] in availableSupplies:
-        supply['is_available']=True
-    if supply['name']=="ett":
-        if supply['size'] in ["3", "3.5"]:
-            supply['is_available']=True
-    if supply['name']=='laryngoscope':
-        if supply['size']=="1":
-            supply['is_available']=True
-
-        
 tasks=[]
 for supply in supplyList:
     task={

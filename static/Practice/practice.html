@@ -60,105 +60,11 @@
         <div id="HelloBabyApp">
         <div class="container">
             <div class="row">
-                <div class="col-4">
-                    <div class="container">
-                     <div class="card">
-                          <div class="card-body">
-                            History
-                          </div>
-                        </div>
-
-                        <div class="card">
-                              <div class="card-body">
-                                PE
-                              </div>
-                        </div>
-                        <div class="card">
-                              <div class="card-body">
-                                Warmer
-                              </div>
-                        </div>
-                        <div class="card">
-                              <div class="card-body">
-                                Supplies
-                              </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="container">
-                    <div class="row">
-                        <div class="btn btn-primary">Baby Out</div>
-                    </div>
-                    <div class="row" style="background-color:black; padding:20px; border-radius:5px;">
-                        <div class="col">
-                        </div>
-                        <div class="col-auto">
-                            <div class="row">
-                                <span class="badge badge-primary">O2 Sat: Unavailable</span>
-                            </div>
-                            <div class="row">
-                                 <span class="badge badge-success">Temp: 36</span>
-                            </div>
-                            <div class="row">
-                                <span class="badge badge-light">RR: 0</span>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="row" style="padding:20px;">
-                              35 week infant.  Cyanotic.  No chest rise.  Infant is dry.
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            Warmer is on. Temp mode: manual.
-                        </div>
-                    </div>
-                <div class="row">
-                    <div class="col-sm-2">PIP: <span class="badge badge-primary">20</span></div>
-                    <div class="col-sm-2">PEEP: <span class="badge badge-primary">5</span></div>
-                    <div class="col-sm-2">POP: <span class="badge badge-primary">40</span></div>
-                </div>
-                	<div class="row">
-                            <div class="col-sm-2">Flow: <span class="badge badge-primary">10</span></div>
-                            <div class="col-sm-2">FiO2: <span class="badge badge-primary">21</span></div>
-                            <div class="col-sm-2">Suction: <span class="badge badge-primary">100</span></div>
-                        </div>
-                    <div class="row">
-                    	Ventilation mode: PPV using infant mask.
-                    </div>
-                    <div class="row">No chest compressions</div>
-                </div>
-                <div class="col-4">
-                    <div class="container">
-                     <div class="card">
-                          <div class="card-body">
-                            Simple Interventions
-                          </div>
-                        </div>
-
-                        <div class="card">
-                              <div class="card-body">
-                                Ventilation
-                              </div>
-                        </div>
-                        <div class="card">
-                              <div class="card-body">
-                                CPR
-                              </div>
-                        </div>
-                        <div class="card">
-                              <div class="card-body">
-                                Procedures
-                              </div>
-                        </div>
-                        <div class="card">
-                              <div class="card-body">
-                                Medications
-                              </div>
-                        </div>
-                    </div>
+                <div class="col-4" v-on:select="console.log('hey')">
+                    <vue-slider id="hey-slider" ref="slider" v-on:callback="alert(hey)" v-bind="helloSliderOptions(0, 100, width='100%', '50%')" v-model="hey">
+                                <div slot="label"></div>
+                            </vue-slider>
+                            <input type="text" v-model="hey" v-on:change="alert('hmmm')" class="form-control" id="usr">
                 </div>
             </div>
         </div>

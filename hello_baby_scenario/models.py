@@ -1,4 +1,4 @@
-from app import db
+from app import db, app
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy as sqla
@@ -186,6 +186,47 @@ class Scenario(db.Model):
     uvc=db.Column(db.Text)
     health=db.Column(db.Text)
 
+"""
+class Baby(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+        nullable=False)
+    ga=db.Column(db.Text)
+    neonatal_complications=db.Column(db.Text)
+    is_delivered=db.Column(db.Boolean)
+
+    supplies = db.relationship('Supply', backref='baby', lazy=True)
+
+    def __repr__(self):
+        return '<Baby %r>' % self.ga
+
+
+class Supply(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    baby_id = db.Column(db.Integer, db.ForeignKey('baby.id'),
+        nullable=False)
+    name=db.Column(db.Text)
+    is_available=db.Column(db.Boolean)
+    is_using=db.Column(db.Boolean)
+    size=db.Column(db.Text, nullable=True)
+    pp=db.Column(db.Text)
+"""
+
+#needs to probably go in a different file
+class Actionlog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    baby_id = db.Column(db.Integer, db.ForeignKey('baby.id'),
+        nullable=False)
+    actions = db.relationship('Action', backref='actionlog', lazy=True)
+
+
+class Action(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    actionlog_id = db.Column(db.Integer, db.ForeignKey('actionlog.id'),
+        nullable=False)
+    action=db.Column(db.Text)
+    time=db.Column(db.DateTime)
+
 # probably should change the name as it now includes mechanical things like PE/UVC
 PEDict={
     'vitals':PEVitals,
@@ -230,6 +271,8 @@ def create_baby(user, scenario):
         db.session.add(newSupply)
     db.session.commit()
     w=Warmer(baby_id=baby_id, **warmer)
+    a=Actionlog(baby_id=baby_id)
+    db.session.add(a)
     db.session.add(w)
     db.session.commit()
     return b
@@ -256,7 +299,7 @@ def getExams(baby_id):
     n=ed['neuro']
     o=ed['other']
     vent=rd['vent']
-    
+
     #appearance
     dry=" and dry" if s.is_dry else " and not dry"
     if r.chest_rise=="None":
@@ -303,15 +346,15 @@ def getExams(baby_id):
         'wob':wob,
         'mouth_open': mouth_open,
         'positioning':positioning
-        
+
     }
     resultDict['appearance']="{ga} week old infant.  Skin is {s.color}{dry}. {texture}. {breathing}{vent_type}There is {chest_rise}.{wob}{grunting} Mouth is {mouth_open}. {positioning}.".format(**d)
-    
+
     #respiratory
     breath_sounds="There are no breath sounds. "
     if r.breath_sounds!="None":
         breath_sounds="Breath sounds are "+r.breath_sounds+". "
-    
+
     d={
         'breathing':breathing,
         'breath_sounds':breath_sounds,
@@ -321,10 +364,10 @@ def getExams(baby_id):
         'vent_type':vent_type,
         'wob':wob,
         'sec':sec
-        
+
     }
     resultDict['resp']="{breathing}{breath_sounds}{vent_type}There is {chest_rise}. {wob}{grunting}Secretions are {sec.quantity}, {sec.thickness}, and {sec.color}. ".format(**d)
-    
+
     #cardiac
     d={
         'murmur':c.murmur,
@@ -334,21 +377,21 @@ def getExams(baby_id):
         'sounds':c.sounds.capitalize()
     }
     resultDict['cardiac']="{sounds}. There is {murmur}. Pulses are {b} brachial and {f} femoral. Heart rate is {hr}.".format(**d)
-   
+
     #abdomen
     resultDict['abd']="Abdomen is {abd.palpate}. {abd.bs}.".format(abd=abd)
-   
+
     #neuro
     cry="not crying"
     if not n.loc=="no cry":
-        cry=n.loc     
+        cry=n.loc
     moving=n.motor_activity
     d={
         'cry':cry,
         'moving':moving
     }
     resultDict['neuro']="Infant is {cry}. Infant is {moving}.".format(**d)
-    
+
     #other
     d={
         'o':o,
@@ -358,5 +401,4 @@ def getExams(baby_id):
         d[key]=getattr(o, key).capitalize()
     resultDict['other']="Infant {scalp}. {clavicles}. Ears are {o.ears}. {eyes}. {umbilical_cord}. {palate}. {lips}. {gu}. {hips}. {spine}. {anus}".format(**d)
     return resultDict
-        
-        
+

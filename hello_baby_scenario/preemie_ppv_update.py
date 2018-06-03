@@ -29,6 +29,9 @@ def getSupply(baby_id, name, size=None):
     return None
 
 #tasks below still require db session commit
+def updatewarmer(baby_id, **kwargs):
+    models.Warmer.query.filter_by(baby_id=baby_id).update(kwargs)
+
 def fetchSupply(baby_id, **kwargs):
     models.Supply.query.filter_by(baby_id=baby_id, **kwargs).update(dict(is_available=True))
 
@@ -75,7 +78,8 @@ taskDict={
     "deliver_baby":deliver_baby,
     "startPPV":start_ppv,
     'stopPPV':stop_ppv,
-    'set_rate':set_rate
+    'set_rate':set_rate,
+    'updatewarmer':updatewarmer
 }
 
 #this is hacky - need to fix this - also needs major testing!!!
@@ -106,7 +110,7 @@ class UpdateBaby:
 
     def update(self, time, **kwargs):#taskName, **kwargs):
         self.getData()
-        self.time=time 
+        self.time=time
         self.updateVent()
         self.updateUVC()
         self.updateCPR()
@@ -127,7 +131,7 @@ class UpdateBaby:
             taskDict[taskName](self.baby_id, **kwargs)
         self.db.session.commit()
         self.getData()
-        self.time=time 
+        self.time=time
         self.updateVent()
         self.updateUVC()
         self.updateCPR()
@@ -141,7 +145,7 @@ class UpdateBaby:
             result=m.query.filter_by(baby_id=self.baby_id)
             result.update(self.resusc[e])
         self.db.session.commit()
-        
+
     def updateVent(self):
         if self.resusc['vent']['vent_type'] in ['ppv', 'intubated']:
             self.PE['vitals']['rr']=self.resusc['vent']['set_rate']
@@ -186,10 +190,10 @@ class UpdateBaby:
         last=oxygen_delivery[-count:]
         last=sum(last)/float(len(last)) if len(last)!=0 else 0
         return last
-        
+
     #maybe I can start to include some formulas - like the O2 delivery formula at some point
-    def updateHealth(self): #this is going to need some serious testing!!!  
-        
+    def updateHealth(self): #this is going to need some serious testing!!!
+
         oxygenation=json.loads(self.resusc['health']['oxygenation'])
         ndelta=len(oxygenation)
         tdelta=self.time//5000
@@ -197,7 +201,7 @@ class UpdateBaby:
             for x in range(tdelta-ndelta):
                 oxygenation.append(self.resusc['vent']['efficacy'])
         self.resusc['health']['oxygenation']=json.dumps(oxygenation)
-               
+
         #update circ_eff - this needs some editing to account for other things like CPR, etc...
         card_health=self.resusc['health']['card_health']
         if card_health==4:
@@ -209,7 +213,7 @@ class UpdateBaby:
         else:
             circ_eff=0
         self.resusc['health']['circ_eff']=circ_eff
-        
+
         #update circulation
         circulation=json.loads(self.resusc['health']['circulation'])
         ndelta=len(circulation)
@@ -218,7 +222,7 @@ class UpdateBaby:
             for x in range(tdelta-ndelta):
                 circulation.append(circ_eff)
         self.resusc['health']['circulation']=json.dumps(circulation)
-  
+
         ctime=self.resusc['health']['card_health_updated']
         btime=self.resusc['health']['brain_health_updated']
 
@@ -232,9 +236,9 @@ class UpdateBaby:
                     card_health=card_health+1
                     self.resusc['health']['card_health_updated']=self.time
             return card_health
-        
+
         self.resusc['health']['card_health']=get_card_health(self.resusc['health']['card_health'])
-        
+
         # now we need to update brain health
         def get_brain_health(brain_health):
             if ((brain_health==4) and (self.get_last_od(120)<0.2) and (self.time-btime))>120000:
@@ -247,14 +251,14 @@ class UpdateBaby:
                     brain_health=brain_health+1
                     self.resusc['health']['brain_health_updated']=self.time
             return brain_health
-        
+
         self.resusc['health']['brain_health']=get_brain_health(self.resusc['health']['brain_health'])
-        
+
     def updatePE(self):
-        
+
         def updateResp():
             pass
-            
+
         def updateCardiac():
             if self.resusc['health']['card_health']<2:
                 self.PE['cardiac']['sounds']="no heart sounds audible"
@@ -268,18 +272,18 @@ class UpdateBaby:
                 self.PE['cardiac']['sounds']="normal S1/S2"
                 self.PE['cardiac']['femoral_pulse']="2+"
                 self.PE['cardiac']['brachial_pulse']="2+"
-            
+
         def updateSecretions():
             pass
-        
+
         def updateNeuro():
             pass
-       
+
         updateResp()
         updateCardiac()
         updateSecretions()
-        updateNeuro()    
-        
+        updateNeuro()
+
     def updateVitals(self):
         def updateHR():
             if (not self.taskName): #I don't want to update HR for a task update, just q5s.
@@ -325,7 +329,7 @@ class UpdateBaby:
                 card_health=self.resusc['health']['card_health']
                 rr=self.PE['vitals']['rr']
                 if self.resusc['vent']['vent_type']=='spontaneous':
-                    if self.get_last_od(45)>0.8:                        
+                    if self.get_last_od(45)>0.8:
                         if card_health==4:
                             if rr==0:
                                 rr=40
@@ -340,7 +344,7 @@ class UpdateBaby:
                         rr=rr-np.random.normal(4, 4)
                     self.PE['vitals']['rr']=int(rr)
                 else:
-                    self.PE['vitals']['rr']=self.resusc['vent']['set_rate'] 
+                    self.PE['vitals']['rr']=self.resusc['vent']['set_rate']
 
         def updateTemp():
             temp=self.PE['vitals']['temp']
@@ -379,7 +383,7 @@ class UpdateBaby:
                         o2sat=o2sat+np.random.normal(0, 2)
                     else:
                         o2sat=o2sat+np.random.normal(5, 2)
-                    
+
             if self.get_last_od(30)<0.2:
                 if (self.time-otime)>30000:
                     self.otime=self.time
@@ -389,7 +393,7 @@ class UpdateBaby:
             if o2sat<0:
                 o2sat=0
             self.PE['vitals']['o2sat']=int(o2sat)
-               
+
 
         updateHR()
         updateRR()

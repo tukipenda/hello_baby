@@ -159,15 +159,9 @@ var app = new Vue({
                     if(this.baby_delivered){
                         dtime=Date.now()-this.delivery_time;
                     }
-                    var w=this.scenario.warmer;
-                    this.updateWarmer(function(){
-                        axios.post("/getscenario", {"time":dtime}).then(function(response){
+                    axios.post("/getscenario", {"time":dtime}).then(function(response){
                         self.scenario=response.data;
-                        if(typeof w !== "undefined"){
-                            self.scenario.warmer=w; /* terrible*/   
-                        }
                     });
-                    }); /*This is super hacky and needs to be improved */
                 },
                 startBabyTimer: function(){
                     this.baby_timer_started=true;
@@ -198,6 +192,7 @@ var app = new Vue({
                         current_time=(Date.now()-this.delivery_time)/1000;
                     }
                     this.elapsed_delivery_time=current_time;
+                    console.log(task);
                     axios.post("/dotask",
                              {'task':task,
                              'time':current_time,
@@ -276,7 +271,7 @@ var app = new Vue({
                   },
                   toggleHeat: function(){
                       this.scenario.warmer.is_turned_on=!this.scenario.warmer.is_turned_on;
-                      this.updateWarmer();
+                      this.doTask({'name':"updatewarmer", 'is_turned_on':this.scenario.warmer.is_turned_on});
                   },
                   toggleShowTab: function(name){
                       if(this.showTab===name){
@@ -294,7 +289,7 @@ var app = new Vue({
                         else {
                             this.scenario.warmer.temp_mode="baby";
                         }
-                        this.updateWarmer();
+                        this.doTask({'name':"updatewarmer", 'temp_mode':this.scenario.warmer.temp_mode});
                     },
                   updateData: function(){
                       this.data_last_updated=Date.now();
@@ -305,16 +300,11 @@ var app = new Vue({
                             }
                         }, 3000);
                   },
-                  updateWarmer: function(callbackFxn){
-                      if(typeof callbackFxn === 'undefined'){
-                          callbackFxn=function(){
-                              return 0;
-                          };
-                      }
-                      let self=this;
-                      axios.post("/updatewarmer", {
-                        'warmer':JSON.stringify(self.scenario.warmer)
-                      }).then(callbackFxn());
+                  updateWarmer: function(pressure_type, pvalue){
+                      pressure=pressure_type.toLowerCase()
+                      task={'name':'updatewarmer'}
+                      task[pressure]=pvalue
+                      this.doTask(task);
                   }
             }
         });
