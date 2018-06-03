@@ -19,27 +19,27 @@
         <div class="col-sm"><!--Needed to keep make app in the center of the screen -->
         </div>
         <div class="col-lg-4 col-md-6 col-sm-7">
-             
-    	<div class="row">        
+
+    	<div class="row">
             <div id="HelloBabyNav" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
               <button type="button" v-on:click="toggleShowTab('prep')" v-bind:class="(showTab==='prep') ? 'btn btn-primary' : 'btn btn-light'">Prep</button>
                 <button type="button" v-on:click="toggleShowTab('supplies')" v-bind:class="(showTab==='supplies') ? 'btn btn-primary' : 'btn btn-light'">Supply</button>
                 <button v-if="!baby_delivered" v-on:click="deliverBaby" type="button" class="btn btn-danger">Ready!</button>
-              <button v-if="baby_delivered" v-on:click="toggleShowTab('exam')" v-bind:class="(showTab==='exam') ? 'btn btn-primary' : 'btn btn-light'" type="button">Exam</button>              
+              <button v-if="baby_delivered" v-on:click="toggleShowTab('exam')" v-bind:class="(showTab==='exam') ? 'btn btn-primary' : 'btn btn-light'" type="button">Exam</button>
               <button v-if="baby_delivered" v-on:click="toggleShowTab('actions')" v-bind:class="(showTab==='actions') ? 'btn btn-primary' : 'btn btn-light'" type="button" >Actions</button>
             </div>
 	    </div>
 		<div class="row" style="background-color:black; padding:5px; border-radius:5px;">
 			<div class="col" style="padding-left:0px;">
-				<div v-if="baby_delivered"> 
-                         <div v-if="baby_timer_started"> 
-                             <a class="btn btn-sm btn-warning"><span id="baby_time" v-html="elapsed_baby_time"></span> </a> 
-                         </div> 
-                         <div v-else> 
-                             <button class="btn btn-sm btn-primary" v-on:click="startBabyTimer"> Start Timer </button> 
-                         </div> 
+				<div v-if="baby_delivered">
+                         <div v-if="baby_timer_started">
+                             <a class="btn btn-sm btn-warning"><span id="baby_time" v-html="elapsed_baby_time"></span> </a>
+                         </div>
+                         <div v-else>
+                             <button class="btn btn-sm btn-primary" v-on:click="startBabyTimer"> Start Timer </button>
+                         </div>
                  </div>
-                
+
 			</div>
 			<div class="col-auto">
 			    <div class="row">
@@ -72,7 +72,7 @@
             </div>
         </div>
 	</div>
-	
+
 	<div class="row mt-2">
         {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
         <div class="col-auto px-2"><span class="pr-1">{{pname}}: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[{{pressure}}]]</span></div>
@@ -85,7 +85,7 @@
         {% endfor %}
         <div class="col-auto px-2"><span class="pr-1">Suction: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.suction]]</span></div>
     </div>
-	
+
 	<div class="row mt-3">
 		Ventilation mode: [[scenario.resusc.vent.vent_type]]
 	</div>
@@ -94,9 +94,9 @@
 	</div>
 </div>
 <div class="col-sm"> <!--Needed to keep make app in the center of the screen -->
-    
+
             </div>
-            
+
 </div>
 </div>
 {% endblock %}

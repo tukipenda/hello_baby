@@ -6,7 +6,7 @@
               <span v-else class="p-2 btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
             </div>
      	   </div>
-    		
+
     		<div class="row mt-3">
                 <div v-if="!drawer_opened" class="col">
                     <button class="btn btn-sm btn-primary" v-on:click="drawer_opened=true">
@@ -14,52 +14,69 @@
                     </button>
                 </div>
                 <div v-else class="col">
-                    <div class="row">
-                        <h4 class="col">
-                            Available Supplies:
-                        </h4>
-                    </div>
-                    <div class="row">
-                     <div v-for="supply in availableSupplies" class="col-auto">                        
-                    <div v-if="baby_delivered">[[supply.name]] <span v-if="supply.is_using" class="badge badge-success">using</span><span v-else v-on:click="useSupply(supply)" class="btn badge badge-primary">Use</span></div>
-                	<div v-else>[[supply.name]]</div>
-                    </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2">
-                            ETTs: 
+                    <div class="container" v-if="availableSupplies.length>0">
+                        <div class="row">
+                            <h4 class="col">
+                                Available Supplies:
+                            </h4>
                         </div>
-                        <div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='ett') && (supply.is_available)">
-                            <span class="badge badge-light">[[supply.size]]</span>
+                        <div class="row">
+                         <div v-for="supply in availableSupplies" class="col-auto">
+                        <div v-if="baby_delivered">[[supply.name]] <span v-if="supply.is_using" class="badge badge-success">using</span><span v-else v-on:click="useSupply(supply)" class="btn badge badge-primary">Use</span></div>
+                    	<div v-else>[[supply.name]]</div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5">
-                            Laryngoscopes: 
                         </div>
-                        <div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='laryngoscope') && (supply.is_available)">
-                            <span class="badge badge-light">[[supply.size]]</span>
+                        <div class="row">
+                            <div class="col-2">
+                                ETTs:
+                            </div>
+                            <div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='ett') && (supply.is_available)">
+                                <span class="badge badge-light">[[supply.size]]</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mt-2">
-                        <h4 class="col">Get More Supplies:</h4>
-                    </div>
-                    <div class="row">
-                    <div class="col input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="px-1 input-group-text" id="basic-addon3">Fetch:</span>
+                        <div class="row">
+                            <div class="col-5">
+                                Laryngoscopes:
+                            </div>
+                            <div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='laryngoscope') && (supply.is_available)">
+                                <span class="badge badge-light">[[supply.size]]</span>
+                            </div>
                         </div>
-                        <v-select class="supply-fetch" label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)"	:options="supplySearchOptions" placeholder="search..."></v-select>
+                        <div class="row mt-2">
+                            <h4 class="col">Get More Supplies:</h4>
+                        </div>
+                        <div class="row">
+                        <div class="col input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="px-1 input-group-text" id="basic-addon3">Fetch:</span>
+                            </div>
+                            <v-select class="supply-fetch" label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)"	:options="supplySearchOptions" placeholder="search..."></v-select>
 
+                        </div>
+
+                        </div>
                     </div>
-                        
+                    <div class="container" v-else>
+                        <div class="row mt-2">
+                            <h4 class="col">Fetch Supplies:</h4>
+                        </div>
+                        <div class="row">
+                        <div class="col input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="px-1 input-group-text" id="basic-addon3">Fetch:</span>
+                            </div>
+                            <v-select class="supply-fetch" label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)"	:options="supplySearchOptions" placeholder="search..."></v-select>
+
+                        </div>
+
+                        </div>
                     </div>
                 </div>
     </div>
-    		
+
 
 </div>
-     
+
       <div class="modal-footer">
         <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>

@@ -1,8 +1,9 @@
+
 {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
                     <div class="row mt-3">
                         <p class="col-3">{{pname}}: </p>
                         <div class="col-9">
-                            <vue-slider id="{{pname}}-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, {% if pname=="PEEP" %} 20 {% else %} 50 {% endif %}, width='100%', '50%')" v-model="{{pressure}}">
+                            <vue-slider id="{{pname}}-slider" ref="slider" v-on:callback="updateWarmer('{{pname}}',{{pressure}})" v-bind="helloSliderOptions(0, {% if pname=="PEEP" %} 20 {% else %} 50 {% endif %}, width='100%', '50%')" v-model="{{pressure}}">
                                 {% if is_IE %}
                                 <div slot="label"></div>
                                 {% else %}
@@ -20,7 +21,7 @@
                     <div class="row mt-3">
                         <p class="col-3">{{pname}}: </p>
                         <div class="col-9">
-                            <vue-slider id="{{pname}}-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, {% if pressure=="scenario.warmer.flow" %} 20 {% else %} 100 {% endif %}, width='100%', '50%')" v-model="{{pressure}}">
+                            <vue-slider id="{{pname}}-slider" ref="slider" v-on:callback="updateWarmer('{{pname}}',{{pressure}})" v-bind="helloSliderOptions(0, {% if pressure=="scenario.warmer.flow" %} 20 {% else %} 100 {% endif %}, width='100%', '50%')" v-model="{{pressure}}">
                                 {% if is_IE %}
                                 <div slot="label"></div>
                                 {% else %}
@@ -40,7 +41,7 @@
                     <p>Suction: </p>
                 </div>
                 <div class="col col-md-9">
-                    <vue-slider id="suction-slider" ref="slider" v-on:change="updateWarmer" v-bind="helloSliderOptions(0, 150, width='100%', '50%')" v-model="scenario.warmer.suction">
+                    <vue-slider id="suction-slider" ref="slider" v-on:callback="updateWarmer('suction',scenario.warmer.suction)" v-bind="helloSliderOptions(0, 150, width='100%', '50%')" v-model="scenario.warmer.suction">
                         {% if is_IE %}
                         <div slot="label"></div>
                         {% else %}
