@@ -1,22 +1,25 @@
 <div class="modal navModal" v-if="(showTab==='prep')" id="prepModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
   <div class="modal-dialog" role="document">
     <div class="modal-content" v-on:click.stop="">
-      <div class="modal-body">
+      <div class="modal-header pb-0">
+    	<div class="row">
+            <div class="col p-0 ml-5 btn-group btn-group-sm" role="group" aria-label="Basic example">
+              <button type="button" v-on:click="warmerTab='warmer_settings'" v-bind:class="(warmerTab==='warmer_settings') ? 'btn btn-primary' : 'btn btn-light'">Warmer Settings</button>
+              <button type="button" v-on:click="warmerTab='supplies'" v-bind:class="(warmerTab==='supplies') ? 'btn btn-primary' : 'btn btn-light'">Supplies</button>
+            </div>
+	    </div>
+      </div>
+      <div v-if="warmerTab==='warmer_settings'" class="modal-body">
           {% include "warmer_settings.html" %}
-      </div> 
-      
+      </div>
+      <div v-else class="modal-body">
+        {% include "supplies.html" %}
+      </div>
+
       <div class="modal-footer">
         <button v-if="ventTab=='start'" type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button v-else type="button" v-on:click="showTab='action'" class="btn btn-secondary" data-dismiss="modal">Back</button>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal navModal" v-if="(showTab==='supplies')" id="supplyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content" v-on:click.stop="">
-        {% include "supplies.html" %}
     </div>
   </div>
 </div>
@@ -31,9 +34,9 @@
         </button>
       </div>
       <div class="modal-body">
-             {% include "exam.html" %}           
+             {% include "exam.html" %}
         </div>
-        
+
       <div class="modal-footer">
         <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
@@ -61,7 +64,7 @@
         <div class="modal-body">
             Give Medication
         </div>
-      
+
       <div class="modal-footer">
         <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>

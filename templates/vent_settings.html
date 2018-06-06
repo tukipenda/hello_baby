@@ -1,7 +1,7 @@
 <div v-if="ventTab==='start'" class="container">
 <div class="row">
                 <div class="col-auto">
-                    <span v-if="scenario.resusc.vent.vent_type==='spontaneous'">Infant is <span class="badge badge-sm badge-success">spontaneously ventilating</span></span>
+                    <span v-if="scenario.resusc.vent.vent_type==='spontaneous'">Infant is <span v-if="scenario.PE.vitals.rr===0" class="badge badge-sm badge-success">not breathing</span><span v-else class="badge badge-sm badge-success">spontaneously ventilating</span></span>
                     <span v-else-if="scenario.resusc.vent.vent_type==='ppv'">Infant is getting <span class="badge badge-sm badge-success">bag-mask ventilated</span></span>
                     <span v-else="scenario.resusc.vent.vent_type==='intubated'">Infant is <span class="badge badge-sm badge-success">intubated</span></span>
                 </div>

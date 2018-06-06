@@ -1,35 +1,42 @@
-scenario - has one liner, mom's history, rules for how to update baby w/ time
-baby - has a PE, vitals that are updated
-warmer - can be set up
-supplies available - some supplies have a size or type
+Mode - test vs. practice (tutorial).
 
-CPR
-ventilation - w/ bag-mask or via ETT
-UVC - place, give medications
+States:
+predelivery, post-delivery.
+Timer running or paused.
+Instruction -> next action
+Get more information (hint).
 
-current 
+Supplies - need to reorganize by area (airway, blankets, monitors, etc...).
+Need to highlight changes in PE, or key PE findings.
+In practice mode timer is paused when looking at hints/additional information/algorithm.
+Spontaneously breathing -> needs to go to not breathing (if HR is 0).
 
-Typical scenario
-baby comes out not breathing
-timer on
-suction, dry, stim
-place bag-mask (mask size), start  (PPV settings)
-adjust mask
-open mouth
-good chest rise, but heart rate now less than 60
-intubate (tube size, laryngoscope size)
-start compressions
-set resp rate, compressions rate
-heart rate increasing
-stop compressions
-continue mechanical ventilation
-transfer to NICU
+Priorities:
+Get app working.
+Test backend.
+Improve UI (per Alejandro)
+Tutorial.
+Add logging/scores.
+Add hints.
 
-Actions affect infant.
+Tutorial:
+Time to get the warmer set up - first turn it on.
+Next pick which size mask you want to attach to the warmer.
+Click here to adjust the warmer settings (what values do I need for the settings?)/ or just click here for some hints
+Now you need to fetch your supplies.
+When you are ready, click here top deliver the baby.
+Your baby was delivered, don't forget to start the timer.
+Your baby isn't breathing - click actions to start helping the baby breathe.
+First dry, stimulate, and suction.
+Oops, the baby still isn't breathing, let's start PPV.
+Now that we are giving PPV, you can see that the baby's chest is rising.
+Lets place the pulse ox.
+We can place the temp probe too, put on a hat, switch to baby mode.
 
-Scenario - baby PE, vitals, ventilation status, CPR status, UVC status, medications given, tasks completed
-update function -> all of the logic (inputs - time, actions, baby's status)
+Congratulations, you saved the baby!
+Uh oh, the baby's heart is less than 60 bpm.  Scenario failed?
 
-ventilation type - bag/mask vs ett, rate, PIP/PEEP/POP, FiO2, efficacy level?, 
-bag mask ventilation - mouth open?, seal?, secretions, positioning
-ett - tube size, tube placement (deep or shallow?), 
+Tutorial mode
+Practice mode (click here to view the tutorial)
+Exam mode (no hints provided)
+

@@ -1,5 +1,4 @@
 
-<div class="modal-body">
      		<div class="row">
             <div class="col-6" v-for="mask in getMasks">
             <span v-if="mask.is_using" class="p-2 badge badge-large badge-primary">Using [[mask.size]] Mask </span>
@@ -73,10 +72,3 @@
                     </div>
                 </div>
     </div>
-
-
-</div>
-
-      <div class="modal-footer">
-        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>

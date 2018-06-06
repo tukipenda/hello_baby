@@ -54,6 +54,7 @@ var app = new Vue({
             showTab: "None",
             actionTab: "simple",
             mainTab: "history",
+            warmerTab: "warmer_settings",
             interveneTab:"supplies",
             supplyToFetch: null,
             task: null,
@@ -148,7 +149,7 @@ var app = new Vue({
                  lpe: function(PEtype){
                     var toReturn={};
                     toReturn['text']=this.lastPE[PEtype].text;
-                    t=15*Math.floor((Date.now()-this.lastPE[PEtype]['time'])/15000);
+                    t=5*Math.floor((Date.now()-this.lastPE[PEtype]['time'])/5000);
                     toReturn['time']=t;
                     return toReturn;
                 },
