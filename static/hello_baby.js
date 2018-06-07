@@ -1,10 +1,10 @@
 Vue.component('v-select', VueSelect.VueSelect);
 Vue.component('v-select-intervene', VueSelect.VueSelect);
 
+
 /*There is a problem which is css is dynamically loaded based on the name of the component here.  Probably I eventually need to package this on my own
 so this is not an issue
 */
-
 
 var hs = document.getElementsByTagName('style');
 if(hs.length){
@@ -51,6 +51,8 @@ var app = new Vue({
             scenario:{},
             data_last_updated:null,
             data_updater:null, /*repeatedly update data */
+            app_mode:"tutorial", /*alternatives are practice and test */
+            app_state:"instruction", /* options include playing, hint */
             showTab: "None",
             actionTab: "simple",
             mainTab: "history",

@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="/static/hello_baby_style.css">
     <link rel="stylesheet" href="/static/vue-select.css">
     <link rel="stylesheet" href="/static/vuetify.css">
+    
+    
+    <!-- trying to get popover styling with vue -->
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <!-- link href="https://unpkg.com/vuetify/dist/vuetify.css" rel="stylesheet" -->
@@ -15,6 +19,10 @@
 
     <script src="https://unpkg.com/popper.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+    
+    
+    <!-- adding to try and get vue popover styling included -->
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
     
     <!-- Vue select -->
     <script src="https://unpkg.com/vue-select@2.4.0"></script>
@@ -65,32 +73,33 @@
     <main role="main" class="container" style="margin-top:75px;">
         
         <div id="HelloBabyApp">
-                <div id="mycard" style="background-color:blue;">
-                  Hello
-                </div>
-                
+            <div id="tutorial_popover" class="popover fade show bs-popover-right">
+	<div class="arrow"></div>
+	<h3 class="popover-header">Popover</h3>
+	<div class="popover-body"><div>
+        Hello <strong>World!</strong></div>
+	</div>
+</div>
                 <div class="container">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-9">
                             
                         </div>
                         <div class="col-3">
                             <div class="row">
                                 <div class="col">
-                                    <p> this is paragraph one</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
                                     <p> this is paragraph two</p>
-                                    <button id="mybutton" type="button" class="btn btn-primary p-0">Hello</button>
-                                    
+                                    <button id="mybutton" class="btn btn-primary">
+                                        Click Here
+                                    </button>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <p> this is paragraph three</p>
-                                    
+                                    <button id="mybutton2" class="btn btn-primary">
+                                        Click Here
+                                    </button>
                                 </div>
                             </div>
 
@@ -109,10 +118,31 @@
     <!-- IE Message -->
     <script>
         ref=document.getElementById("mybutton");
-        pop=document.getElementById("mycard");
+        other=document.getElementById("mybutton2");
+        pop=document.getElementById("tutorial_popover");
         var popper = new Popper(ref, pop, {
-            placement: 'left'
+            placement:"right", 
+            onUpdate: function(data){
+                pl=data.placement;
+                pop.classList.remove("bs-popover-right");
+                pop.classList.remove("bs-popover-left");
+                pop.classList.remove("bs-popover-top");
+                pop.classList.remove("bs-popover-bottom");
+                pop.classList.add("bs-popover-"+pl);
+            }
         });
+        var popper = new Popper(other, pop, {
+            placement:"right", 
+            onUpdate: function(data){
+                pl=data.placement;
+                pop.classList.remove("bs-popover-right");
+                pop.classList.remove("bs-popover-left");
+                pop.classList.remove("bs-popover-top");
+                pop.classList.remove("bs-popover-bottom");
+                pop.classList.add("bs-popover-"+pl);
+            }
+        });
+
 
     </script>
 

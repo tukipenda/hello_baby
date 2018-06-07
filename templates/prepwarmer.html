@@ -12,10 +12,18 @@
   </div>
 </div>
 
+<div class="popover fade show bs-popover-right">
+	<div class="arrow" style="top: 24px;"></div>
+	<h3 class="popover-header">Popover</h3>
+	<div class="popover-body"><div>
+        Hello <strong>World!</strong></div>
+	</div>
+</div>
+
 {% include "controls.html" %}
 
 <div class="container">
-    	<div class="row">
+    	<div class="row">		
         <div class="col-sm"><!--Needed to keep make app in the center of the screen -->
         </div>
         <div class="col-lg-4 col-md-6 col-sm-7">
@@ -42,7 +50,7 @@
 			</div>
 			<div class="col-auto">
 			    <div class="row">
-                <span class="badge badge-light">RR [[scenario.PE.vitals.rr]]</span>
+                <span id="here" class="badge badge-light">RR [[scenario.PE.vitals.rr]]</span>
 			    </div>
 			    <div class="row">
                 <span v-if="checkSupplyByName('pulse_ox').is_using==true" class="badge badge-primary">O2 Sat [[scenario.PE.vitals.o2sat]].</span>

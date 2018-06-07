@@ -8,13 +8,20 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='hello_baby_style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='vue-select.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='vuetify.css') }}">
+    
+    <!-- trying to get popover styling with vue -->
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <!-- link href="https://unpkg.com/vuetify/dist/vuetify.css" rel="stylesheet" -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 
     
+    <script src="https://unpkg.com/popper.js"></script> <!-- do I already have this from below?, can probably pare this down -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+    
+    <!-- adding to try and get vue popover styling included -->
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
     
     <!-- Vue select -->
     <script src="https://unpkg.com/vue-select@2.4.0"></script>
