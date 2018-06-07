@@ -40,3 +40,4 @@ Tutorial mode
 Practice mode (click here to view the tutorial)
 Exam mode (no hints provided)
 
+https://github.com/RobinCK/vue-popper - Vue popper
