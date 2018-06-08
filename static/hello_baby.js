@@ -1,7 +1,6 @@
 Vue.component('v-select', VueSelect.VueSelect);
 Vue.component('v-select-intervene', VueSelect.VueSelect);
 
-
 /*There is a problem which is css is dynamically loaded based on the name of the component here.  Probably I eventually need to package this on my own
 so this is not an issue
 */
@@ -29,8 +28,7 @@ var app = new Vue({
         delimiters: ['[[',']]'],
         data: {
             contents: '',
-            toggle_values:{
-            },
+            instruction_index:0,
             lastPE:{ /*each contains a copy of the full scenario.PE that is checked at different times, to use in the description of the PE
                       * Note that e.g. resp does not map 1:1 onto scenario.PE.resp as it includes secretions data as well*/
                 'hr':{'has_examined':false, 'text':"", 'time':0},
@@ -40,6 +38,7 @@ var app = new Vue({
                 'neuro':{'has_examined':false, 'text':'', 'time':0},
                 'other':{'has_examined':false, 'text':'', 'time':0}
             },
+            pl:'left',
             ventTab:"start",
             drawer_opened: false,
             baby_timer_started: false,
@@ -68,6 +67,7 @@ var app = new Vue({
         },
         created: function(){
             this.getScenario();
+            this.$root.$emit('bv::hide::popover');
         },
         computed: {
             availableSupplies: function(){
@@ -91,6 +91,9 @@ var app = new Vue({
                     };
                 }
                 return toReturn;
+            },
+            getPopover: function(){
+                return tutorial_instructions[this.instruction_index];
             },
             getMasks: function(){
                 var masks=[];
@@ -137,7 +140,15 @@ var app = new Vue({
                 }, 60000);
               */
         },
+        updated: function(){
+            this.loadPopup();
+        },
         methods: {
+                loadPopup: function(){
+                    instruct_index=this.instruction_index;
+                    this.$root.$emit('bv::show::popover', tutorial_instructions[instruct_index]);
+                    this.instruction_index+=1;
+                },
                 updateLastPE: function(PEtype){
                     this.lastPE[PEtype].has_examined=true;
                     if (PEtype=='hr'){

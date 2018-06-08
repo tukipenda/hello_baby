@@ -5,6 +5,10 @@
     <meta charset="utf-8">
     <title>Hello Baby</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    
+    <!-- bootstrap vue stylesheet -->
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+
     <link rel="stylesheet" href="{{ url_for('static',filename='hello_baby_style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='vue-select.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='vuetify.css') }}">
@@ -18,11 +22,11 @@
     <!-- vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
     
-    <!-- Vue popper -->
-    <script src="https://unpkg.com/vue-popperjs"></script>
-    
     <!-- Vue select -->
     <script src="https://unpkg.com/vue-select@2.4.0"></script>
+    
+    <!-- bootstrap vue -->
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -36,7 +40,6 @@
     <!--jquery and jquery UI -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 
@@ -118,6 +121,7 @@
     <!-- Vue slider component -->
     <script src="https://nightcatsama.github.io/vue-slider-component/dist/index.js"></script>
 
+    <script src="{{ url_for('static',filename='tutorial.js') }}"></script>
     <script src="{{ url_for('static',filename='hello_baby.js') }}"></script>
     {% block javascript %}{% endblock %}
 
