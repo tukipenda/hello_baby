@@ -146,8 +146,10 @@ var app = new Vue({
         methods: {
                 loadPopup: function(){
                     instruct_index=this.instruction_index;
-                    this.$root.$emit('bv::show::popover', tutorial_instructions[instruct_index]);
-                    this.instruction_index+=1;
+                    this.$root.$emit('bv::show::popover', tutorial_instructions[instruct_index]['id']);
+                    if(this.instruction_index<tutorial_instructions.length){
+                        this.instruction_index+=1;
+                    }
                 },
                 updateLastPE: function(PEtype){
                     this.lastPE[PEtype].has_examined=true;
