@@ -64,8 +64,8 @@
          <span class="col-auto px-1">Temperature mode: </span><span v-on:click="toggleTempMode" class="col-auto btn badge badge-primary">
                     [[scenario.warmer.temp_mode]]
                     </span>
-        <div class="row mt-2" v-b-popover="getPopover" >
-            <div class="col-auto" id="mask_size" v-for="mask in getMasks">
+        <div class="row mt-2" id="mask_size" v-b-popover="getPopover">
+            <div class="col-auto" v-for="mask in getMasks">
             <span v-if="mask.is_using" class="p-2 badge badge-large badge-primary">Using [[mask.size]] Mask </span>
               <span v-else class="p-2 btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
             </div>

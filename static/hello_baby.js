@@ -68,6 +68,7 @@ var app = new Vue({
         created: function(){
             this.getScenario();
             this.$root.$emit('bv::hide::popover');
+            this.$root.$on('bv:hide::popover', this.loadPopup());
         },
         computed: {
             availableSupplies: function(){
@@ -82,6 +83,9 @@ var app = new Vue({
                 }
                 return toReturn;
             },
+            getPopover: function(){
+                return {'content':tutorial_instructions[this.instruction_index]['content']};
+            },
             supplySearchOptions: function(){
                 var supplyList=this.scenario.supplies;
                 var toReturn=[];
@@ -91,9 +95,6 @@ var app = new Vue({
                     };
                 }
                 return toReturn;
-            },
-            getPopover: function(){
-                return tutorial_instructions[this.instruction_index];
             },
             getMasks: function(){
                 var masks=[];
@@ -141,14 +142,22 @@ var app = new Vue({
               */
         },
         updated: function(){
-            this.loadPopup();
+            if(this.instruction_index===0){
+                this.$root.$emit('bv::show::popover', tutorial_instructions[0]['id']);
+                this.$root.$on('bv::hide::popover', this.loadPopup());
+            }
         },
         methods: {
                 loadPopup: function(){
+                    console.log('here');
                     instruct_index=this.instruction_index;
-                    this.$root.$emit('bv::show::popover', tutorial_instructions[instruct_index]['id']);
-                    if(this.instruction_index<tutorial_instructions.length){
+                    if(instruct_index<tutorial_instructions.length-1){
+                        this.$root.$emit('bv::show::popover', tutorial_instructions[instruct_index]['id']);
                         this.instruction_index+=1;
+                    }
+                    if (instruct_index>0){
+                            this.$root.$emit('bv::hide::popover', tutorial_instructions[instruct_index-1]['id']);
+                            this.$root.$emit('bv::disable::popover', tutorial_instructions[instruct_index-1]['id']);
                     }
                 },
                 updateLastPE: function(PEtype){
@@ -208,7 +217,6 @@ var app = new Vue({
                         current_time=(Date.now()-this.delivery_time)/1000;
                     }
                     this.elapsed_delivery_time=current_time;
-                    console.log(task);
                     axios.post("/dotask",
                              {'task':task,
                              'time':current_time,
