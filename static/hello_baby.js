@@ -27,6 +27,7 @@ var app = new Vue({
         el: '#HelloBabyApp',
         delimiters: ['[[',']]'],
         data: {
+            scenario_started:false,
             contents: '',
             instruction_index:0,
             lastPE:{ /*each contains a copy of the full scenario.PE that is checked at different times, to use in the description of the PE
@@ -67,8 +68,6 @@ var app = new Vue({
         },
         created: function(){
             this.getScenario();
-            this.$root.$emit('bv::hide::popover');
-            this.$root.$on('bv:hide::popover', this.loadPopup());
         },
         computed: {
             availableSupplies: function(){
@@ -82,9 +81,6 @@ var app = new Vue({
                     }
                 }
                 return toReturn;
-            },
-            getPopover: function(){
-                return {'content':tutorial_instructions[this.instruction_index]['content']};
             },
             supplySearchOptions: function(){
                 var supplyList=this.scenario.supplies;
@@ -132,33 +128,55 @@ var app = new Vue({
                     return false;
             }
         },
-        mounted: function(){ /*should really set this up so clicking the close button starts this timer*/
-            self=this;
-            /* baby does not automatically deliver for now
-            setTimeout(
-                function() {
-                  self.deliverBaby();
-                }, 60000);
-              */
-        },
         updated: function(){
-            if(this.instruction_index===0){
-                this.$root.$emit('bv::show::popover', tutorial_instructions[0]['id']);
-                this.$root.$on('bv::hide::popover', this.loadPopup());
-            }
+            if(this.app_mode!='tutorial'){
+                        this.$root.$emit('bv::hide::popover');
+                        this.$root.$emit('bv::disable::popover');
+                    }
         },
         methods: {
-                loadPopup: function(){
-                    console.log('here');
-                    instruct_index=this.instruction_index;
-                    if(instruct_index<tutorial_instructions.length-1){
-                        this.$root.$emit('bv::show::popover', tutorial_instructions[instruct_index]['id']);
+                startPopups: function(){
+                    if(this.app_mode==='tutorial'){
+                        this.$root.$emit('bv::disable::popover');
+                        this.$root.$emit('bv::enable::popover', tutorial_instructions[0]['id']);
+                        this.$root.$emit('bv::show::popover', tutorial_instructions[0]['id']);
+                    }
+                    else{
+                        this.$root.$emit('bv::disable::popover');
+                    }
+                },
+                loadNextPopup: function(){
+                    if(this.app_mode==='tutorial'){
+                        i=this.instruction_index;
                         this.instruction_index+=1;
+                        this.$root.$emit('bv::disable::popover', tutorial_instructions[i]['id']);
+                        if(i<tutorial_instructions.length){
+                            self=this;
+                            duration=200;
+                            if (i===11){
+                                duration=1000;
+                            }
+                            setTimeout(function () { /*This is an abomination of code */
+                                self.$root.$emit('bv::enable::popover', tutorial_instructions[i+1]['id']);
+                                self.$root.$emit('bv::show::popover', tutorial_instructions[i+1]['id']);
+                            }, duration);
+                        }
                     }
-                    if (instruct_index>0){
-                            this.$root.$emit('bv::hide::popover', tutorial_instructions[instruct_index-1]['id']);
-                            this.$root.$emit('bv::disable::popover', tutorial_instructions[instruct_index-1]['id']);
+                },
+                dismissPopup: function(id){
+                    if (this.instruction_index<tutorial_instructions.length){
+                        if(tutorial_instructions[this.instruction_index]['id']===id){
+                            this.$root.$emit('bv::hide::popover', tutorial_instructions[this.instruction_index]['id']);
+                            this.loadNextPopup();
+                        }
                     }
+                },
+                getPopover: function(){
+                    if(this.app_mode!='tutorial'){
+                        this.$root.$emit('bv::hide::popover');
+                        this.$root.$emit('bv::disable::popover');
+                    }
+                    return tutorial_instructions[this.instruction_index]['content'];
                 },
                 updateLastPE: function(PEtype){
                     this.lastPE[PEtype].has_examined=true;
@@ -186,6 +204,7 @@ var app = new Vue({
                     }
                     axios.post("/getscenario", {"time":dtime}).then(function(response){
                         self.scenario=response.data;
+                        self.app_mode=self.scenario.app_mode;
                     });
                 },
                 startBabyTimer: function(){
@@ -280,6 +299,13 @@ var app = new Vue({
                       };
 
                     return options;
+                  },
+                  hideMessage: function(){
+                    this.show_message=false;
+                    if(!this.scenario_started){
+                        this.startPopups();
+                    }
+                    this.scenario_started=true;  
                   },
                   toggleEl: function(el_id){
                       this.toggle_values[el_id]=!this.toggle_values[el_id];

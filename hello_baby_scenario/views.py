@@ -22,6 +22,7 @@ def home():
 
 @app.route('/scenario')
 def scenario():
+    session['app_mode']='tutorial'
     #need to account for possibility that session has user_id, but user is not defined
     if 'user_id' in session.keys():
         return render_template('scenario.html')
@@ -37,6 +38,27 @@ def scenario():
 
 @app.route('/prepwarmer')
 def prepwarmer():
+    session['app_mode']='tutorial'
+    user_agent=request.headers.get('User-Agent')
+    is_IE=False
+    for test in ["msie", "trident", "edge"]:
+        if test in user_agent.lower():
+            is_IE=True
+    return render_template('prepwarmer.html', is_IE=is_IE)
+
+@app.route('/practice')
+def practice():
+    session['app_mode']='practice'
+    user_agent=request.headers.get('User-Agent')
+    is_IE=False
+    for test in ["msie", "trident", "edge"]:
+        if test in user_agent.lower():
+            is_IE=True
+    return render_template('prepwarmer.html', is_IE=is_IE)
+
+@app.route('/exam')
+def exam():
+    session['app_mode']='exam'
     user_agent=request.headers.get('User-Agent')
     is_IE=False
     for test in ["msie", "trident", "edge"]:
@@ -56,6 +78,7 @@ def getScenario():
             ub=ppv_update.UpdateBaby(baby_id)
             ub.update(time)
         scenarioData=ppv.getScenarioData(user)
+        scenarioData['app_mode']=session['app_mode']
         return(json.dumps(scenarioData))
     else:
         return "" #ugh

@@ -8,7 +8,7 @@
 
     		<div class="row mt-3">
                 <div v-if="!drawer_opened" class="col">
-                    <button class="btn btn-sm btn-primary" v-on:click="drawer_opened=true">
+                    <button class="btn btn-sm btn-primary" id="check_drawer" v-b-popover.top="getPopover" v-on:click="dismissPopup('check_drawer'); drawer_opened=true">
                         Check Drawer for Available Supplies
                     </button>
                 </div>
@@ -21,7 +21,10 @@
                         </div>
                         <div class="row">
                          <div v-for="supply in availableSupplies" class="col-auto">
-                        <div v-if="baby_delivered">[[supply.name]] <span v-if="supply.is_using" class="badge badge-success">using</span><span v-else v-on:click="useSupply(supply)" class="btn badge badge-primary">Use</span></div>
+                        <div v-if="baby_delivered">[[supply.name]] <span v-if="supply.is_using" class="badge badge-success">using</span>
+                            <span v-else-if="supply.name==='pulse_ox'" id="pulse_ox" v-b-popover.top="getPopover" v-on:click="dismissPopup('pulse_ox'); useSupply(supply)" class="btn badge badge-primary">Use</span>
+                             <span v-else v-on:click="useSupply(supply)" class="btn badge badge-primary">Use</span>
+                             </div>
                     	<div v-else>[[supply.name]]</div>
                         </div>
                         </div>

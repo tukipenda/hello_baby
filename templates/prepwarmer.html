@@ -6,7 +6,7 @@
         [[hb_message]]
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="show_message=false">Okay</button>
+        <button type="button" class="btn btn-secondary" v-on:click="hideMessage">Okay</button>
       </div>
     </div>
   </div>
@@ -22,10 +22,12 @@
 
     	<div class="row">
             <div id="HelloBabyNav" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button type="button" v-on:click="toggleShowTab('prep')" v-bind:class="(showTab==='prep') ? 'btn btn-primary' : 'btn btn-light'"><span id="prep_warmer" v-b-popover="getPopover" v-if="!baby_delivered">Prep Warmer</span><span v-else>Warmer</span></button>
-                <button v-if="!baby_delivered" v-on:click="deliverBaby" type="button" class="btn btn-danger">Ready!</button>
-              <button v-if="baby_delivered" v-on:click="toggleShowTab('exam')" v-bind:class="(showTab==='exam') ? 'btn btn-primary' : 'btn btn-light'" type="button">Exam</button>
-              <button v-if="baby_delivered" v-on:click="toggleShowTab('actions')" v-bind:class="(showTab==='actions') ? 'btn btn-primary' : 'btn btn-light'" type="button" >Actions</button>
+              <button type="button" v-on:click="toggleShowTab('prep')" v-bind:class="(showTab==='prep') ? 'btn btn-primary' : 'btn btn-light'">
+				  <span id="prep_warmer" v-on:click="dismissPopup('prep_warmer')" v-b-popover.bottom="getPopover" v-if="!baby_delivered">Prep Warmer</span>
+				  <span v-else id="warmer" v-on:click="dismissPopup('warmer')" v-b-popover.bottom="getPopover">Warmer</span></button>
+                <button v-if="!baby_delivered" id="ready" v-on:click="dismissPopup('ready');deliverBaby()" v-b-popover.top="getPopover" type="button" class="btn btn-danger">Ready!</button>
+              <button v-if="baby_delivered" id="exam" v-b-popover.top="getPopover" v-on:click="dismissPopup('exam'); toggleShowTab('exam')" v-bind:class="(showTab==='exam') ? 'btn btn-primary' : 'btn btn-light'" type="button">Exam</button>
+              <button v-if="baby_delivered" id="actions" v-b-popover.top="getPopover" v-on:click="dismissPopup('actions'); toggleShowTab('actions')" v-bind:class="(showTab==='actions') ? 'btn btn-primary' : 'btn btn-light'" type="button" >Actions</button>
             </div>
 	    </div>
 		<div class="row" style="background-color:black; padding:5px; border-radius:5px;">
@@ -35,7 +37,7 @@
                              <a class="btn btn-sm btn-warning"><span id="baby_time" v-html="elapsed_baby_time"></span> </a>
                          </div>
                          <div v-else>
-                             <button class="btn btn-sm btn-primary" v-on:click="startBabyTimer"> Start Timer </button>
+                             <button class="btn btn-sm btn-primary" id="start_timer" v-b-popover.top="getPopover" v-on:click="dismissPopup('start_timer'); startBabyTimer()"> Start Timer </button>
                          </div>
                  </div>
 
@@ -45,7 +47,7 @@
                 <span id="here" class="badge badge-light">RR [[scenario.PE.vitals.rr]]</span>
 			    </div>
 			    <div class="row">
-                <span v-if="checkSupplyByName('pulse_ox').is_using==true" class="badge badge-primary">O2 Sat [[scenario.PE.vitals.o2sat]].</span>
+                <span v-if="checkSupplyByName('pulse_ox').is_using==true" class="badge badge-primary">O2 Sat [[Math.round(scenario.PE.vitals.o2sat)]]</span>
                 <span v-else class="badge badge-warning"> unavailable</span>
 			    </div>
 			    <div class="row">
@@ -60,11 +62,11 @@
 	<div class="row mt-3">
             <span class="col-auto px-1">Heat is:</span>
         	<span v-if="scenario.warmer.is_turned_on"  v-on:click="toggleHeat" class="px-1 col-auto btn badge badge-danger">on</span>
-            <span v-if="!scenario.warmer.is_turned_on" id="toggle_heat" v-b-popover="getPopover" v-on:click="toggleHeat" class="px-1 col-auto btn badge badge-secondary">off</span>
+            <span v-if="!scenario.warmer.is_turned_on" id="toggle_heat" v-b-popover.top="getPopover" v-on:click="dismissPopup('toggle_heat'); toggleHeat()" class="px-1 col-auto btn badge badge-secondary">off</span>
          <span class="col-auto px-1">Temperature mode: </span><span v-on:click="toggleTempMode" class="col-auto btn badge badge-primary">
                     [[scenario.warmer.temp_mode]]
                     </span>
-        <div class="row mt-2" id="mask_size" v-b-popover="getPopover">
+        <div class="row mt-2" id="mask_size" v-on:click="dismissPopup('mask_size')" v-b-popover.bottom="getPopover">
             <div class="col-auto" v-for="mask in getMasks">
             <span v-if="mask.is_using" class="p-2 badge badge-large badge-primary">Using [[mask.size]] Mask </span>
               <span v-else class="p-2 btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>

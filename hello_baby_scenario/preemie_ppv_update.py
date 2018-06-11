@@ -374,27 +374,40 @@ class UpdateBaby:
 
 
         def updateO2sat():
-            o2sat=self.PE['vitals']['o2sat']
-            otime=self.PE['vitals']['o2sat_updated']
-            if self.get_last_od(30)>0.8:
+            if (not self.taskName):
+                app.logger.info(self.get_last_od(30))
+                app.logger.info(self.time)
+                o2sat=self.PE['vitals']['o2sat']
+                otime=self.PE['vitals']['o2sat_updated']
+                app.logger.info(o2sat)
+                if o2sat>95:
+                    o2sat=o2sat+np.random.normal(0, 2)                
+                    self.PE['vitals']['o2sat']=round(o2sat, 2)
+                    return
                 if (self.time-otime)>30000:
-                    self.otime=self.time
-                    if o2sat>95:
-                        o2sat=o2sat+np.random.normal(0, 2)
-                    else:
-                        o2sat=o2sat+np.random.normal(5, 2)
+                    self.PE['vitals']['o2sat_updated']=self.time
+                    if self.get_last_od(30)>0.8:
+                        o2sat=o2sat+5+np.random.normal(0, 2)
 
-            if self.get_last_od(30)<0.2:
-                if (self.time-otime)>30000:
-                    self.otime=self.time
-                    o2sat=o2sat-np.random.normal(5, 2)
-            if o2sat>100:
-                o2sat=100
-            if o2sat<0:
-                o2sat=0
-            self.PE['vitals']['o2sat']=int(o2sat)
+                    if self.get_last_od(30)<0.2:
+                        o2sat=o2sat-5-np.random.normal(0, 2)
+                    else:
+                        o2sat=o2sat+np.random.normal(0, 2)
+                else:
+                    if self.get_last_od(30)>0.8:
+                        o2sat=o2sat+0.5+np.random.normal(0, 0.5)
+                    if self.get_last_od(30)<0.2:
+                        o2sat=o2sat-0.5-np.random.normal(0, 0.5)
+                    else:
+                        o2sat=o2sat+np.random.normal(0, 0.5)
+                if o2sat>100:
+                    o2sat=100
+                if o2sat<0:
+                    o2sat=0
+                self.PE['vitals']['o2sat']=round(o2sat, 2)
 
 
         updateHR()
         updateRR()
         updateTemp()
+        updateO2sat()

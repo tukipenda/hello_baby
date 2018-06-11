@@ -18,7 +18,6 @@ class Baby(db.Model):
     ga=db.Column(db.Text)
     neonatal_complications=db.Column(db.Text)
     is_delivered=db.Column(db.Boolean)
-
     supplies = db.relationship('Supply', backref='baby', lazy=True)
 
     def __repr__(self):
