@@ -6,7 +6,7 @@
 {% for exam, pp in [('hr', 'Heart Rate'), ('resp', 'Lungs'), ('cardiac', 'Heart'), ('abd', "Abdomen"), ('neuro', "Neuro Exam"), ('other', 'Other Exams')] %}
 <div v-if="!lastPE['{{exam}}'].has_examined" class="row mt-3">
         <div class="col-auto">
-       <button class="btn btn-primary" {% if exam=='hr' %} id="hr" v-b-popover.top="getPopover" v-on:click="dismissPopup('hr'); updateLastPE('{{exam}}')" {% else %} v-on:click="updateLastPE('{{exam}}')" {% endif %}>
+       <button class="btn btn-primary" {% if exam=='hr' %} id="hr" v-on:click="updateLastPE('{{exam}}')" {% else %} v-on:click="updateLastPE('{{exam}}')" {% endif %}>
            {% if exam in ['hr', 'neuro', 'other'] %}Check{% else %}Examine{% endif %} {{pp}}
 	    </button>
 	    </div>

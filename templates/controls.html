@@ -5,7 +5,7 @@
     	<div class="row">
             <div class="col p-0 ml-5 btn-group btn-group-sm" role="group" aria-label="Basic example">
               <button type="button" v-on:click="warmerTab='warmer_settings'" v-bind:class="(warmerTab==='warmer_settings') ? 'btn btn-primary' : 'btn btn-light'">Warmer Settings</button>
-              <button type="button" id="supplies" v-b-popover.top="getPopover" v-on:click="dismissPopup('supplies'); warmerTab='supplies'" v-bind:class="(warmerTab==='supplies') ? 'btn btn-primary' : 'btn btn-light'">Supplies</button>
+              <button type="button" id="supplies" v-on:click="warmerTab='supplies'" v-bind:class="(warmerTab==='supplies') ? 'btn btn-primary' : 'btn btn-light'">Supplies</button>
             </div>
 	    </div>
       </div>

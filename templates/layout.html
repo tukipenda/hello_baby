@@ -5,26 +5,26 @@
     <meta charset="utf-8">
     <title>Hello Baby</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    
+
     <!-- bootstrap vue stylesheet -->
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
 
     <link rel="stylesheet" href="{{ url_for('static',filename='hello_baby_style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='vue-select.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='vuetify.css') }}">
-    
+
     <!-- consider adding bootstrap vue at some point? -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <!-- link href="https://unpkg.com/vuetify/dist/vuetify.css" rel="stylesheet" -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 
-    
+
     <!-- vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-    
+
     <!-- Vue select -->
     <script src="https://unpkg.com/vue-select@2.4.0"></script>
-    
+
     <!-- bootstrap vue -->
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 
@@ -117,13 +117,9 @@
         }
 
     </script>
-
     <!-- Vue slider component -->
     <script src="https://nightcatsama.github.io/vue-slider-component/dist/index.js"></script>
-
-    <script src="{{ url_for('static',filename='tutorial.js') }}"></script>
     <script src="{{ url_for('static',filename='hello_baby.js') }}"></script>
-    {% block javascript %}{% endblock %}
 
 
 </body>

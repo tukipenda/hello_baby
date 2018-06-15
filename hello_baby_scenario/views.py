@@ -44,7 +44,7 @@ def prepwarmer():
     for test in ["msie", "trident", "edge"]:
         if test in user_agent.lower():
             is_IE=True
-    return render_template('prepwarmer.html', is_IE=is_IE)
+    return render_template('tutorial.html', is_IE=is_IE)
 
 @app.route('/practice')
 def practice():

@@ -51,7 +51,7 @@ var app = new Vue({
             scenario:{},
             data_last_updated:null,
             data_updater:null, /*repeatedly update data */
-            app_mode:"tutorial", /*alternatives are practice and test */
+            app_mode:"practice", /*alternatives are practice and test */
             app_state:"instruction", /* options include playing, hint */
             showTab: "None",
             actionTab: "simple",
@@ -128,56 +128,7 @@ var app = new Vue({
                     return false;
             }
         },
-        updated: function(){
-            if(this.app_mode!='tutorial'){
-                        this.$root.$emit('bv::hide::popover');
-                        this.$root.$emit('bv::disable::popover');
-                    }
-        },
         methods: {
-                startPopups: function(){
-                    if(this.app_mode==='tutorial'){
-                        this.$root.$emit('bv::disable::popover');
-                        this.$root.$emit('bv::enable::popover', tutorial_instructions[0]['id']);
-                        this.$root.$emit('bv::show::popover', tutorial_instructions[0]['id']);
-                    }
-                    else{
-                        this.$root.$emit('bv::disable::popover');
-                    }
-                },
-                loadNextPopup: function(){
-                    if(this.app_mode==='tutorial'){
-                        i=this.instruction_index;
-                        this.instruction_index+=1;
-                        this.$root.$emit('bv::disable::popover', tutorial_instructions[i]['id']);
-                        if(i<tutorial_instructions.length){
-                            self=this;
-                            duration=200;
-                            if (i===11){
-                                duration=1000;
-                            }
-                            setTimeout(function () { /*This is an abomination of code */
-                                self.$root.$emit('bv::enable::popover', tutorial_instructions[i+1]['id']);
-                                self.$root.$emit('bv::show::popover', tutorial_instructions[i+1]['id']);
-                            }, duration);
-                        }
-                    }
-                },
-                dismissPopup: function(id){
-                    if (this.instruction_index<tutorial_instructions.length){
-                        if(tutorial_instructions[this.instruction_index]['id']===id){
-                            this.$root.$emit('bv::hide::popover', tutorial_instructions[this.instruction_index]['id']);
-                            this.loadNextPopup();
-                        }
-                    }
-                },
-                getPopover: function(){
-                    if(this.app_mode!='tutorial'){
-                        this.$root.$emit('bv::hide::popover');
-                        this.$root.$emit('bv::disable::popover');
-                    }
-                    return tutorial_instructions[this.instruction_index]['content'];
-                },
                 updateLastPE: function(PEtype){
                     this.lastPE[PEtype].has_examined=true;
                     if (PEtype=='hr'){
@@ -302,10 +253,7 @@ var app = new Vue({
                   },
                   hideMessage: function(){
                     this.show_message=false;
-                    if(!this.scenario_started){
-                        this.startPopups();
-                    }
-                    this.scenario_started=true;  
+                    this.scenario_started=true;
                   },
                   toggleEl: function(el_id){
                       this.toggle_values[el_id]=!this.toggle_values[el_id];
