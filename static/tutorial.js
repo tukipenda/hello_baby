@@ -163,6 +163,9 @@ var app = new Vue({
             return false;
         }
     },
+    updated: {
+        
+    },
     methods: {
         nextStep: function() {
             this.instruct_index+=1;
@@ -175,6 +178,7 @@ var app = new Vue({
             var popper = new Popper(document.getElementById('toggle_heat'), document.getElementById("1"), {
                 placement: pl
             });
+            popper.scheduleUpdate();
         },
         updateLastPE: function(PEtype) {
             this.lastPE[PEtype].has_examined = true;
