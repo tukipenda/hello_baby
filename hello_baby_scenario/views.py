@@ -36,16 +36,6 @@ def scenario():
         session['baby_id']=baby.id
         return render_template('scenario.html')
 
-@app.route('/prepwarmer')
-def prepwarmer():
-    session['app_mode']='tutorial'
-    user_agent=request.headers.get('User-Agent')
-    is_IE=False
-    for test in ["msie", "trident", "edge"]:
-        if test in user_agent.lower():
-            is_IE=True
-    return render_template('tutorial.html', is_IE=is_IE)
-
 @app.route('/practice')
 def practice():
     session['app_mode']='practice'
@@ -54,7 +44,17 @@ def practice():
     for test in ["msie", "trident", "edge"]:
         if test in user_agent.lower():
             is_IE=True
-    return render_template('prepwarmer.html', is_IE=is_IE)
+    if 'user_id' in session.keys():
+        return render_template('prepwarmer.html', is_IE=is_IE)
+    else:
+        user_id=str(uuid.uuid4())
+        session['user_id']=user_id
+        user=models.User(username=user_id)
+        db.session.add(user)
+        db.session.commit()
+        baby=ppv.PPVCreateBaby(user)
+        session['baby_id']=baby.id
+        return render_template('prepwarmer.html', is_IE=is_IE)
 
 @app.route('/exam')
 def exam():

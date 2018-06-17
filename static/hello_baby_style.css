@@ -16,6 +16,10 @@
     top:110px; 
 }
 
+#HelloBabyApp .popover {
+    
+}
+
 #HelloBabyApp .v-select .open-indicator {display:none}
 
 #HelloBabyApp .v-select input {

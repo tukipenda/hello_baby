@@ -1,809 +1,833 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <title>Hello Baby</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<meta charset="utf-8">
+	<title>Hello Baby</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
-    <!-- bootstrap vue stylesheet -->
-    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+	<!-- bootstrap vue stylesheet -->
+	<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
 
-    <link rel="stylesheet" href="/static/hello_baby_style.css">
-    <link rel="stylesheet" href="/static/vue-select.css">
-    <link rel="stylesheet" href="/static/vuetify.css">
+	<link rel="stylesheet" href="/static/hello_baby_style.css">
+	<link rel="stylesheet" href="/static/vue-select.css">
+	<link rel="stylesheet" href="/static/vuetify.css">
 
-    <!-- consider adding bootstrap vue at some point? -->
-    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-    <!-- link href="https://unpkg.com/vuetify/dist/vuetify.css" rel="stylesheet" -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-
-
-    <!-- vue -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-
-    <!-- Vue select -->
-    <script src="https://unpkg.com/vue-select@2.4.0"></script>
-    
-    <!-- popper -->
-    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-
-    <!-- bootstrap vue -->
-    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
-
-    <!-- axios -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-    <!-- vuetify -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script> <!-- polyfill for vuetify -->
-    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+	<!-- consider adding bootstrap vue at some point? -->
+	<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+	<!-- link href="https://unpkg.com/vuetify/dist/vuetify.css" rel="stylesheet" -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 
 
-    <!--jquery and jquery UI -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<!-- vue -->
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<!-- Vue select -->
+	<script src="https://unpkg.com/vue-select@2.4.0"></script>
+
+	<!-- popper -->
+	<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+
+	<!-- bootstrap vue -->
+	<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+
+	<!-- axios -->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<!-- vuetify -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
+	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+	<!-- polyfill for vuetify -->
+	<script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
 
 
-    <!--scripts below to make axios work with IE -->
-    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+	<!--jquery and jquery UI -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+	<!--scripts below to make axios work with IE -->
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
 
 </head>
 
 <body>
 
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#homenavbar" aria-controls="homenavbar" aria-expanded="false" aria-label="Toggle navigation">
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#homenavbar" aria-controls="homenavbar" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-        <div class="collapse navbar-collapse" id="homenavbar">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/static/Practice/practice.html">Practice</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+		<div class="collapse navbar-collapse" id="homenavbar">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">About</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/practice">Practice</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
 
-    <main role="main" class="container" style="margin-top:75px;">
-        <div id="IEalert" class="alert alert-warning" role="alert" style="display:none">
-          I am still working on supporting internet explorer.  If you have trouble getting this website to work, you may need to try chrome or firefox.
-          I will try to get this website working in internet explorer as soon as possible.  Thanks for your patience!
-        </div>
-        <div id="HelloBabyApp">
+	<main role="main" class="container" style="margin-top:75px;">
 
-            
-<div class="modal" v-bind:style="show_message ? 'display:block':'display:none'" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="show_message=false">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content" v-on:click.stop="">
-      <div class="modal-body">
-        [[hb_message]]
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="hideMessage">Okay</button>
-      </div>
-    </div>
-  </div>
-</div>
+		<div id="HelloBabyApp">
+			<div id="popup_tutorials">
+				
+			</div>
+			<div class="row">
+				<div class="col">
 
-<div class="modal navModal" v-if="(showTab==='prep')" id="prepModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content" v-on:click.stop="">
-      <div class="modal-header pb-0">
-    	<div class="row">
-            <div class="col p-0 ml-5 btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button type="button" v-on:click="warmerTab='warmer_settings'" v-bind:class="(warmerTab==='warmer_settings') ? 'btn btn-primary' : 'btn btn-light'">Warmer Settings</button>
-              <button type="button" id="supplies" v-on:click="warmerTab='supplies'" v-bind:class="(warmerTab==='supplies') ? 'btn btn-primary' : 'btn btn-light'">Supplies</button>
-            </div>
-	    </div>
-      </div>
-      <div v-if="warmerTab==='warmer_settings'" class="modal-body">
-          
+				</div>
+				<div id="tutorial_message" class=" col alert alert-warning" role="alert">
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								[[tutorial_messages[instruct_index] ]]
+							</div>
+						</div>
+						<div class="row mt-2">
+							<div v-if="instruct_index===0" class="col">
 
-                    <div class="row mt-3">
-                        <p class="col-3">PIP: </p>
-                        <div class="col-9">
-                            <vue-slider id="PIP-slider" ref="slider" v-on:callback="updateWarmer('PIP',scenario.warmer.pip)" v-bind="helloSliderOptions(0,  50 , width='100%', '50%')" v-model="scenario.warmer.pip">
-                                
-                                <div slot="label" slot-scope="{ label, active }">
-                                    <span :class="['custom-label', { active }]" v-if="label %  10  === 0">
+								<a class="btn btn-sm btn-outline-primary p-1" href="/practice">
+								Skip tutorial.  
+						</a>
+							</div>
+							
+							<div class="col">
+
+							</div>
+							<div class="col-auto">
+								<button class="col btn btn-primary" v-on:click="nextStep">
+								Next Step
+							</button>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="col">
+
+				</div>
+			</div>
+
+
+			<div class="modal navModal" v-if="(showTab==='prep')" id="prepModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content" v-on:click.stop="">
+						<div class="modal-header pb-0">
+							<div class="row">
+								<div class="col p-0 ml-5 btn-group btn-group-sm" role="group" aria-label="Basic example">
+									<button type="button" v-on:click="warmerTab='warmer_settings'" v-bind:class="(warmerTab==='warmer_settings') ? 'btn btn-primary' : 'btn btn-light'">Warmer Settings</button>
+									<button type="button" id="supplies" v-on:click="warmerTab='supplies'" v-bind:class="(warmerTab==='supplies') ? 'btn btn-primary' : 'btn btn-light'">Supplies</button>
+								</div>
+							</div>
+						</div>
+						<div v-if="warmerTab==='warmer_settings'" class="modal-body">
+
+
+							<div class="row mt-3">
+								<p class="col-3">PIP: </p>
+								<div class="col-9">
+									<vue-slider id="PIP-slider" ref="slider" v-on:callback="updateWarmer('PIP',scenario.warmer.pip)" v-bind="helloSliderOptions(0,  50 , width='100%', '50%')" v-model="scenario.warmer.pip">
+
+										<div slot="label" slot-scope="{ label, active }">
+											<span :class="['custom-label', { active }]" v-if="label %  10  === 0">
                                     [[ label ]]
                                   </span>
-                                </div>
-                                
-                            </vue-slider>
-                        </div>
-                    </div>
-                    
-                    <div class="row mt-3">
-                        <p class="col-3">PEEP: </p>
-                        <div class="col-9">
-                            <vue-slider id="PEEP-slider" ref="slider" v-on:callback="updateWarmer('PEEP',scenario.warmer.peep)" v-bind="helloSliderOptions(0,  20 , width='100%', '50%')" v-model="scenario.warmer.peep">
-                                
-                                <div slot="label" slot-scope="{ label, active }">
-                                    <span :class="['custom-label', { active }]" v-if="label %  5  === 0">
+										</div>
+
+									</vue-slider>
+								</div>
+							</div>
+
+							<div class="row mt-3">
+								<p class="col-3">PEEP: </p>
+								<div class="col-9">
+									<vue-slider id="PEEP-slider" ref="slider" v-on:callback="updateWarmer('PEEP',scenario.warmer.peep)" v-bind="helloSliderOptions(0,  20 , width='100%', '50%')" v-model="scenario.warmer.peep">
+
+										<div slot="label" slot-scope="{ label, active }">
+											<span :class="['custom-label', { active }]" v-if="label %  5  === 0">
                                     [[ label ]]
                                   </span>
-                                </div>
-                                
-                            </vue-slider>
-                        </div>
-                    </div>
-                    
-                    <div class="row mt-3">
-                        <p class="col-3">POP: </p>
-                        <div class="col-9">
-                            <vue-slider id="POP-slider" ref="slider" v-on:callback="updateWarmer('POP',scenario.warmer.pop)" v-bind="helloSliderOptions(0,  50 , width='100%', '50%')" v-model="scenario.warmer.pop">
-                                
-                                <div slot="label" slot-scope="{ label, active }">
-                                    <span :class="['custom-label', { active }]" v-if="label %  10  === 0">
+										</div>
+
+									</vue-slider>
+								</div>
+							</div>
+
+							<div class="row mt-3">
+								<p class="col-3">POP: </p>
+								<div class="col-9">
+									<vue-slider id="POP-slider" ref="slider" v-on:callback="updateWarmer('POP',scenario.warmer.pop)" v-bind="helloSliderOptions(0,  50 , width='100%', '50%')" v-model="scenario.warmer.pop">
+
+										<div slot="label" slot-scope="{ label, active }">
+											<span :class="['custom-label', { active }]" v-if="label %  10  === 0">
                                     [[ label ]]
                                   </span>
-                                </div>
-                                
-                            </vue-slider>
-                        </div>
-                    </div>
-                    
-          
-                    <div class="row mt-3">
-                        <p class="col-3">Flow: </p>
-                        <div class="col-9">
-                            <vue-slider id="Flow-slider" ref="slider" v-on:callback="updateWarmer('Flow',scenario.warmer.flow)" v-bind="helloSliderOptions(0,  20 , width='100%', '50%')" v-model="scenario.warmer.flow">
-                                
-                                <div slot="label" slot-scope="{ label, active }">
-                                    <span :class="['custom-label', { active }]" v-if="label %  5  === 0">
+										</div>
+
+									</vue-slider>
+								</div>
+							</div>
+
+
+							<div class="row mt-3">
+								<p class="col-3">Flow: </p>
+								<div class="col-9">
+									<vue-slider id="Flow-slider" ref="slider" v-on:callback="updateWarmer('Flow',scenario.warmer.flow)" v-bind="helloSliderOptions(0,  20 , width='100%', '50%')" v-model="scenario.warmer.flow">
+
+										<div slot="label" slot-scope="{ label, active }">
+											<span :class="['custom-label', { active }]" v-if="label %  5  === 0">
                             [[ label ]]
                           </span>
-                                </div>
-                                
+										</div>
 
-                            </vue-slider>
-                        </div>
-                    </div>
-                
-                    <div class="row mt-3">
-                        <p class="col-3">FIO2: </p>
-                        <div class="col-9">
-                            <vue-slider id="FIO2-slider" ref="slider" v-on:callback="updateWarmer('FIO2',scenario.warmer.fio2)" v-bind="helloSliderOptions(0,  100 , width='100%', '50%')" v-model="scenario.warmer.fio2">
-                                
-                                <div slot="label" slot-scope="{ label, active }">
-                                    <span :class="['custom-label', { active }]" v-if="label %  20  === 0">
+
+									</vue-slider>
+								</div>
+							</div>
+
+							<div class="row mt-3">
+								<p class="col-3">FIO2: </p>
+								<div class="col-9">
+									<vue-slider id="FIO2-slider" ref="slider" v-on:callback="updateWarmer('FIO2',scenario.warmer.fio2)" v-bind="helloSliderOptions(0,  100 , width='100%', '50%')" v-model="scenario.warmer.fio2">
+
+										<div slot="label" slot-scope="{ label, active }">
+											<span :class="['custom-label', { active }]" v-if="label %  20  === 0">
                             [[ label ]]
                           </span>
-                                </div>
-                                
+										</div>
 
-                            </vue-slider>
-                        </div>
-                    </div>
-                
-        <div class="row mt-3">
-                <div class="col-3">
-                    <p>Suction: </p>
-                </div>
-                <div class="col col-md-9">
-                    <vue-slider id="suction-slider" ref="slider" v-on:callback="updateWarmer('suction',scenario.warmer.suction)" v-bind="helloSliderOptions(0, 150, width='100%', '50%')" v-model="scenario.warmer.suction">
-                        
-                        <div slot="label" slot-scope="{ label, active }">
-                            <span :class="['custom-label', { active }]" v-if="label % 30 === 0">
+
+									</vue-slider>
+								</div>
+							</div>
+
+							<div class="row mt-3">
+								<div class="col-3">
+									<p>Suction: </p>
+								</div>
+								<div class="col col-md-9">
+									<vue-slider id="suction-slider" ref="slider" v-on:callback="updateWarmer('suction',scenario.warmer.suction)" v-bind="helloSliderOptions(0, 150, width='100%', '50%')" v-model="scenario.warmer.suction">
+
+										<div slot="label" slot-scope="{ label, active }">
+											<span :class="['custom-label', { active }]" v-if="label % 30 === 0">
                             [[ label ]]
                           </span>
-                        </div>
+										</div>
 
-                        
-                    </vue-slider>
-                </div>
-                </div>
-      </div>
-      <div v-else class="modal-body">
-        
-     		<div class="row">
-            <div class="col-6" v-for="mask in getMasks">
-            <span v-if="mask.is_using" class="p-2 badge badge-large badge-primary">Using [[mask.size]] Mask </span>
-              <span v-else class="p-2 btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
-            </div>
-     	   </div>
 
-    		<div class="row mt-3">
-                <div v-if="!drawer_opened" class="col">
-                    <button class="btn btn-sm btn-primary" id="check_drawer" v-on:click="drawer_opened=true">
+									</vue-slider>
+								</div>
+							</div>
+						</div>
+						<div v-else class="modal-body">
+
+							<div class="row">
+								<div class="col-6" v-for="mask in getMasks">
+									<span v-if="mask.is_using" class="p-2 badge badge-large badge-primary">Using [[mask.size]] Mask </span>
+									<span v-else class="p-2 btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
+								</div>
+							</div>
+
+							<div class="row mt-3">
+								<div v-if="!drawer_opened" class="col">
+									<button class="btn btn-sm btn-primary" id="check_drawer" v-on:click="drawer_opened=true">
                         Check Drawer for Available Supplies
                     </button>
-                </div>
-                <div v-else class="col">
-                    <div class="container" v-if="availableSupplies.length>0">
-                        <div class="row">
-                            <h4 class="col">
-                                Available Supplies:
-                            </h4>
-                        </div>
-                        <div class="row">
-                         <div v-for="supply in availableSupplies" class="col-auto">
-                        <div v-if="baby_delivered">[[supply.name]] <span v-if="supply.is_using" class="badge badge-success">using</span>
-                            <span v-else-if="supply.name==='pulse_ox'" id="pulse_ox" v-on:click="useSupply(supply)" class="btn badge badge-primary">Use</span>
-                             <span v-else v-on:click="useSupply(supply)" class="btn badge badge-primary">Use</span>
-                             </div>
-                    	<div v-else>[[supply.name]]</div>
-                        </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">
-                                ETTs:
-                            </div>
-                            <div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='ett') && (supply.is_available)">
-                                <span class="badge badge-light">[[supply.size]]</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-5">
-                                Laryngoscopes:
-                            </div>
-                            <div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='laryngoscope') && (supply.is_available)">
-                                <span class="badge badge-light">[[supply.size]]</span>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <h4 class="col">Get More Supplies:</h4>
-                        </div>
-                        <div class="row">
-                        <div class="col input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="px-1 input-group-text" id="basic-addon3">Fetch:</span>
-                            </div>
-                            <v-select class="supply-fetch" label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)"	:options="supplySearchOptions" placeholder="search..."></v-select>
+								</div>
+								<div v-else class="col">
+									<div class="container" v-if="availableSupplies.length>0">
+										<div class="row">
+											<h4 class="col">
+												Available Supplies:
+											</h4>
+										</div>
+										<div class="row">
+											<div v-for="supply in availableSupplies" class="col-auto">
+												<div v-if="baby_delivered">[[supply.name]] <span v-if="supply.is_using" class="badge badge-success">using</span>
+													<span v-else-if="supply.name==='pulse_ox'" id="pulse_ox" v-on:click="useSupply(supply)" class="btn badge badge-primary">Use</span>
+													<span v-else v-on:click="useSupply(supply)" class="btn badge badge-primary">Use</span>
+												</div>
+												<div v-else>[[supply.name]]</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-2">
+												ETTs:
+											</div>
+											<div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='ett') && (supply.is_available)">
+												<span class="badge badge-light">[[supply.size]]</span>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-5">
+												Laryngoscopes:
+											</div>
+											<div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='laryngoscope') && (supply.is_available)">
+												<span class="badge badge-light">[[supply.size]]</span>
+											</div>
+										</div>
+										<div class="row mt-2">
+											<h4 class="col">Get More Supplies:</h4>
+										</div>
+										<div class="row">
+											<div class="col input-group mb-3">
+												<div class="input-group-prepend">
+													<span class="px-1 input-group-text" id="basic-addon3">Fetch:</span>
+												</div>
+												<v-select class="supply-fetch" label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)" :options="supplySearchOptions" placeholder="search..."></v-select>
 
-                        </div>
+											</div>
 
-                        </div>
-                    </div>
-                    <div class="container" v-else>
-                        <div class="row mt-2">
-                            <h4 class="col">Fetch Supplies:</h4>
-                        </div>
-                        <div class="row">
-                        <div class="col input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="px-1 input-group-text" id="basic-addon3">Fetch:</span>
-                            </div>
-                            <v-select class="supply-fetch" label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)"	:options="supplySearchOptions" placeholder="search..."></v-select>
+										</div>
+									</div>
+									<div class="container" v-else>
+										<div class="row mt-2">
+											<h4 class="col">Fetch Supplies:</h4>
+										</div>
+										<div class="row">
+											<div class="col input-group mb-3">
+												<div class="input-group-prepend">
+													<span class="px-1 input-group-text" id="basic-addon3">Fetch:</span>
+												</div>
+												<v-select class="supply-fetch" label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)" :options="supplySearchOptions" placeholder="search..."></v-select>
 
-                        </div>
+											</div>
 
-                        </div>
-                    </div>
-                </div>
-    </div>
-      </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 
-      <div class="modal-footer">
-        <button v-if="ventTab=='start'" type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button v-else type="button" v-on:click="showTab='action'" class="btn btn-secondary" data-dismiss="modal">Back</button>
-      </div>
-    </div>
-  </div>
-</div>
+						<div class="modal-footer">
+							<button v-if="ventTab=='start'" type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button v-else type="button" v-on:click="showTab='action'" class="btn btn-secondary" data-dismiss="modal">Back</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
-<div class="modal navModal" v-if="(showTab==='exam')" id="examModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content" v-on:click.stop="">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Exam</h5>
-        <button v-on:click="showTab='None'" type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<div class="modal navModal" v-if="(showTab==='exam')" id="examModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content" v-on:click.stop="">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Exam</h5>
+							<button v-on:click="showTab='None'" type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-             <div class="row">
-                            <div class="col">
-                            [[scenario.PEtext.appearance]]
-                        </div>
-          </div>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col">
+									[[scenario.PEtext.appearance]]
+								</div>
+							</div>
 
-<div v-if="!lastPE['hr'].has_examined" class="row mt-3">
-        <div class="col-auto">
-       <button class="btn btn-primary"  id="hr" v-on:click="updateLastPE('hr')" >
+							<div v-if="!lastPE['hr'].has_examined" class="row mt-3">
+								<div class="col-auto">
+									<button class="btn btn-primary" id="hr" v-on:click="updateLastPE('hr')">
            Check Heart Rate
 	    </button>
-	    </div>
-</div>
-<div v-else class="row mt-3">
-	    <div class="col">
-         <div class="row">
-             
-             <div class="col"> Heart rate is <span class="col-auto badge badge-danger">[[lpe('hr').text]]</span></div>
-             
-            </div>
-          <div v-if="lpe('hr').time!=0" class="row">
-           	<span class="col-auto">Last checked: [[lpe('hr').time]] seconds ago. </span>
-              <button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('hr')">Recheck</button>
-            </div>
-        </div>
-</div>
+								</div>
+							</div>
+							<div v-else class="row mt-3">
+								<div class="col">
+									<div class="row">
 
-<div v-if="!lastPE['resp'].has_examined" class="row mt-3">
-        <div class="col-auto">
-       <button class="btn btn-primary"  v-on:click="updateLastPE('resp')" >
+										<div class="col"> Heart rate is <span class="col-auto badge badge-danger">[[lpe('hr').text]]</span></div>
+
+									</div>
+									<div v-if="lpe('hr').time!=0" class="row">
+										<span class="col-auto">Last checked: [[lpe('hr').time]] seconds ago. </span>
+										<button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('hr')">Recheck</button>
+									</div>
+								</div>
+							</div>
+
+							<div v-if="!lastPE['resp'].has_examined" class="row mt-3">
+								<div class="col-auto">
+									<button class="btn btn-primary" v-on:click="updateLastPE('resp')">
            Examine Lungs
 	    </button>
-	    </div>
-</div>
-<div v-else class="row mt-3">
-	    <div class="col">
-         <div class="row">
-             
-             <div class="col"> Lungs: [[lpe('resp').text]]</div>
-             
-            </div>
-          <div v-if="lpe('resp').time!=0" class="row">
-           	<span class="col-auto">Last checked: [[lpe('resp').time]] seconds ago. </span>
-              <button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('resp')">Recheck</button>
-            </div>
-        </div>
-</div>
+								</div>
+							</div>
+							<div v-else class="row mt-3">
+								<div class="col">
+									<div class="row">
 
-<div v-if="!lastPE['cardiac'].has_examined" class="row mt-3">
-        <div class="col-auto">
-       <button class="btn btn-primary"  v-on:click="updateLastPE('cardiac')" >
+										<div class="col"> Lungs: [[lpe('resp').text]]</div>
+
+									</div>
+									<div v-if="lpe('resp').time!=0" class="row">
+										<span class="col-auto">Last checked: [[lpe('resp').time]] seconds ago. </span>
+										<button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('resp')">Recheck</button>
+									</div>
+								</div>
+							</div>
+
+							<div v-if="!lastPE['cardiac'].has_examined" class="row mt-3">
+								<div class="col-auto">
+									<button class="btn btn-primary" v-on:click="updateLastPE('cardiac')">
            Examine Heart
 	    </button>
-	    </div>
-</div>
-<div v-else class="row mt-3">
-	    <div class="col">
-         <div class="row">
-             
-             <div class="col"> Heart: [[lpe('cardiac').text]]</div>
-             
-            </div>
-          <div v-if="lpe('cardiac').time!=0" class="row">
-           	<span class="col-auto">Last checked: [[lpe('cardiac').time]] seconds ago. </span>
-              <button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('cardiac')">Recheck</button>
-            </div>
-        </div>
-</div>
+								</div>
+							</div>
+							<div v-else class="row mt-3">
+								<div class="col">
+									<div class="row">
 
-<div v-if="!lastPE['abd'].has_examined" class="row mt-3">
-        <div class="col-auto">
-       <button class="btn btn-primary"  v-on:click="updateLastPE('abd')" >
+										<div class="col"> Heart: [[lpe('cardiac').text]]</div>
+
+									</div>
+									<div v-if="lpe('cardiac').time!=0" class="row">
+										<span class="col-auto">Last checked: [[lpe('cardiac').time]] seconds ago. </span>
+										<button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('cardiac')">Recheck</button>
+									</div>
+								</div>
+							</div>
+
+							<div v-if="!lastPE['abd'].has_examined" class="row mt-3">
+								<div class="col-auto">
+									<button class="btn btn-primary" v-on:click="updateLastPE('abd')">
            Examine Abdomen
 	    </button>
-	    </div>
-</div>
-<div v-else class="row mt-3">
-	    <div class="col">
-         <div class="row">
-             
-             <div class="col"> Abdomen: [[lpe('abd').text]]</div>
-             
-            </div>
-          <div v-if="lpe('abd').time!=0" class="row">
-           	<span class="col-auto">Last checked: [[lpe('abd').time]] seconds ago. </span>
-              <button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('abd')">Recheck</button>
-            </div>
-        </div>
-</div>
+								</div>
+							</div>
+							<div v-else class="row mt-3">
+								<div class="col">
+									<div class="row">
 
-<div v-if="!lastPE['neuro'].has_examined" class="row mt-3">
-        <div class="col-auto">
-       <button class="btn btn-primary"  v-on:click="updateLastPE('neuro')" >
+										<div class="col"> Abdomen: [[lpe('abd').text]]</div>
+
+									</div>
+									<div v-if="lpe('abd').time!=0" class="row">
+										<span class="col-auto">Last checked: [[lpe('abd').time]] seconds ago. </span>
+										<button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('abd')">Recheck</button>
+									</div>
+								</div>
+							</div>
+
+							<div v-if="!lastPE['neuro'].has_examined" class="row mt-3">
+								<div class="col-auto">
+									<button class="btn btn-primary" v-on:click="updateLastPE('neuro')">
            Check Neuro Exam
 	    </button>
-	    </div>
-</div>
-<div v-else class="row mt-3">
-	    <div class="col">
-         <div class="row">
-             
-             <div class="col"> Neuro Exam: [[lpe('neuro').text]]</div>
-             
-            </div>
-          <div v-if="lpe('neuro').time!=0" class="row">
-           	<span class="col-auto">Last checked: [[lpe('neuro').time]] seconds ago. </span>
-              <button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('neuro')">Recheck</button>
-            </div>
-        </div>
-</div>
+								</div>
+							</div>
+							<div v-else class="row mt-3">
+								<div class="col">
+									<div class="row">
 
-<div v-if="!lastPE['other'].has_examined" class="row mt-3">
-        <div class="col-auto">
-       <button class="btn btn-primary"  v-on:click="updateLastPE('other')" >
+										<div class="col"> Neuro Exam: [[lpe('neuro').text]]</div>
+
+									</div>
+									<div v-if="lpe('neuro').time!=0" class="row">
+										<span class="col-auto">Last checked: [[lpe('neuro').time]] seconds ago. </span>
+										<button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('neuro')">Recheck</button>
+									</div>
+								</div>
+							</div>
+
+							<div v-if="!lastPE['other'].has_examined" class="row mt-3">
+								<div class="col-auto">
+									<button class="btn btn-primary" v-on:click="updateLastPE('other')">
            Check Other Exams
 	    </button>
-	    </div>
-</div>
-<div v-else class="row mt-3">
-	    <div class="col">
-         <div class="row">
-             
-             <div class="col"> Other Exams: [[lpe('other').text]]</div>
-             
-            </div>
-          <div v-if="lpe('other').time!=0" class="row">
-           	<span class="col-auto">Last checked: [[lpe('other').time]] seconds ago. </span>
-              <button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('other')">Recheck</button>
-            </div>
-        </div>
-</div>
+								</div>
+							</div>
+							<div v-else class="row mt-3">
+								<div class="col">
+									<div class="row">
 
-        </div>
+										<div class="col"> Other Exams: [[lpe('other').text]]</div>
 
-      <div class="modal-footer">
-        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+									</div>
+									<div v-if="lpe('other').time!=0" class="row">
+										<span class="col-auto">Last checked: [[lpe('other').time]] seconds ago. </span>
+										<button class="col-auto btn badge badge-primary" v-on:click="updateLastPE('other')">Recheck</button>
+									</div>
+								</div>
+							</div>
 
-<div class="modal navModal" v-if="(showTab==='actions')" id="actionsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content" v-on:click.stop="">
-      <div class="modal-header pb-0">
-    	<div class="row">
-            <div class="col p-0 btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button type="button" v-on:click="actionTab='simple'" v-bind:class="(actionTab==='simple') ? 'btn btn-primary' : 'btn btn-light'">Simple</button>
-              <button type="button" id="vent" v-on:click="actionTab='vent'" v-bind:class="(actionTab==='vent') ? 'btn btn-primary' : 'btn btn-light'">Vent</button>
-              <button type="button" v-on:click="actionTab='cpr'" v-bind:class="(actionTab==='cpr') ? 'btn btn-primary' : 'btn btn-light'">CPR</button>
-              <button type="button" v-on:click="actionTab='procedures'" v-bind:class="(actionTab==='procedures') ? 'btn btn-primary' : 'btn btn-light'">Procedures</button>
-              <button type="button" v-on:click="actionTab='meds'" v-bind:class="(actionTab==='meds') ? 'btn btn-primary' : 'btn btn-light'">Meds</button>
-            </div>
-	    </div>
-      </div>
+						</div>
 
-		<div v-if="actionTab==='simple'" class="modal-body">
-			<div class="row">
-                    <div v-if="!scenario.PE.skin.is_dry" class="col-auto my-2">
-                        <button id="dry" v-on:click="doTask({'name':'dry'})" class="btn btn-sm btn-primary">Dry</button>
-                    </div>
-               <div class="col-auto my-2">
-                        <button v-on:click=doTask({'name':'stimulate'}) class="btn btn-sm btn-primary">Stimulate</button>
-                    </div>
+						<div class="modal-footer">
+							<button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
-               <div class="col-auto my-2">
-                        <button v-on:click=doTask({'name':'bulb_suction'}) class="btn btn-sm btn-primary">Bulb suction</button>
-                    </div>
-                <div class="col-auto my-2">
-                        <button v-on:click=doTask({'name':'deep_suction'}) class="btn btn-sm btn-primary">Deep suction</button>
-                    </div>
-          		</div>
-		</div>
+			<div class="modal navModal" v-if="(showTab==='actions')" id="actionsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content" v-on:click.stop="">
+						<div class="modal-header pb-0">
+							<div class="row">
+								<div class="col p-0 btn-group btn-group-sm" role="group" aria-label="Basic example">
+									<button type="button" v-on:click="actionTab='simple'" v-bind:class="(actionTab==='simple') ? 'btn btn-primary' : 'btn btn-light'">Simple</button>
+									<button type="button" id="vent" v-on:click="actionTab='vent'" v-bind:class="(actionTab==='vent') ? 'btn btn-primary' : 'btn btn-light'">Vent</button>
+									<button type="button" v-on:click="actionTab='cpr'" v-bind:class="(actionTab==='cpr') ? 'btn btn-primary' : 'btn btn-light'">CPR</button>
+									<button type="button" v-on:click="actionTab='procedures'" v-bind:class="(actionTab==='procedures') ? 'btn btn-primary' : 'btn btn-light'">Procedures</button>
+									<button type="button" v-on:click="actionTab='meds'" v-bind:class="(actionTab==='meds') ? 'btn btn-primary' : 'btn btn-light'">Meds</button>
+								</div>
+							</div>
+						</div>
 
-       <div v-if="actionTab==='vent'" class="modal-body">
-            <div v-if="ventTab==='start'" class="container">
-<div class="row">
-                <div class="col-auto">
-                    <span v-if="scenario.resusc.vent.vent_type==='spontaneous'">Infant is <span v-if="scenario.PE.vitals.rr===0" class="badge badge-sm badge-success">not breathing</span><span v-else class="badge badge-sm badge-success">spontaneously ventilating</span></span>
-                    <span v-else-if="scenario.resusc.vent.vent_type==='ppv'">Infant is getting <span class="badge badge-sm badge-success">bag-mask ventilated</span></span>
-                    <span v-else="scenario.resusc.vent.vent_type==='intubated'">Infant is <span class="badge badge-sm badge-success">intubated</span></span>
-                </div>
-           </div>
-            <div v-if="scenario.resusc.vent.vent_type==='spontaneous'" class="row mt-3">
-                	<div class="col">
-                        <button id="prep_ppv" v-on:click="ventTab='prep_ppv'" class="btn btn-sm btn-primary">Start PPV</button>
-	                </div>
-                	<div class="col">
-                        <button v-on:click="ventTab='prep_intubate'" class="btn btn-sm btn-primary">Intubate</button>
-	                </div>
-            </div>
-            <div v-else-if="scenario.resusc.vent.vent_type==='ppv'" class="row mt-3">
-                <div class="col">
-                	<button v-on:click="simpleTask('stopPPV')" class="btn btn-sm btn-primary">Stop PPV</button>
-                </div>
-                <div class="col">
-                    <button v-on:click="ventTab='prep_intubate'" class="btn btn-sm btn-primary">Intubate</button>
-                </div>
-            </div>
-            <div v-else="scenario.resusc.vent.vent_type==='intubated'" class="row mt-3">
-                <div class="col">
-                    <button v-on:click="ventTab='prep_extubate'" class="btn btn-sm btn-primary">Extubate</button>
-                </div>
-            </div>
+						<div v-if="actionTab==='simple'" class="modal-body">
+							<div class="row">
+								<div v-if="!scenario.PE.skin.is_dry" class="col-auto my-2">
+									<button id="dry" v-on:click="doTask({'name':'dry'})" class="btn btn-sm btn-primary">Dry</button>
+								</div>
+								<div class="col-auto my-2">
+									<button v-on:click=doTask({ 'name': 'stimulate'}) class="btn btn-sm btn-primary">Stimulate</button>
+								</div>
 
-           <div class="row mt-3">
-               <div v-if="scenario.resusc.vent.vent_type==='ppv'" class="col">
-				   <div class="row">
-                   <button id="adjust" v-on:click="simpleTask('adjustMask')" class="col-auto btn btn-primary btn-sm mr-2">
+								<div class="col-auto my-2">
+									<button v-on:click=doTask({ 'name': 'bulb_suction'}) class="btn btn-sm btn-primary">Bulb suction</button>
+								</div>
+								<div class="col-auto my-2">
+									<button v-on:click=doTask({ 'name': 'deep_suction'}) class="btn btn-sm btn-primary">Deep suction</button>
+								</div>
+							</div>
+						</div>
+
+						<div v-if="actionTab==='vent'" class="modal-body">
+							<div v-if="ventTab==='start'" class="container">
+								<div class="row">
+									<div class="col-auto">
+										<span v-if="scenario.resusc.vent.vent_type==='spontaneous'">Infant is <span v-if="scenario.PE.vitals.rr===0" class="badge badge-sm badge-success">not breathing</span><span v-else class="badge badge-sm badge-success">spontaneously ventilating</span></span>
+										<span v-else-if="scenario.resusc.vent.vent_type==='ppv'">Infant is getting <span class="badge badge-sm badge-success">bag-mask ventilated</span></span>
+										<span v-else="scenario.resusc.vent.vent_type==='intubated'">Infant is <span class="badge badge-sm badge-success">intubated</span></span>
+									</div>
+								</div>
+								<div v-if="scenario.resusc.vent.vent_type==='spontaneous'" class="row mt-3">
+									<div class="col">
+										<button id="prep_ppv" v-on:click="ventTab='prep_ppv'" class="btn btn-sm btn-primary">Start PPV</button>
+									</div>
+									<div class="col">
+										<button v-on:click="ventTab='prep_intubate'" class="btn btn-sm btn-primary">Intubate</button>
+									</div>
+								</div>
+								<div v-else-if="scenario.resusc.vent.vent_type==='ppv'" class="row mt-3">
+									<div class="col">
+										<button v-on:click="simpleTask('stopPPV')" class="btn btn-sm btn-primary">Stop PPV</button>
+									</div>
+									<div class="col">
+										<button v-on:click="ventTab='prep_intubate'" class="btn btn-sm btn-primary">Intubate</button>
+									</div>
+								</div>
+								<div v-else="scenario.resusc.vent.vent_type==='intubated'" class="row mt-3">
+									<div class="col">
+										<button v-on:click="ventTab='prep_extubate'" class="btn btn-sm btn-primary">Extubate</button>
+									</div>
+								</div>
+
+								<div class="row mt-3">
+									<div v-if="scenario.resusc.vent.vent_type==='ppv'" class="col">
+										<div class="row">
+											<button id="adjust" v-on:click="simpleTask('adjustMask')" class="col-auto btn btn-primary btn-sm mr-2">
                        Adjust Mask
                    </button>
-                   <button v-on:click="simpleTask('reposition')" class="col-auto btn btn-primary btn-sm mr-2">
+											<button v-on:click="simpleTask('reposition')" class="col-auto btn btn-primary btn-sm mr-2">
                        Reposition
                    </button>
-                   <button v-on:click="simpleTask('deep_suction')" class="col-auto btn btn-primary btn-sm mr-2">
+											<button v-on:click="simpleTask('deep_suction')" class="col-auto btn btn-primary btn-sm mr-2">
                        Suction
                    </button>
-                   <button v-on:click="simpleTask('openMouth')" class="col-auto btn btn-primary btn-sm mt-2">
+											<button v-on:click="simpleTask('openMouth')" class="col-auto btn btn-primary btn-sm mt-2">
                        Open Mouth
                    </button>
-				   </div>
-               </div>
+										</div>
+									</div>
 
-           </div>
-           <div class="row">
-               <div v-if="scenario.resusc.vent.vent_type!='spontaneous'" class="col">
-                   <p class="col-3">Set vent rate: </p>
-                        <div class="col-9">
-                            <vue-slider v-on:callback="doTask({'name':'set_rate', 'set_rate':scenario.resusc.vent.set_rate})" id="vent_rate-slider" ref="slider" v-bind="helloSliderOptions(0, 60, width='100%', '50%')" v-model="scenario.resusc.vent.set_rate">
-                                
-                                <div slot="label" slot-scope="{ label, active }">
-                                    <span :class="['custom-label', { active }]" v-if="label % 10 === 0">
+								</div>
+								<div class="row">
+									<div v-if="scenario.resusc.vent.vent_type!='spontaneous'" class="col">
+										<p class="col-3">Set vent rate: </p>
+										<div class="col-9">
+											<vue-slider v-on:callback="doTask({'name':'set_rate', 'set_rate':scenario.resusc.vent.set_rate})" id="vent_rate-slider" ref="slider" v-bind="helloSliderOptions(0, 60, width='100%', '50%')" v-model="scenario.resusc.vent.set_rate">
+
+												<div slot="label" slot-scope="{ label, active }">
+													<span :class="['custom-label', { active }]" v-if="label % 10 === 0">
                                     [[ label ]]
                                   </span>
-                                </div>
-                                
-                            </vue-slider>
-                        </div>
-               </div>
-        </div>
+												</div>
 
-</div>
-<div v-if="ventTab==='prep_ppv'" class="container">
-        <div class="row">
-                <div class="col">
-                    <h6>
-                        Prepare to Start PPV
-                    </h6>
-                </div>
-           </div>
-    	<div class="row mt-1">
+											</vue-slider>
+										</div>
+									</div>
+								</div>
 
-            <div class="row mt-2">
-            <div class="col-auto" v-for="mask in getMasks">
-            <span v-if="mask.is_using" class="p-2 badge badge-large badge-primary">Using [[mask.size]] Mask </span>
-              <span v-else class="p-2 btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
-            </div>
-        </div>
-	</div>
+							</div>
+							<div v-if="ventTab==='prep_ppv'" class="container">
+								<div class="row">
+									<div class="col">
+										<h6>
+											Prepare to Start PPV
+										</h6>
+									</div>
+								</div>
+								<div class="row mt-1">
 
-	<div class="row mt-2">
-        
-        <div class="col-auto px-2"><span class="pr-1">PIP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.pip]]</span></div>
-        
-        <div class="col-auto px-2"><span class="pr-1">PEEP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.peep]]</span></div>
-        
-        <div class="col-auto px-2"><span class="pr-1">POP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.pop]]</span></div>
-        
+									<div class="row mt-2">
+										<div class="col-auto" v-for="mask in getMasks">
+											<span v-if="mask.is_using" class="p-2 badge badge-large badge-primary">Using [[mask.size]] Mask </span>
+											<span v-else class="p-2 btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
+										</div>
+									</div>
+								</div>
 
-    </div>
-    <div class="row">
-        
-        <div class="col-auto px-2"><span class="pr-1">Flow: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.flow]]</span></div>
-        
-        <div class="col-auto px-2"><span class="pr-1">FIO2: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.fio2]]</span></div>
-        
-    </div>
-    <div class="row mt-4">
-                   <div class="col-auto p-0">Set vent rate: </div>
-                        <div class="col pl-0">
-                            <vue-slider v-on:callback="doTask({'name':'set_rate', 'set_rate':scenario.resusc.vent.set_rate})" id="vent_rate-slider" ref="slider" v-bind="helloSliderOptions(0, 60, width='100%', '50%')" v-model="scenario.resusc.vent.set_rate">
-                                
-                                <div slot="label" slot-scope="{ label, active }">
-                                    <span :class="['custom-label', { active }]" v-if="label % 10 === 0">
+								<div class="row mt-2">
+
+									<div class="col-auto px-2"><span class="pr-1">PIP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.pip]]</span></div>
+
+									<div class="col-auto px-2"><span class="pr-1">PEEP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.peep]]</span></div>
+
+									<div class="col-auto px-2"><span class="pr-1">POP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.pop]]</span></div>
+
+
+								</div>
+								<div class="row">
+
+									<div class="col-auto px-2"><span class="pr-1">Flow: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.flow]]</span></div>
+
+									<div class="col-auto px-2"><span class="pr-1">FIO2: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.fio2]]</span></div>
+
+								</div>
+								<div class="row mt-4">
+									<div class="col-auto p-0">Set vent rate: </div>
+									<div class="col pl-0">
+										<vue-slider v-on:callback="doTask({'name':'set_rate', 'set_rate':scenario.resusc.vent.set_rate})" id="vent_rate-slider" ref="slider" v-bind="helloSliderOptions(0, 60, width='100%', '50%')" v-model="scenario.resusc.vent.set_rate">
+
+											<div slot="label" slot-scope="{ label, active }">
+												<span :class="['custom-label', { active }]" v-if="label % 10 === 0">
                                     [[ label ]]
                                   </span>
-                                </div>
-                                
-                            </vue-slider>
-                        </div>
-        </div>
-</div>
-<div v-if="ventTab==='prep_intubate'" class="container">
-        <div class="row">
-                <div class="col">
-                    <h6>
-                        Prepare to Intubate
-                    </h6>
-                </div>
-                            <div class="col">
-                    <button v-on:click="ventTab='start'" class="btn btn-sm btn-secondary">
+											</div>
+
+										</vue-slider>
+									</div>
+								</div>
+							</div>
+							<div v-if="ventTab==='prep_intubate'" class="container">
+								<div class="row">
+									<div class="col">
+										<h6>
+											Prepare to Intubate
+										</h6>
+									</div>
+									<div class="col">
+										<button v-on:click="ventTab='start'" class="btn btn-sm btn-secondary">
                         	Cancel
                                 </button>
-                </div>
-           </div>
-</div>
-<div v-if="ventTab==='prep_extubate'" class="container">
-        <div class="row">
-                <div class="col">
-                    <h6>
-                        Prepare for Extubation
-                    </h6>
-                </div>
-                            <div class="col">
-                    <button v-on:click="ventTab='start'" class="btn btn-sm btn-secondary">
+									</div>
+								</div>
+							</div>
+							<div v-if="ventTab==='prep_extubate'" class="container">
+								<div class="row">
+									<div class="col">
+										<h6>
+											Prepare for Extubation
+										</h6>
+									</div>
+									<div class="col">
+										<button v-on:click="ventTab='start'" class="btn btn-sm btn-secondary">
                         	Cancel
                                 </button>
-                </div>
-           </div>
-</div>
-		</div>
+									</div>
+								</div>
+							</div>
+						</div>
 
-		<div v-if="actionTab==='cpr'" class="modal-body">
+						<div v-if="actionTab==='cpr'" class="modal-body">
 
-		</div>
+						</div>
 
-		<div v-if="actionTab==='procedures'" class="modal-body">
+						<div v-if="actionTab==='procedures'" class="modal-body">
 
-		</div>
+						</div>
 
-		<div v-if="actionTab==='meds'" class="modal-body">
+						<div v-if="actionTab==='meds'" class="modal-body">
 
-		</div>
+						</div>
 
-      <div class="modal-footer">
-          <div class="container">
-              <div class="row" v-if="(actionTab==='vent')&&(ventTab!='start')">
-              <div class="col">
-              		<button class="btn btn-secondary" type="button" v-on:click="ventTab='start'">Cancel</button>
-              </div>
-              <div class="col">
-              <button v-if="ventTab==='prep_ppv'" class="btn btn-primary" type="button" id="ppv" v-on:click="simpleTask('startPPV'); ventTab='start'">Start PPV</button>
-              <button v-else-if="ventTab==='prep_intubate'" class="btn btn-primary" type="button" v-on:click="simpleTask('intubate'); ventTab='start'" >Intubate</button>
-              <button v-else class="btn btn-primary" type="button" v-on:click="simpleTask('extubate'); ventTab='start'">Extubate</button> <!-- note that only 'prep_extubate' remains as start defaults to v-else below -->
-              </div>
-          </div>
-          </div>
-		 <button v-else type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+						<div class="modal-footer">
+							<div class="container">
+								<div class="row" v-if="(actionTab==='vent')&&(ventTab!='start')">
+									<div class="col">
+										<button class="btn btn-secondary" type="button" v-on:click="ventTab='start'">Cancel</button>
+									</div>
+									<div class="col">
+										<button v-if="ventTab==='prep_ppv'" class="btn btn-primary" type="button" id="ppv" v-on:click="simpleTask('startPPV'); ventTab='start'">Start PPV</button>
+										<button v-else-if="ventTab==='prep_intubate'" class="btn btn-primary" type="button" v-on:click="simpleTask('intubate'); ventTab='start'">Intubate</button>
+										<button v-else class="btn btn-primary" type="button" v-on:click="simpleTask('extubate'); ventTab='start'">Extubate</button>
+										<!-- note that only 'prep_extubate' remains as start defaults to v-else below -->
+									</div>
+								</div>
+							</div>
+							<button v-else type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
-<div class="modal navModal" v-if="(showTab==='meds')" id="medsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content" v-on:click.stop="">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Medications</h5>
-        <button v-on:click="showTab='None'" type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<div class="modal navModal" v-if="(showTab==='meds')" id="medsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content" v-on:click.stop="">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Medications</h5>
+							<button v-on:click="showTab='None'" type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-        <div class="modal-body">
-            Give Medication
-        </div>
+						</div>
+						<div class="modal-body">
+							Give Medication
+						</div>
 
-      <div class="modal-footer">
-        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+						<div class="modal-footer">
+							<button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
-<div class="container">
-    	<div class="row">
-        <div class="col-sm"><!--Needed to keep make app in the center of the screen -->
-        </div>
-        <div class="col-lg-4 col-md-6 col-sm-7">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm">
+						<!--Needed to keep make app in the center of the screen -->
+					</div>
+					<div class="col-lg-4 col-md-6 col-sm-7">
 
-    	<div class="row">
-            <div id="HelloBabyNav" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button type="button" v-on:click="toggleShowTab('prep')" v-bind:class="(showTab==='prep') ? 'btn btn-primary' : 'btn btn-light'">
+						<div class="row">
+							<div id="HelloBabyNav" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+								<button type="button" v-on:click="toggleShowTab('prep')" v-bind:class="(showTab==='prep') ? 'btn btn-primary' : 'btn btn-light'">
 				  <span id="prep_warmer" v-if="!baby_delivered">Prep Warmer</span>
 				  <span v-else id="warmer">Warmer</span></button>
-                <button v-if="!baby_delivered" v-on:click="deliverBaby()" type="button" class="btn btn-danger">Ready!</button>
-              <button v-if="baby_delivered" id="exam" v-on:click="toggleShowTab('exam')" v-bind:class="(showTab==='exam') ? 'btn btn-primary' : 'btn btn-light'" type="button">Exam</button>
-              <button v-if="baby_delivered" id="actions" v-on:click="toggleShowTab('actions')" v-bind:class="(showTab==='actions') ? 'btn btn-primary' : 'btn btn-light'" type="button" >Actions</button>
-            </div>
-	    </div>
-		<div class="row" style="background-color:black; padding:5px; border-radius:5px;">
-			<div class="col" style="padding-left:0px;">
-				<div v-if="baby_delivered">
-                         <div v-if="baby_timer_started">
-                             <a class="btn btn-sm btn-warning"><span id="baby_time" v-html="elapsed_baby_time"></span> </a>
-                         </div>
-                         <div v-else>
-                             <button class="btn btn-sm btn-primary" id="start_timer" v-on:click="startBabyTimer()"> Start Timer </button>
-                         </div>
-                 </div>
+								<button v-if="!baby_delivered" v-on:click="deliverBaby()" type="button" class="btn btn-danger">Ready!</button>
+								<button v-if="baby_delivered" id="exam" v-on:click="toggleShowTab('exam')" v-bind:class="(showTab==='exam') ? 'btn btn-primary' : 'btn btn-light'" type="button">Exam</button>
+								<button v-if="baby_delivered" id="actions" v-on:click="toggleShowTab('actions')" v-bind:class="(showTab==='actions') ? 'btn btn-primary' : 'btn btn-light'" type="button">Actions</button>
+							</div>
+						</div>
+						<div class="row" style="background-color:black; padding:5px; border-radius:5px;">
+							<div class="col" style="padding-left:0px;">
+								<div v-if="baby_delivered">
+									<div v-if="baby_timer_started">
+										<a class="btn btn-sm btn-warning"><span id="baby_time" v-html="elapsed_baby_time"></span> </a>
+									</div>
+									<div v-else>
+										<button class="btn btn-sm btn-primary" id="start_timer" v-on:click="startBabyTimer()"> Start Timer </button>
+									</div>
+								</div>
 
-			</div>
-			<div class="col-auto">
-			    <div class="row">
-                <span id="here" class="badge badge-light">RR [[scenario.PE.vitals.rr]]</span>
-			    </div>
-			    <div class="row">
-                <span v-if="checkSupplyByName('pulse_ox').is_using==true" class="badge badge-primary">O2 Sat [[Math.round(scenario.PE.vitals.o2sat)]]</span>
-                <span v-else class="badge badge-warning"> unavailable</span>
-			    </div>
-			    <div class="row">
-                <span v-if="checkSupplyByName('temp_probe').is_using==true" class="badge badge-success">Temp [[scenario.PE.vitals.temp]]</span>
-                <span v-else class="badge badge-warning">unavailable</span>
-			    </div>
-			</div>
-		</div>
-	<div class="row mt-2" v-if="baby_delivered">
-      [[scenario.PEtext.appearance]]
- 	</div>
-	<div class="row mt-3">
-            <span class="col-auto px-1">Heat is:</span>
-        	<span v-if="scenario.warmer.is_turned_on"  v-on:click="toggleHeat" class="px-1 col-auto btn badge badge-danger">on</span>
-            <span v-if="!scenario.warmer.is_turned_on" id="toggle_heat" v-on:click="toggleHeat()" class="px-1 col-auto btn badge badge-secondary">off</span>
-         <span class="col-auto px-1">Temperature mode: </span><span v-on:click="toggleTempMode" class="col-auto btn badge badge-primary">
+							</div>
+							<div class="col-auto">
+								<div class="row">
+									<span id="here" class="badge badge-light">RR [[scenario.PE.vitals.rr]]</span>
+								</div>
+								<div class="row">
+									<span v-if="checkSupplyByName('pulse_ox').is_using==true" class="badge badge-primary">O2 Sat [[Math.round(scenario.PE.vitals.o2sat)]]</span>
+									<span v-else class="badge badge-warning"> unavailable</span>
+								</div>
+								<div class="row">
+									<span v-if="checkSupplyByName('temp_probe').is_using==true" class="badge badge-success">Temp [[scenario.PE.vitals.temp]]</span>
+									<span v-else class="badge badge-warning">unavailable</span>
+								</div>
+							</div>
+						</div>
+						<div class="row mt-2" v-if="baby_delivered">
+							[[scenario.PEtext.appearance]]
+						</div>
+						<div class="row mt-3">
+							<span class="col-auto px-1">Heat is:</span>
+							<span v-if="scenario.warmer.is_turned_on" v-on:click="toggleHeat" class="px-1 col-auto btn badge badge-danger">on</span>
+							<span v-if="!scenario.warmer.is_turned_on" id="toggle_heat" v-on:click="toggleHeat()" class="px-1 col-auto btn badge badge-secondary">off</span>
+							<span class="col-auto px-1">Temperature mode: </span><span v-on:click="toggleTempMode" class="col-auto btn badge badge-primary">
                     [[scenario.warmer.temp_mode]]
                     </span>
-        <div class="row mt-2" id="mask_size">
-            <div class="col-auto" v-for="mask in getMasks">
-            <span v-if="mask.is_using" class="p-2 badge badge-large badge-primary">Using [[mask.size]] Mask </span>
-              <span v-else class="p-2 btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
-            </div>
-        </div>
-	</div>
+							<div class="row mt-2" id="mask_size">
+								<div class="col-auto" v-for="mask in getMasks">
+									<span v-if="mask.is_using" class="p-2 badge badge-large badge-primary">Using [[mask.size]] Mask </span>
+									<span v-else class="p-2 btn badge badge-large badge-secondary" v-on:click="useSupply(mask)">Use [[mask.size]] Mask</span>
+								</div>
+							</div>
+						</div>
 
-	<div class="row mt-2">
-        
-        <div class="col-auto px-2"><span class="pr-1">PIP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.pip]]</span></div>
-        
-        <div class="col-auto px-2"><span class="pr-1">PEEP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.peep]]</span></div>
-        
-        <div class="col-auto px-2"><span class="pr-1">POP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.pop]]</span></div>
-        
+						<div class="row mt-2">
 
-    </div>
-    <div class="row">
-        
-        <div class="col-auto px-2"><span class="pr-1">Flow: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.flow]]</span></div>
-        
-        <div class="col-auto px-2"><span class="pr-1">FIO2: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.fio2]]</span></div>
-        
-        <div class="col-auto px-2"><span class="pr-1">Suction: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.suction]]</span></div>
-    </div>
-</div>
-<div class="col-sm"> <!--Needed to keep make app in the center of the screen -->
+							<div class="col-auto px-2"><span class="pr-1">PIP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.pip]]</span></div>
 
-            </div>
+							<div class="col-auto px-2"><span class="pr-1">PEEP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.peep]]</span></div>
 
-</div>
-</div>
+							<div class="col-auto px-2"><span class="pr-1">POP: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.pop]]</span></div>
 
-        </div>
 
-    </main>
+						</div>
+						<div class="row">
 
-    <!-- IE Message -->
-    <script>
+							<div class="col-auto px-2"><span class="pr-1">Flow: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.flow]]</span></div>
 
-        function detectIE() {
-            var ua = window.navigator.userAgent;
+							<div class="col-auto px-2"><span class="pr-1">FIO2: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.fio2]]</span></div>
 
-            var msie = ua.indexOf('MSIE ');
-            if (msie > 0) {
-                // IE 10 or older => return version number
-                return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
-            }
+							<div class="col-auto px-2"><span class="pr-1">Suction: </span><span class="btn badge badge-primary" v-on:click="toggleShowTab('prep')">[[scenario.warmer.suction]]</span></div>
+						</div>
+					</div>
+					<div class="col-sm">
+						<!--Needed to keep make app in the center of the screen -->
 
-            var trident = ua.indexOf('Trident/');
-            if (trident > 0) {
-                // IE 11 => return version number
-                var rv = ua.indexOf('rv:');
-                return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
-            }
+					</div>
 
-            var edge = ua.indexOf('Edge/');
-            if (edge > 0) {
-               // Edge (IE 12+) => return version number
-               return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
-            }
+				</div>
+			</div>
 
-            // other browser
-            return false;
-        }
+		</div>
 
-        if(detectIE()){
-            $("#IEalert").show();
-            $(".IEclass").remove();
-        }
+	</main>
 
-    </script>
-    <!-- Vue slider component -->
-    <script src="https://nightcatsama.github.io/vue-slider-component/dist/index.js"></script>
-    <script src="/static/tutorial.js"></script>
+	<!-- IE Message -->
+	<script>
+		function detectIE() {
+			var ua = window.navigator.userAgent;
+
+			var msie = ua.indexOf('MSIE ');
+			if (msie > 0) {
+				// IE 10 or older => return version number
+				return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+			}
+
+			var trident = ua.indexOf('Trident/');
+			if (trident > 0) {
+				// IE 11 => return version number
+				var rv = ua.indexOf('rv:');
+				return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+			}
+
+			var edge = ua.indexOf('Edge/');
+			if (edge > 0) {
+				// Edge (IE 12+) => return version number
+				return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+			}
+
+			// other browser
+			return false;
+		}
+
+		if (detectIE()) {
+			$("#IEalert").show();
+			$(".IEclass").remove();
+		}
+	</script>
+	<!-- Vue slider component -->
+	<script src="https://nightcatsama.github.io/vue-slider-component/dist/index.js"></script>
+	<script src="/static/tutorial_data.js"></script>
+	<script src="/static/tutorial.js"></script>
 
 
 </body>
