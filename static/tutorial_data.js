@@ -1,8 +1,15 @@
 tutorial_messages=[
     "Welcome to the tutorial! The first step is to set up the warmer!",
+    "Next you adjust the pressures"
 ]
 popup_messages=[
-     
+     {
+        'toggle_heat': "Click here to turn warmer on",
+        'mask_size': "Select a mask"
+     },
+    {
+        'toggle_heat': "next"
+    }
 ]
 
 scenario_tutorial = {

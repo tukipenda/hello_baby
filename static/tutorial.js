@@ -34,6 +34,7 @@ var app = new Vue({
         contents: '',
         instruct_index:0,
         tutorial_messages:tutorial_messages,
+        poppers: {},
         lastPE: {
             /*each contains a copy of the full scenario.PE that is checked at different times, to use in the description of the PE
              * Note that e.g. resp does not map 1:1 onto scenario.PE.resp as it includes secretions data as well*/
@@ -163,22 +164,41 @@ var app = new Vue({
             return false;
         }
     },
+    mounted: function(){
+        this.displayNextPopups();
+    },
     updated: {
-        
+
     },
     methods: {
         nextStep: function() {
             this.instruct_index+=1;
             this.displayNextPopups();
         },
-        displayNextPopups: function(){
+        createPopper: function(msg, target_id){
+            var id="popover_"+target_id;
             var d1 = document.getElementById('popup_tutorials');
-            var pl="right"
-            d1.insertAdjacentHTML('beforeend', '<div id="1" class="popover bs-popover-'+pl+' card"><div class="arrow"></div><div class="popover-body">Turn Warmer On</div></div>');
-            var popper = new Popper(document.getElementById('toggle_heat'), document.getElementById("1"), {
+            var pl="left"
+            d1.insertAdjacentHTML('beforeend', '<div id="'+id+'" class="popover bs-popover-'+pl+' card"><div class="arrow"></div><div class="popover-body">'+msg+'</div></div>');
+            this.poppers[target_id] = new Popper(document.getElementById(target_id), document.getElementById(id), {
                 placement: pl
             });
-            popper.scheduleUpdate();
+        },
+        deletePopper: function(target_id){
+            this.poppers[target_id].destroy();
+        },
+        displayNextPopups: function(){
+            var msgs=popup_messages[this.instruct_index];
+            self=this;
+            if(this.instruct_index>0){
+                var old=popup_messages[this.instruct_index-1];
+                Object.keys(old).forEach(function(key){
+                    self.deletePopper(key);
+                });
+            }
+            Object.keys(msgs).forEach(function(key){
+                self.createPopper(msgs[key], key);
+            })
         },
         updateLastPE: function(PEtype) {
             this.lastPE[PEtype].has_examined = true;
