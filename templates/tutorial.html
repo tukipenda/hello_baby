@@ -1,16 +1,43 @@
 {% extends "layout.html" %} {% block body %}
-<div class="modal" v-bind:style="show_message ? 'display:block':'display:none'" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="show_message=false">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content" v-on:click.stop="">
-      <div class="modal-body">
-        [[hb_message]]
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="hideMessage">Okay</button>
-      </div>
-    </div>
-  </div>
-</div>
+<div id="popup_tutorials">
+
+			</div>
+			<div class="row">
+				<div class="col">
+
+				</div>
+				<div id="tutorial_message" class=" col alert alert-warning" role="alert">
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								[[tutorial_messages[instruct_index] ]]
+							</div>
+						</div>
+						<div class="row mt-2">
+							<div v-if="instruct_index===0" class="col">
+
+								<a class="btn btn-sm btn-outline-primary p-1" href="/practice">
+								Skip tutorial.
+						</a>
+							</div>
+
+							<div class="col">
+
+							</div>
+							<div class="col-auto">
+								<button class="col btn btn-primary" v-on:click="nextStep">
+								Next Step
+							</button>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="col">
+
+				</div>
+			</div>
+
 
 {% include "controls.html" %}
 
@@ -97,5 +124,6 @@
 {% block javascript %}
 <!-- Vue slider component -->
     <script src="https://nightcatsama.github.io/vue-slider-component/dist/index.js"></script>
-    <script src="{{ url_for('static',filename='hello_baby.js') }}"></script>
+    <script src="{{ url_for('static',filename='tutorial_data.js') }}"></script>
+    <script src="{{ url_for('static',filename='tutorial.js') }}"></script>
 {% endblock %}

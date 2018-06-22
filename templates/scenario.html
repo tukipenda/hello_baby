@@ -14,7 +14,7 @@
         </div>
         <div class="row">
             <div class="col">
-                <a class="btn btn-primary" href="/static/Practice/tutorial.html" role="button">Tutorial</a>
+                <a class="btn btn-primary" href="/tutorial" role="button">Tutorial</a>
             </div>
         </div>
         <div class="row mt-2">
@@ -45,4 +45,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block javascript %}
+    <script src="https://nightcatsama.github.io/vue-slider-component/dist/index.js"></script>
+    <script src="{{ url_for('static',filename='hello_baby.js') }}"></script>
 {% endblock %}
