@@ -175,17 +175,28 @@ var app = new Vue({
             this.instruct_index+=1;
             this.displayNextPopups();
         },
-        createPopper: function(msg, target_id){
-            var id="popover_"+target_id;
+        createPopper: function(msg, target_id, pl){
+            var id="popper_"+target_id;
             var d1 = document.getElementById('popup_tutorials');
-            var pl="left"
             d1.insertAdjacentHTML('beforeend', '<div id="'+id+'" class="popover bs-popover-'+pl+' card"><div class="arrow"></div><div class="popover-body">'+msg+'</div></div>');
             this.poppers[target_id] = new Popper(document.getElementById(target_id), document.getElementById(id), {
                 placement: pl
             });
+            var target=document.getElementById(target_id);
+            self=this;
+            target.addEventListener('click', function() {
+                self.deletePopper(target_id);
+            }, false);
         },
         deletePopper: function(target_id){
             this.poppers[target_id].destroy();
+            var targ_popover=document.getElementById('popper_'+target_id);
+            if (targ_popover == null) {
+                 //do nothing
+            }
+            else {
+                targ_popover.parentNode.removeChild(targ_popover);
+            }
         },
         displayNextPopups: function(){
             var msgs=popup_messages[this.instruct_index];
@@ -197,7 +208,7 @@ var app = new Vue({
                 });
             }
             Object.keys(msgs).forEach(function(key){
-                self.createPopper(msgs[key], key);
+                self.createPopper(msgs[key].text, key, msgs[key].position);
             })
         },
         updateLastPE: function(PEtype) {

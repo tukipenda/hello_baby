@@ -1,7 +1,7 @@
 
 {% for pressure,pname in [("scenario.warmer.pip", "PIP"), ("scenario.warmer.peep", "PEEP"), ("scenario.warmer.pop", "POP")] %}
                     <div class="row mt-3">
-                        <p class="col-3">{{pname}}: </p>
+                        <p class="col-3 popper_target" {% if pname=="PIP" %} id="pip" {% endif %}>{{pname}}: </p>
                         <div class="col-9">
                             <vue-slider id="{{pname}}-slider" ref="slider" v-on:callback="updateWarmer('{{pname}}',{{pressure}})" v-bind="helloSliderOptions(0, {% if pname=="PEEP" %} 20 {% else %} 50 {% endif %}, width='100%', '50%')" v-model="{{pressure}}">
                                 {% if is_IE %}
