@@ -35,6 +35,7 @@ var app = new Vue({
         instruct_index:0,
         tutorial_messages:tutorial_messages,
         poppers: {},
+        popper_displayed: {},
         lastPE: {
             /*each contains a copy of the full scenario.PE that is checked at different times, to use in the description of the PE
              * Note that e.g. resp does not map 1:1 onto scenario.PE.resp as it includes secretions data as well*/
@@ -179,15 +180,25 @@ var app = new Vue({
             var id="popper_"+target_id;
             var d1 = document.getElementById('popup_tutorials');
             d1.insertAdjacentHTML('beforeend', '<div id="'+id+'" class="popover bs-popover-'+pl+' card"><div class="arrow"></div><div class="popover-body">'+msg+'</div></div>');
-            this.poppers[target_id] = new Popper(document.getElementById(target_id), document.getElementById(id), {
-                placement: pl
-            });
-            var target=document.getElementById(target_id);
-            self=this;
-            target.addEventListener('click', function() {
-                self.deletePopper(target_id);
-            }, false);
+            this.displayPopper(id, target_id, pl);
         },
+        displayPopper: function(id, target_id, pl){
+            var target=document.getElementById(target_id);
+            var popover=document.getElementById(id);
+            self=this;
+            if(target==null){
+                popover.style.display="none";
+            }
+            else {
+                this.poppers[target_id] = new Popper(target, popover, {
+                   placement: pl
+                });
+                target.addEventListener('click', function() {
+                    self.deletePopper(target_id);
+                }, false);
+                setInterval(function(){ self.poppers[target_id].update(); }, 50);
+            }
+         },
         deletePopper: function(target_id){
             this.poppers[target_id].destroy();
             var targ_popover=document.getElementById('popper_'+target_id);

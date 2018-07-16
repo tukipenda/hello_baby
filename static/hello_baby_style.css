@@ -6,6 +6,30 @@
 .glyphicon { margin-right:10px; }
 .alert a {color: gold;}
 
+.popover {
+    border-color:black;
+    border-width:2px;
+}
+
+.popover {
+    background-color:yellow;
+}
+
+.bs-popover-right .arrow::after {
+    border-right-color:black;
+}
+
+.bs-popover-left .arrow::after {
+    border-left-color:black;
+}
+
+.bs-popover-top .arrow::after {
+    border-top-color:black;
+}
+
+.bs-popover-bottom .arrow::after {
+    border-bottom-color:black;
+}
 
 #HelloBabyNav {
     margin-left:-4px;

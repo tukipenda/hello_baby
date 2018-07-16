@@ -9,7 +9,7 @@ popup_messages=[
         'mask_size': {'text': "Select a mask", 'position':'bottom'}
      },
      {
-        'prep_warmer': {'text': "Choose warmer settings", 'position':'bottom'},
+        'prep_warmer': {'text': "Choose warmer settings", 'position':'right'},
         'pip': {'text': 'Click here to set the pressures', 'position':'bottom'}
      },
      {

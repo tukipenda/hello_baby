@@ -49,9 +49,9 @@
 
     	<div class="row">
             <div id="HelloBabyNav" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button type="button" v-on:click="toggleShowTab('prep')" v-bind:class="(showTab==='prep') ? 'btn btn-primary' : 'btn btn-light'">
-				  <span id="prep_warmer" class="popup_target" v-if="!baby_delivered">Prep Warmer</span>
-				  <span v-else id="warmer">Warmer</span></button>
+              <button id='prep_warmer' type="button" v-on:click="toggleShowTab('prep')" v-bind:class="(showTab==='prep') ? 'btn btn-primary' : 'btn btn-light'">
+				  <span class="popup_target" v-if="!baby_delivered">Prep Warmer</span>
+				  <span v-else>Warmer</span></button>
                 <button v-if="!baby_delivered" v-on:click="deliverBaby()" type="button" class="btn btn-danger">Ready!</button>
               <button v-if="baby_delivered" id="exam" v-on:click="toggleShowTab('exam')" v-bind:class="(showTab==='exam') ? 'btn btn-primary' : 'btn btn-light'" type="button">Exam</button>
               <button v-if="baby_delivered" id="actions" v-on:click="toggleShowTab('actions')" v-bind:class="(showTab==='actions') ? 'btn btn-primary' : 'btn btn-light'" type="button" >Actions</button>
