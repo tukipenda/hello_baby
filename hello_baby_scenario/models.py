@@ -10,6 +10,21 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+    
+class Scenario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name=db.Column(db.Text) # needs to be unique
+    scenario=db.Column(db.Text)
+    baby_data=db.Column(db.Text)
+    history=db.Column(db.Text)
+    baby_PE=db.Column(db.Text)
+    warmer=db.Column(db.Text)
+    supplies=db.Column(db.Text)
+    tasks=db.Column(db.Text)
+    vent=db.Column(db.Text)
+    cpr=db.Column(db.Text)
+    uvc=db.Column(db.Text)
+    health=db.Column(db.Text)
 
 class Baby(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -169,21 +184,6 @@ class Supply(db.Model):
     is_using=db.Column(db.Boolean)
     size=db.Column(db.Text, nullable=True)
     pp=db.Column(db.Text)
-
-class Scenario(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name=db.Column(db.Text) # needs to be unique
-    scenario=db.Column(db.Text)
-    baby_data=db.Column(db.Text)
-    mom_data=db.Column(db.Text)
-    baby_PE=db.Column(db.Text)
-    warmer=db.Column(db.Text)
-    supplies=db.Column(db.Text)
-    tasks=db.Column(db.Text)
-    vent=db.Column(db.Text)
-    cpr=db.Column(db.Text)
-    uvc=db.Column(db.Text)
-    health=db.Column(db.Text)
 
 """
 class Baby(db.Model):

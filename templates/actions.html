@@ -2,7 +2,7 @@
     	<div class="row">
             <div class="col p-0 btn-group btn-group-sm" role="group" aria-label="Basic example">
               <button type="button" v-on:click="actionTab='simple'" v-bind:class="(actionTab==='simple') ? 'btn btn-primary' : 'btn btn-light'">Simple</button>
-              <button type="button" id="vent" v-on:click="actionTab='vent'" v-bind:class="(actionTab==='vent') ? 'btn btn-primary' : 'btn btn-light'">Vent</button>
+              <button type="button" id="vent" v-on:click="actionTab='resp'" v-bind:class="(actionTab==='resp') ? 'btn btn-primary' : 'btn btn-light'">Respiratory</button>
               <button type="button" v-on:click="actionTab='cpr'" v-bind:class="(actionTab==='cpr') ? 'btn btn-primary' : 'btn btn-light'">CPR</button>
               <button type="button" v-on:click="actionTab='procedures'" v-bind:class="(actionTab==='procedures') ? 'btn btn-primary' : 'btn btn-light'">Procedures</button>
               <button type="button" v-on:click="actionTab='meds'" v-bind:class="(actionTab==='meds') ? 'btn btn-primary' : 'btn btn-light'">Meds</button>
@@ -28,7 +28,7 @@
           		</div>
 		</div>
 
-       <div v-if="actionTab==='vent'" class="modal-body">
+       <div v-if="actionTab==='resp'" class="modal-body">
             {% include 'vent_settings.html' %}
 		</div>
 

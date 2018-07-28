@@ -1,7 +1,5 @@
 {% block history %}
 <div class="container">
-    <div v-for="(value, key, i) in scenario.mom" class="row">
-        <button class="btn btn-primary">Get [[key]]</button> <!--[[value]]-->
-    </div>
+    [[scenario.history]]
 </div>
 {% endblock %}

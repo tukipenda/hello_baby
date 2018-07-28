@@ -22,10 +22,11 @@
 
     	<div class="row">
             <div id="HelloBabyNav" class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+			  <button id="history" v-on:click="toggleShowTab('history')" v-bind:class="(showTab==='history') ? 'btn btn-primary' : 'btn btn-light'" type="button">History</button>
               <button type="button" v-on:click="toggleShowTab('prep')" v-bind:class="(showTab==='prep') ? 'btn btn-primary' : 'btn btn-light'">
 				  <span id="prep_warmer" v-if="!baby_delivered">Prep Warmer</span>
 				  <span v-else id="warmer">Warmer</span></button>
-                <button v-if="!baby_delivered" v-on:click="deliverBaby()" type="button" class="btn btn-danger">Ready!</button>
+                <button v-if="!baby_delivered" v-on:click="deliverBaby()" type="button" class="btn btn-danger">Ready for the baby!</button>
               <button v-if="baby_delivered" id="exam" v-on:click="toggleShowTab('exam')" v-bind:class="(showTab==='exam') ? 'btn btn-primary' : 'btn btn-light'" type="button">Exam</button>
               <button v-if="baby_delivered" id="actions" v-on:click="toggleShowTab('actions')" v-bind:class="(showTab==='actions') ? 'btn btn-primary' : 'btn btn-light'" type="button" >Actions</button>
             </div>
@@ -40,19 +41,22 @@
                              <button class="btn btn-sm btn-primary" id="start_timer" v-on:click="startBabyTimer()"> Start Timer </button>
                          </div>
                  </div>
+				<div v-else style="min-height:64px"> <!-- Would be much better if this number was not hard-coded.  Aaaaaaahhhh! -->
+					<button class="btn btn-sm btn-primary" id="start_timer" disabled> Timer Off </button>
+				</div>
 
 			</div>
-			<div class="col-auto">
+			<div v-if="baby_delivered" class="col-auto">
 			    <div class="row">
                 <span id="here" class="badge badge-light">RR [[scenario.PE.vitals.rr]]</span>
 			    </div>
 			    <div class="row">
                 <span v-if="checkSupplyByName('pulse_ox').is_using==true" class="badge badge-primary">O2 Sat [[Math.round(scenario.PE.vitals.o2sat)]]</span>
-                <span v-else class="badge badge-warning"> unavailable</span>
+                <span v-else class="badge badge-warning">O2sat unavailable</span>
 			    </div>
 			    <div class="row">
                 <span v-if="checkSupplyByName('temp_probe').is_using==true" class="badge badge-success">Temp [[scenario.PE.vitals.temp]]</span>
-                <span v-else class="badge badge-warning">unavailable</span>
+                <span v-else class="badge badge-warning">Temp unavailable</span>
 			    </div>
 			</div>
 		</div>

@@ -1,3 +1,22 @@
+<div class="modal navModal" v-if="(showTab==='history')" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" v-on:click.stop="">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">History</h5>
+        <button v-on:click="showTab='None'" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+             {% include "history.html" %}
+        </div>
+
+      <div class="modal-footer">
+        <button type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal navModal" v-if="(showTab==='prep')" id="prepModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" v-on:click="showTab='None'">
   <div class="modal-dialog" role="document">
     <div class="modal-content" v-on:click.stop="">
@@ -17,7 +36,7 @@
       </div>
 
       <div class="modal-footer">
-        <button v-if="ventTab=='start'" type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="warmer_close_button" v-if="ventTab=='start'" type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button v-else type="button" v-on:click="showTab='action'" class="btn btn-secondary" data-dismiss="modal">Back</button>
       </div>
     </div>

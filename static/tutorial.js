@@ -180,23 +180,32 @@ var app = new Vue({
             var id="popper_"+target_id;
             var d1 = document.getElementById('popup_tutorials');
             d1.insertAdjacentHTML('beforeend', '<div id="'+id+'" class="popover bs-popover-'+pl+' card"><div class="arrow"></div><div class="popover-body">'+msg+'</div></div>');
-            this.displayPopper(id, target_id, pl);
+            this.popper_displayed[target_id]=false;
+            var self=this;
+            setInterval(function(){
+                console.log('here');
+                self.displayPopper(id, target_id, pl);  
+           }, 50)
         },
         displayPopper: function(id, target_id, pl){
-            var target=document.getElementById(target_id);
-            var popover=document.getElementById(id);
-            self=this;
-            if(target==null){
-                popover.style.display="none";
-            }
-            else {
-                this.poppers[target_id] = new Popper(target, popover, {
-                   placement: pl
-                });
-                target.addEventListener('click', function() {
-                    self.deletePopper(target_id);
-                }, false);
-                setInterval(function(){ self.poppers[target_id].update(); }, 50);
+            if(!this.popper_displayed[target_id]){
+                var target=document.getElementById(target_id);
+                var popover=document.getElementById(id);
+                var self=this;
+                if(target==null){
+                    popover.style.display="none";
+                }
+                else {
+                    popover.style.display="block";
+                    this.poppers[target_id] = new Popper(target, popover, {
+                       placement: pl
+                    });
+                    this.popper_displayed[target_id]=true;
+                    target.addEventListener('click', function() {
+                        self.deletePopper(target_id);
+                    }, false);
+                    setInterval(function(){ self.poppers[target_id].update(); }, 50);
+                }
             }
          },
         deletePopper: function(target_id){

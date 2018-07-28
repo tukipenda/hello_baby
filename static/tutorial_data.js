@@ -10,7 +10,8 @@ popup_messages=[
      },
      {
         'prep_warmer': {'text': "Choose warmer settings", 'position':'right'},
-        'pip': {'text': 'Click here to set the pressures', 'position':'bottom'}
+        'PIP-div': {'text': 'Adjust the sliders to set pressures', 'position':'bottom'},
+        'supplies': {'text': "When you are done setting pressures, you can pick supplies.", 'position':'right'}
      },
      {
 

@@ -41,7 +41,6 @@ var app = new Vue({
             },
             pl:'left',
             ventTab:"start",
-            drawer_opened: false,
             baby_timer_started: false,
             delivery_time:null,
             elapsed_delivery_time:0, /*in seconds*/

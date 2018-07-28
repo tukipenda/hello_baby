@@ -1,0 +1,6 @@
+
+supplies:
+respiratory
+monitors
+warming
+medications

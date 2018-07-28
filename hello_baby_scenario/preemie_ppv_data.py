@@ -1,12 +1,8 @@
-scenario="You are called by the OB team for a stat C/S. Mom is 25 years old, and gestational age is 32 weeks."
-baby_data={"ga":"32", "neonatal_complications":"None", "delivery":"C/S", "is_delivered":False}
+scenario="You are called by the OB team for a preterm delivery by SVD. The baby's gestational age is estimated at 32 weeks.  Mom is 37 years old, afebrile, and prenatal labs are normal.  "
+baby_data={"ga":"32", "neonatal_complications":"None", "delivery":"SVD", "is_delivered":False}
 
-mom_data={"age":25,
-  "PNL":"Prenatal labs: VZVI, RI, HIV negative, Hep B negative, RPRNR, GC/Chlamydia negative",
-"hsv":"No history of HSV and has no active lesions.",
-  "gbs":"GBS+.  She was febrile to 38.1, and received ampicillin 2 hours before delivery.",
-  "rom":"ROM occurred 16 hours ago.",
-  "gp":"G1PO"}
+history="Mom is a 37 year old G2P1 woman.  Baby is EGA 32 weeks, delivery by SVD.  She is VZVI, RI, HIV-, Hep B negative, RPRNR, GC/Chlamydia negative, and GBS negative.  \
+She has been afebrile.  Rupture of membranes occurred 36 hours ago with clear fluids.  She received one dose of betamethasone 24 hours ago."
 
 warmer={
     "is_turned_on":False,
@@ -21,7 +17,7 @@ warmer={
 
 #Need to change the exams so they are less text-based.
 #I deleted APGAR for now,not including malformations, BP, EKG, or 4-extremity sats
-vitals={'o2sat':55, 'o2sat_updated':0, 'hr':120, 'rr':0, 'sbp':75, 'dbp':50, 'temp':35, 'weight':2.25}
+vitals={'o2sat':55, 'o2sat_updated':0, 'hr':120, 'rr':0, 'sbp':75, 'dbp':50, 'temp':35.2, 'weight':2.25}
 resp={"breath_sounds":"None", "chest_rise":"None", "wob":"None", "is_grunting":False, "is_spontaneous":False}
 cardiac={"murmur":"no murmur", "sounds": "normal S1/S2", "femoral_pulse":"2+", "brachial_pulse":"2+"}
 abd={"bs":"+bs", "palpate":"soft, no HSM"}

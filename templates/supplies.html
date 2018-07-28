@@ -7,12 +7,7 @@
      	   </div>
 
     		<div class="row mt-3">
-                <div v-if="!drawer_opened" class="col">
-                    <button class="btn btn-sm btn-primary" id="check_drawer" v-on:click="drawer_opened=true">
-                        Check Drawer for Available Supplies
-                    </button>
-                </div>
-                <div v-else class="col">
+                <div class="col">
                     <div class="container" v-if="availableSupplies.length>0">
                         <div class="row">
                             <h4 class="col">
@@ -63,14 +58,15 @@
                             <h4 class="col">Fetch Supplies:</h4>
                         </div>
                         <div class="row">
-                        <div class="col input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="px-1 input-group-text" id="basic-addon3">Fetch:</span>
+                            <nav class="nav flex-column col-auto">
+                              <a class="nav-link btn btn-primary p-0" href="#">Active</a>
+                              <a class="nav-link btn btn-light p-0">Link</a>
+                              <a class="nav-link btn btn-light p-0">Link</a>
+                              <a class="nav-link btn btn-light p-0" href="#">Disabled</a>
+                            </nav>
+                            <div class="col">
+                                
                             </div>
-                            <v-select class="supply-fetch" label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)"	:options="supplySearchOptions" placeholder="search..."></v-select>
-
-                        </div>
-
                         </div>
                     </div>
                 </div>

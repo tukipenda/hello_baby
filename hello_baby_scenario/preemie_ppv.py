@@ -7,7 +7,7 @@ import preemie_ppv_update as ppv_update
 from preemie_ppv_update import getSubDict, getSupplies
 
 baby_data=json.dumps(data.baby_data)
-mom_data=json.dumps(data.mom_data)
+history=json.dumps(data.history)
 baby_PE=json.dumps(data.PE)
 supplies=json.dumps(data.supplyList)
 warmer=json.dumps(data.warmer)
@@ -16,7 +16,7 @@ vent=json.dumps(data.vent)
 cpr=json.dumps(data.cpr)
 uvc=json.dumps(data.uvc)
 health=json.dumps(data.health)
-ppvScenario=models.Scenario(name="preemie_ppv", scenario=data.scenario, baby_data=baby_data, mom_data=mom_data, baby_PE=baby_PE, supplies=supplies, warmer=warmer, tasks=tasks, vent=vent, cpr=cpr, uvc=uvc, health=health)
+ppvScenario=models.Scenario(name="preemie_ppv", scenario=data.scenario, baby_data=baby_data, history=history, baby_PE=baby_PE, supplies=supplies, warmer=warmer, tasks=tasks, vent=vent, cpr=cpr, uvc=uvc, health=health)
 db.session.add(ppvScenario)
 db.session.commit()
 
@@ -41,13 +41,13 @@ def getScenarioData(user):
     warmer=getSubDict(warmer.__dict__, data.warmer.keys())
 
     scenario_text=scenario.scenario
-    mom=json.loads(scenario.mom_data)
+    history=json.loads(scenario.history)
     tasks=json.loads(scenario.tasks)
     returnDict={
         'scenario_text':scenario_text,
         'PE':PE,
         'resusc':resusc,
-        'mom':mom,
+        'history':history,
         'baby':babyDict,
         'warmer':warmer,
         'supplies':getSupplies(baby.id),

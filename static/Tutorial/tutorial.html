@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,9 +10,9 @@
     <!-- bootstrap vue stylesheet -->
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
 
-    <link rel="stylesheet" href="{{ url_for('static',filename='hello_baby_style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='vue-select.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='vuetify.css') }}">
+    <link rel="stylesheet" href="/static/hello_baby_style.css">
+    <link rel="stylesheet" href="/static/vue-select.css">
+    <link rel="stylesheet" href="/static/vuetify.css">
 
     <!-- consider adding bootstrap vue at some point? -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
@@ -83,7 +84,17 @@
         </div>
         <div id="HelloBabyApp">
 
-            {% block body %}{% endblock %}
+            
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title">Welcome to the Tutorial</h2>
+        Tutorial part 1
+    </div>
+</div>
+</div>
+
+</main>
+
         </div>
 
     </main>
@@ -124,8 +135,8 @@
 
     </script>
     <!-- Vue slider component -->
-    {% block javascript %}
-    {% endblock %}
+    
+    
 
 </body>
 
