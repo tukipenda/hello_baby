@@ -184,32 +184,7 @@ class Supply(db.Model):
     is_using=db.Column(db.Boolean)
     size=db.Column(db.Text, nullable=True)
     pp=db.Column(db.Text)
-
-"""
-class Baby(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-        nullable=False)
-    ga=db.Column(db.Text)
-    neonatal_complications=db.Column(db.Text)
-    is_delivered=db.Column(db.Boolean)
-
-    supplies = db.relationship('Supply', backref='baby', lazy=True)
-
-    def __repr__(self):
-        return '<Baby %r>' % self.ga
-
-
-class Supply(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    baby_id = db.Column(db.Integer, db.ForeignKey('baby.id'),
-        nullable=False)
-    name=db.Column(db.Text)
-    is_available=db.Column(db.Boolean)
-    is_using=db.Column(db.Boolean)
-    size=db.Column(db.Text, nullable=True)
-    pp=db.Column(db.Text)
-"""
+    supply_type=db.Column(db.Text)
 
 #needs to probably go in a different file
 class Actionlog(db.Model):
@@ -266,7 +241,7 @@ def create_baby(user, scenario):
         resuscModel=resuscDict[key](baby_id=baby_id, **kwargs)
         db.session.add(resuscModel)
     for supply in supplies:
-        newSupply=Supply(baby_id=baby_id, name=supply['name'], size=supply['size'], is_available=supply['is_available'], is_using=supply['is_using'], pp=supply['pp'])
+        newSupply=Supply(baby_id=baby_id, name=supply['name'], size=supply['size'], is_available=supply['is_available'], is_using=supply['is_using'], pp=supply['pp'], supply_type=supply['supply_type'])
         db.session.add(newSupply)
     db.session.commit()
     w=Warmer(baby_id=baby_id, **warmer)

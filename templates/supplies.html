@@ -1,3 +1,5 @@
+            
+            <!-- OMG this code is terrible, need to refactor!!! -->
 
      		<div class="row">
             <div class="col-6" v-for="mask in getMasks">
@@ -8,64 +10,119 @@
 
     		<div class="row mt-3">
                 <div class="col">
-                    <div class="container" v-if="availableSupplies.length>0">
-                        <div class="row">
-                            <h4 class="col">
-                                Available Supplies:
-                            </h4>
-                        </div>
-                        <div class="row">
-                         <div v-for="supply in availableSupplies" class="col-auto">
-                        <div v-if="baby_delivered">[[supply.name]] <span v-if="supply.is_using" class="badge badge-success">using</span>
-                            <span v-else-if="supply.name==='pulse_ox'" id="pulse_ox" v-on:click="useSupply(supply)" class="btn badge badge-primary">Use</span>
-                             <span v-else v-on:click="useSupply(supply)" class="btn badge badge-primary">Use</span>
-                             </div>
-                    	<div v-else>[[supply.name]]</div>
-                        </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">
-                                ETTs:
-                            </div>
-                            <div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='ett') && (supply.is_available)">
-                                <span class="badge badge-light">[[supply.size]]</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-5">
-                                Laryngoscopes:
-                            </div>
-                            <div class="col-2" v-for="supply in scenario.supplies" v-if="(supply.name==='laryngoscope') && (supply.is_available)">
-                                <span class="badge badge-light">[[supply.size]]</span>
-                            </div>
-                        </div>
+                    <div class="container">
                         <div class="row mt-2">
-                            <h4 class="col">Get More Supplies:</h4>
-                        </div>
-                        <div class="row">
-                        <div class="col input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="px-1 input-group-text" id="basic-addon3">Fetch:</span>
-                            </div>
-                            <v-select class="supply-fetch" label="pp" v-model="supplyToFetch" @input="getSupply(supplyToFetch)"	:options="supplySearchOptions" placeholder="search..."></v-select>
-
-                        </div>
-
-                        </div>
-                    </div>
-                    <div class="container" v-else>
-                        <div class="row mt-2">
-                            <h4 class="col">Fetch Supplies:</h4>
+                            <h4 class="col">Supply Drawer:</h4>
                         </div>
                         <div class="row">
                             <nav class="nav flex-column col-auto">
-                              <a class="nav-link btn btn-primary p-0" href="#">Active</a>
-                              <a class="nav-link btn btn-light p-0">Link</a>
-                              <a class="nav-link btn btn-light p-0">Link</a>
-                              <a class="nav-link btn btn-light p-0" href="#">Disabled</a>
+                              <a v-on:click="supplyTab='basic'" v-bind:class="(supplyTab==='basic') ? 'btn btn-primary' : 'btn btn-light'" class="nav-link btn p-0" href="#">Basic</a>
+                              <a v-on:click="supplyTab='resp'" v-bind:class="(supplyTab==='resp') ? 'btn btn-primary' : 'btn btn-light'" class="nav-link btn p-0" href="#">Respiratory</a>
+                              <a v-on:click="supplyTab='warming'" v-bind:class="(supplyTab==='warming') ? 'btn btn-primary' : 'btn btn-light'" class="nav-link btn p-0" href="#">Warming</a>
+                              <a v-on:click="supplyTab='monitors'" v-bind:class="(supplyTab==='monitors') ? 'btn btn-primary' : 'btn btn-light'" class="nav-link btn p-0" href="#">Monitors</a>
+                              <a v-on:click="supplyTab='procedures'" v-bind:class="(supplyTab==='procedures') ? 'btn btn-primary' : 'btn btn-light'" class="nav-link btn p-0" href="#">Procedures</a>
+                              <a v-on:click="supplyTab='meds'" v-bind:class="(supplyTab==='meds') ? 'btn btn-primary' : 'btn btn-light'" class="nav-link btn p-0" href="#">Medications</a>
                             </nav>
                             <div class="col">
+                                <div v-if="supplyTab=='basic'">
+                                     <div class="row">
+                                         <div v-for="supply in scenario.supplies" class="col-auto" v-if="(supply.supply_type=='basic') && (supply.name!='mask')">
+                                            <div v-if="!supply.is_available" class='btn badge badge-primary' v-on:click="getSupply(supply)">
+                                                Fetch [[supply.name]]
+                                            </div>
+                                            <div v-else class='badge badge-light'>
+                                                [[supply.name]]
+                                            </div>
+                                         </div>
+                                    </div>
+                                </div>
+                                <div v-if="supplyTab=='resp'">
+                                     <div class="row">
+                                         <div v-for="supply in scenario.supplies" class="col-auto" v-if="(supply.supply_type=='resp') && (supply.name!='ett') && (supply.name!='laryngoscope')">
+                                            <div v-if="!supply.is_available" class='btn badge badge-primary' v-on:click="getSupply(supply)">
+                                                Fetch [[supply.name]]
+                                            </div>
+                                            <div v-else class='badge badge-light'>
+                                                [[supply.name]]
+                                            </div>
+                                     </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-2">
+                                            ETTs:
+                                        </div>
+                                        <div class="col-auto" v-for="supply in scenario.supplies" v-if="(supply.name==='ett')">
+                                            <span v-if="!supply.is_available" class='btn badge badge-primary p-1' v-on:click="getSupply(supply)">
+                                                Fetch size [[supply.size]]
+                                            </span>
+                                            <span v-else class='badge badge-light p-1'>
+                                                [[supply.size]]
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-5">
+                                            Laryngoscopes:
+                                        </div>
+                                        <div class="col-auto" v-for="supply in scenario.supplies" v-if="(supply.name==='laryngoscope')">
+                                            <span v-if="!supply.is_available" class='btn badge badge-primary p-1' v-on:click="getSupply(supply)">
+                                                Fetch size [[supply.size]]
+                                            </span>
+                                            <span v-else class='badge badge-light p-1'>
+                                                [[supply.size]]
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="supplyTab=='warming'">
+                                  <div class="row">
+                                         <div v-for="supply in scenario.supplies" class="col-auto" v-if="(supply.supply_type=='warming')">
+                                            <span v-if="!supply.is_available" class='btn badge badge-primary p-1' v-on:click="getSupply(supply)">
+                                                Fetch [[supply.name]]
+                                            </span>
+                                            <span v-else class='badge badge-light p-1'>
+                                                [[supply.name]]
+                                            </span>
+                                     </div>
+                                    </div>
+                                </div>
                                 
+                                <div v-if="supplyTab=='monitors'">
+                                  <div class="row">
+                                         <div v-for="supply in scenario.supplies" class="col-auto" v-if="(supply.supply_type=='monitors')">
+                                            <div v-if="!supply.is_available" class='btn badge badge-primary' v-on:click="getSupply(supply)">
+                                                Fetch [[supply.name]]
+                                            </div>
+                                            <div v-else class='badge badge-light'>
+                                                [[supply.name]]
+                                            </div>
+                                     </div>
+                                    </div>
+                                </div>
+                                <div v-if="supplyTab=='procedures'">
+                                  <div class="row">
+                                         <div v-for="supply in scenario.supplies" class="col-auto" v-if="(supply.supply_type=='procedures')">
+                                            <div v-if="!supply.is_available" class='btn badge badge-primary' v-on:click="getSupply(supply)">
+                                                Fetch [[supply.name]]
+                                            </div>
+                                            <div v-else class='badge badge-light'>
+                                                [[supply.name]]
+                                            </div>
+                                     </div>
+                                    </div>
+                                </div>
+                                <div v-if="supplyTab=='meds'">
+                                  <div class="row">
+                                         <div v-for="supply in scenario.supplies" class="col-auto" v-if="(supply.supply_type=='meds')">
+                                            <div v-if="!supply.is_available" class='btn badge badge-primary' v-on:click="getSupply(supply)">
+                                                Fetch [[supply.name]]
+                                            </div>
+                                            <div v-else class='badge badge-light'>
+                                                [[supply.name]]
+                                         </div>
+                                     </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

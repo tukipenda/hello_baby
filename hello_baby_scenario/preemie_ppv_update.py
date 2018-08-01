@@ -18,6 +18,7 @@ def getSupplies(baby_id):
         s['is_available']=supply.is_available
         s['is_using']=supply.is_using
         s['pp']=supply.pp
+        s['supply_type']=supply.supply_type
         toReturn.append(s)
     return toReturn
 

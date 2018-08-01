@@ -56,6 +56,7 @@ var app = new Vue({
             actionTab: "simple",
             mainTab: "history",
             warmerTab: "warmer_settings",
+            supplyTab: 'basic',
             interveneTab:"supplies",
             supplyToFetch: null,
             task: null,

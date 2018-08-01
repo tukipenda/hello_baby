@@ -71,32 +71,43 @@ resusc={
     'health':health
 }
 
-simple_supplies=[
-            "pulse_ox",
+basic_supplies=[
             "hat",
-            "transwarmer",
-            "plastic_bag",
-            "temp_probe",
             "blankets",
             "bulb_suction",
-            "meconium_aspirator",
             "stethoscope",
-            "epinephrine",
-            "normal_saline_bag",
-            "cord_clamp",
-            "scalpel",
-            "flush",
-            "UVC"
+            "cord_clamp"
         ]
+resp_supplies=[
+    "meconium_aspirator"
+]
+warming_supplies=[
+    "transwarmer",
+    "plastic_bag"
+]
+monitor_supplies=[
+    "pulse_ox",
+    "temp_probe"
+]
+proc_supplies=[
+    "scalpel",
+    "flush",
+    "UVC"
+]
+med_supplies=[
+    "epinephrine",
+    "normal_saline_bag"
+]
 supplyList=[]
-for supply in simple_supplies:
-    supplyList.append({"name":supply, "size":None})
+for (supplies,supply_type) in [(basic_supplies, 'basic'), (resp_supplies, 'resp'), (warming_supplies, 'warming'), (monitor_supplies, 'monitors'), (proc_supplies, 'procedures'), (med_supplies, 'meds')]:
+    for supply in supplies:
+        supplyList.append({"name":supply, "size":None, 'supply_type':supply_type})
 
 for size in ["0", "1", "00"]:
-    supplyList.append({"name":'laryngoscope', "size":size})
+    supplyList.append({"name":'laryngoscope', "size":size, 'supply_type':'resp'})
 
 for size in ["2.5", "3", "3.5"]:
-    supplyList.append({"name":'ett', "size":size})
+    supplyList.append({"name":'ett', "size":size, 'supply_type':'resp'})
 
 for supply in supplyList:
     supply["is_available"]=False
@@ -106,7 +117,7 @@ for supply in supplyList:
         supply["pp"]=supply['name']+": "+supply['size']
 
 for size in ["Infant", "Preemie"]:
-    supplyList.append({"name":'mask', "size":size, "is_available":True, "is_using":False, 'pp': ('mask: '+size)})
+    supplyList.append({"name":'mask', "size":size, "is_available":True, "is_using":False, 'pp': ('mask: '+size), 'supply_type':'basic'})
 
 tasks=[]
 for supply in supplyList:
