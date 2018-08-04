@@ -46,7 +46,7 @@
 
       <div class="modal-footer">
           <div class="container">
-              <div class="row" v-if="(actionTab==='vent')&&(ventTab!='start')">
+              <div class="row" v-if="(actionTab==='resp')&&(ventTab!='start')">
               <div class="col">
               		<button class="btn btn-secondary" type="button" v-on:click="ventTab='start'">Cancel</button>
               </div>
@@ -56,6 +56,6 @@
               <button v-else class="btn btn-primary" type="button" v-on:click="simpleTask('extubate'); ventTab='start'">Extubate</button> <!-- note that only 'prep_extubate' remains as start defaults to v-else below -->
               </div>
           </div>
+			  <button v-else type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
-		 <button v-else type="button" v-on:click="showTab='None'" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>

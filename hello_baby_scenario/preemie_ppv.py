@@ -6,17 +6,10 @@ import preemie_ppv_data as data
 import preemie_ppv_update as ppv_update
 from preemie_ppv_update import getSubDict, getSupplies
 
-baby_data=json.dumps(data.baby_data)
-history=json.dumps(data.history)
-baby_PE=json.dumps(data.PE)
-supplies=json.dumps(data.supplyList)
-warmer=json.dumps(data.warmer)
-tasks=json.dumps(data.tasks)
-vent=json.dumps(data.vent)
-cpr=json.dumps(data.cpr)
-uvc=json.dumps(data.uvc)
-health=json.dumps(data.health)
-ppvScenario=models.Scenario(name="preemie_ppv", scenario=data.scenario, baby_data=baby_data, history=history, baby_PE=baby_PE, supplies=supplies, warmer=warmer, tasks=tasks, vent=vent, cpr=cpr, uvc=uvc, health=health)
+value_list=['baby_data', 'history', 'PE', 'supplies', 'warmer', 'tasks', 'vent', 'cpr', 'uvc', 'health']
+scenarioDict={name:json.dumps(getattr(data, name)) for name in value_list}
+ppvScenario=models.Scenario(name="preemie_ppv", **scenarioDict)
+
 db.session.add(ppvScenario)
 db.session.commit()
 

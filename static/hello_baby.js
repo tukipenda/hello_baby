@@ -4,7 +4,6 @@ Vue.component('v-select-intervene', VueSelect.VueSelect);
 /*There is a problem which is css is dynamically loaded based on the name of the component here.  Probably I eventually need to package this on my own
 so this is not an issue
 */
-
 var hs = document.getElementsByTagName('style');
 if(hs.length){
 for (var i=0, max = hs.length; i < max; i++) {
@@ -14,6 +13,7 @@ for (var i=0, max = hs.length; i < max; i++) {
 }
 }
 
+/* Takes time in seconds and puts out format m:ss */
 function formatTime(t){
     t=Math.floor(t/1000);
     var m = Math.floor(t / 60);
@@ -30,6 +30,8 @@ var app = new Vue({
             scenario_started:false,
             contents: '',
             instruction_index:0,
+            timedPE: {},
+            timedRD: {}, /*timed resusc dict */
             lastPE:{ /*each contains a copy of the full scenario.PE that is checked at different times, to use in the description of the PE
                       * Note that e.g. resp does not map 1:1 onto scenario.PE.resp as it includes secretions data as well*/
                 'hr':{'has_examined':false, 'text':"", 'time':0},
@@ -39,27 +41,43 @@ var app = new Vue({
                 'neuro':{'has_examined':false, 'text':'', 'time':0},
                 'other':{'has_examined':false, 'text':'', 'time':0}
             },
+            
+            /*this is related to popper, still needed?*/
             pl:'left',
-            ventTab:"start",
+            
+            /* timers */
             baby_timer_started: false,
             delivery_time:null,
             elapsed_delivery_time:0, /*in seconds*/
             baby_time:null,
             elapsed_baby_time:null, /*in seconds*/
             baby_delivered: false,
+            
+            /* stand in for app data */
             scenario:{},
+            
+            
             data_last_updated:null,
             data_updater:null, /*repeatedly update data */
+            
+            /* app settings */
             app_mode:"practice", /*alternatives are practice and test */
             app_state:"instruction", /* options include playing, hint */
+            
+            /* tabs */
+            ventTab:"start",
             showTab: "None",
             actionTab: "simple",
             mainTab: "history",
             warmerTab: "warmer_settings",
             supplyTab: 'basic',
             interveneTab:"supplies",
+            
+            /* tasks, supplies */
             supplyToFetch: null,
             task: null,
+            
+            /* messages */
             show_message:true,
             hb_message:"The baby is about to be delivered.  Time to get the warmer ready.", /*need to make this part of the scenario text*/
         },
@@ -128,7 +146,7 @@ var app = new Vue({
                     return false;
             }
         },
-        methods: {
+        methods: {  
                 updateLastPE: function(PEtype){
                     this.lastPE[PEtype].has_examined=true;
                     if (PEtype=='hr'){
@@ -153,10 +171,13 @@ var app = new Vue({
                     if(this.baby_delivered){
                         dtime=Date.now()-this.delivery_time;
                     }
+                    
                     axios.post("/getscenario", {"time":dtime}).then(function(response){
                         self.scenario=response.data;
                         self.app_mode=self.scenario.app_mode;
                     });
+                    
+                    
                 },
                 startBabyTimer: function(){
                     this.baby_timer_started=true;

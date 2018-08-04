@@ -98,54 +98,61 @@ med_supplies=[
     "epinephrine",
     "normal_saline_bag"
 ]
-supplyList=[]
-for (supplies,supply_type) in [(basic_supplies, 'basic'), (resp_supplies, 'resp'), (warming_supplies, 'warming'), (monitor_supplies, 'monitors'), (proc_supplies, 'procedures'), (med_supplies, 'meds')]:
-    for supply in supplies:
-        supplyList.append({"name":supply, "size":None, 'supply_type':supply_type})
+supplies=[]
 
-for size in ["0", "1", "00"]:
-    supplyList.append({"name":'laryngoscope', "size":size, 'supply_type':'resp'})
+#basic supplies
+for (supplyList,supply_type) in [(basic_supplies, 'basic'), (resp_supplies, 'resp'), (warming_supplies, 'warming'), (monitor_supplies, 'monitors'), (proc_supplies, 'procedures'), (med_supplies, 'meds')]:
+    for supply in supplyList:
+        supplies.append({"name":supply, "size":None, 'supply_type':supply_type})
 
-for size in ["2.5", "3", "3.5"]:
-    supplyList.append({"name":'ett', "size":size, 'supply_type':'resp'})
+#laryngoscopes
+supplies.extend([{"name":'laryngoscope', "size":size, 'supply_type':'resp'} for size in ["0", "1", "00"]])
 
-for supply in supplyList:
-    supply["is_available"]=False
+#ETTs
+supplies.extend([{"name":'ett', "size":size, 'supply_type':'resp'} for size in ["2.5", "3", "3.5"]])
+
+#masks
+supplies.extend([{"name":'mask', "size":size, 'supply_type':'basic'} for size in ["Infant", "Preemie"]])
+
+def setSupplyParams(supply):
+    if supply['name']=='mask':
+        supply['is_available']=True
+    else:
+        supply['is_available']=False
     supply["is_using"]=False
-    supply['pp']=supply['name']
     if supply['size']:
         supply["pp"]=supply['name']+": "+supply['size']
+    else:
+        supply['pp']=supply['name']
+    return supply
 
-for size in ["Infant", "Preemie"]:
-    supplyList.append({"name":'mask', "size":size, "is_available":True, "is_using":False, 'pp': ('mask: '+size), 'supply_type':'basic'})
+#list comprehension to modify list of supplies
+supplies=[setSupplyParams(supply) for supply in supplies]
 
-tasks=[]
-for supply in supplyList:
-    task={
+#fetch tasks
+tasks=[{
         'name':'fetch',
         'supply_name':supply['name'],
         'size':supply['size'],
         'pp':'fetch '+supply['pp']
-    }
-    tasks.append(task)
-for supply in supplyList:
-    task={
+    } for supply in supplies]
+
+#use tasks
+tasks.extend([{
         'name':'use',
         'supply_name':supply['name'],
         'size':supply['size'],
         'pp':'use '+supply['pp']
-    }
-    tasks.append(task)
+    } for supply in supplies])
 
+#simple tasks
 simpleTasks=[
     "dry",
     "stimulate",
     "bulb_suction",
     "deep_suction"
 ]
-for taskName in simpleTasks:
-    task={
+tasks.extend([{
         'name':taskName,
         'pp':taskName
-    }
-    tasks.append(task)
+    } for taskName in simpleTasks])

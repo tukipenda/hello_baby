@@ -10,17 +10,7 @@ def getSubDict(newdict, keys):
 
 def getSupplies(baby_id):
     supplies=models.Supply.query.filter_by(baby_id=baby_id)
-    toReturn=[]
-    for supply in supplies:
-        s={}
-        s['size']=supply.size
-        s['name']=supply.name
-        s['is_available']=supply.is_available
-        s['is_using']=supply.is_using
-        s['pp']=supply.pp
-        s['supply_type']=supply.supply_type
-        toReturn.append(s)
-    return toReturn
+    return {name:getattr(supply, name) for name in ['size', 'name', 'is_available', 'is_using', 'pp', 'supply_type']}
 
 def getSupply(baby_id, name, size=None):
     supplies=getSupplies(baby_id)
@@ -42,6 +32,8 @@ def useSupply(baby_id, **kwargs):
     if(supply.is_available):
         models.Supply.query.filter_by(baby_id=baby_id, name=name).update(dict(is_using=False)) #remove other supplies already being used
         supply.is_using=True
+    else:
+        pass #error supply is not available
 
 def dry(baby_id):
     skin=models.PESkin.query.filter_by(baby_id=baby_id).first()
@@ -83,6 +75,7 @@ taskDict={
     'updatewarmer':updatewarmer
 }
 
+# refactor_this
 #this is hacky - need to fix this - also needs major testing!!!
 class UpdateBaby:
     def __init__(self, baby_id):

@@ -17,7 +17,7 @@ class Scenario(db.Model):
     scenario=db.Column(db.Text)
     baby_data=db.Column(db.Text)
     history=db.Column(db.Text)
-    baby_PE=db.Column(db.Text)
+    PE=db.Column(db.Text)
     warmer=db.Column(db.Text)
     supplies=db.Column(db.Text)
     tasks=db.Column(db.Text)
@@ -201,7 +201,6 @@ class Action(db.Model):
     action=db.Column(db.Text)
     time=db.Column(db.DateTime)
 
-# probably should change the name as it now includes mechanical things like PE/UVC
 PEDict={
     'vitals':PEVitals,
     'resp':PEResp,
@@ -222,7 +221,7 @@ resuscDict={
 
 def create_baby(user, scenario):
     baby_data=json.loads(scenario.baby_data)
-    baby_PE=json.loads(scenario.baby_PE)
+    PE=json.loads(scenario.PE)
     supplies=json.loads(scenario.supplies)
     warmer=json.loads(scenario.warmer)
     b=Baby(user_id=user.id, ga=baby_data['ga'], neonatal_complications=baby_data['neonatal_complications'])
@@ -230,7 +229,7 @@ def create_baby(user, scenario):
     db.session.commit()
     baby_id=b.id
     for name,model in PEDict.items():
-        subPE=model(baby_id=baby_id, **baby_PE[name])
+        subPE=model(baby_id=baby_id, **PE[name])
         db.session.add(subPE)
     db.session.commit()
     for key in ["vent", "cpr", "uvc", "health"]:
@@ -254,16 +253,11 @@ def create_baby(user, scenario):
 
 db.create_all()
 
-# this is a catch-all class that needs to be improved along with the data coming in. Ugh!
-def getExams(baby_id):
-    ed={}
-    rd={}
+# plan - track last changes in JS, <15 seconds, will add <span> and then recreate PP PE dict here
+
+# refactor_this
+def getPrettyPrintPEFromDict(ed, rd, ga):
     resultDict={}
-    for name,model in PEDict.items():
-        ed[name]=model.query.filter_by(baby_id=baby_id).first()
-    for name,model in resuscDict.items():
-        rd[name]=model.query.filter_by(baby_id=baby_id).first()
-    baby=Baby.query.filter_by(id=baby_id).first()
     s=ed['skin']
     r=ed['resp']
     sec=ed['secretions']
@@ -308,7 +302,7 @@ def getExams(baby_id):
     else: #vent.positioning should be 1
         positioning="Infant is in chin-lift position with jaw thrust"
     d={
-        'ga':baby.ga,
+        'ga':ga,
         's':ed['skin'],
         'dry':dry,
         'texture':s.texture.capitalize(),
@@ -376,3 +370,13 @@ def getExams(baby_id):
     resultDict['other']="Infant {scalp}. {clavicles}. Ears are {o.ears}. {eyes}. {umbilical_cord}. {palate}. {lips}. {gu}. {hips}. {spine}. {anus}".format(**d)
     return resultDict
 
+def getExams(baby_id):
+    ed={}
+    rd={}
+    for name,model in PEDict.items():
+        ed[name]=model.query.filter_by(baby_id=baby_id).first()
+    for name,model in resuscDict.items():
+        rd[name]=model.query.filter_by(baby_id=baby_id).first()
+    baby=Baby.query.filter_by(id=baby_id).first()
+    result_dict=getPrettyPrintPEFromDict(ed, rd, baby.ga)
+    return result_dict
