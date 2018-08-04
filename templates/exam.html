@@ -1,6 +1,5 @@
 <div class="row">
-                            <div class="col">
-                            [[scenario.PEtext.appearance]]
+                            <div class="col" v-html="lpe('appearance').text">                            
                         </div>
           </div>
 {% for exam, pp in [('hr', 'Heart Rate'), ('resp', 'Lungs'), ('cardiac', 'Heart'), ('abd', "Abdomen"), ('neuro', "Neuro Exam"), ('other', 'Other Exams')] %}
@@ -17,7 +16,7 @@
              {% if exam=='hr' %}
              <div class="col"> Heart rate is <span class="col-auto badge badge-danger">[[lpe('{{exam}}').text]]</span></div>
              {% else %}
-             <div class="col"> {{pp}}: [[lpe('{{exam}}').text]]</div>
+             <div class="col" v-html="'{{pp}}'+': '+lpe('{{exam}}').text"></div>
              {% endif %}
             </div>
           <div v-if="lpe('{{exam}}').time!=0" class="row">

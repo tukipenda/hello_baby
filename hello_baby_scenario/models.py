@@ -373,7 +373,7 @@ def getPrettyPrintPEFromDict(PPIDict):
     resultDict['appearance']="{ga} week old infant.  Skin is {color}{dry}. {texture}. {breathing}{vent_type}There is {chest_rise}.{wob}{grunting} Mouth is {mouth_open}. {positioning}.".format(**PPIDict['appearance']) 
     resultDict['resp']="{breathing}{breath_sounds}{vent_type}There is {chest_rise}. {wob}{grunting}Secretions are {quantity}, {thickness}, and {color}. ".format(**PPIDict['resp'])
     resultDict['cardiac']="{sounds}. There is {murmur}. Pulses are {b} brachial and {f} femoral. Heart rate is {hr}.".format(**PPIDict['cardiac'])
-    resultDict['abd']="Abdomen is {abd.palpate}. {abd.bs}.".format(PPIDict['abd'])
+    resultDict['abd']="Abdomen is {palpate}. {bs}.".format(**PPIDict['abd'])
     resultDict['neuro']="Infant is {cry}. Infant is {moving}.".format(**PPIDict['neuro'])
     resultDict['other']="Infant {scalp}. {clavicles}. Ears are {ears}. {eyes}. {umbilical_cord}. {palate}. {lips}. {gu}. {hips}. {spine}. {anus}".format(**PPIDict['other'])
     return resultDict
@@ -389,7 +389,10 @@ def getPPIDict(baby_id):
     return getPPInputFromDict(ed, rd, baby.ga)
 
 def getHTMLValue(leaf, time):
-    if (time-leaf['time'])<15:
+    if(leaf['value'].strip()==""):
+        return leaf['value']
+    if (time-leaf['time'])<25000: #25 seconds
+        app.logger.info(time-leaf['time'])
         return "<span class='updated'>{val}</span>".format(val=leaf['value'])
     else:
         return leaf['value']
@@ -398,7 +401,7 @@ def getHTMLPPIDict(PPIDict, time):
     if 'time' in PPIDict.keys():
         return getHTMLValue(PPIDict, time)
     else:
-        return {k:getHTMLValue(v, time) for k,v in PPIDict}     
+        return {k:getHTMLPPIDict(v, time) for k,v in PPIDict.items()}     
     
 def getExams(PPIDict, time):
     PPIDict=getHTMLPPIDict(PPIDict, time)

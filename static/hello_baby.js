@@ -121,7 +121,7 @@ var app = new Vue({
                 getPrettyPrintPE: function(PEtype){
                     var time=Date.now()
                     self=this;
-                    axios.post("/getscenario", {"time":time, 'PPIDict':self.timedPPIDict}).then(function(response){
+                    axios.post("/getPrettyPrintPE", {"time":time, 'PPIDict':self.timedPPIDict}).then(function(response){
                         var pedict=response.data;
                         self.lastPE[PEtype].text=pedict[PEtype];
                     });
@@ -152,14 +152,20 @@ var app = new Vue({
                             if(olddict.hasOwnProperty(key)){
                                 obj[key]={};
                                 obj[key]['value']=newdict[key];
-                                if(olddict[key]!=newdict[key]){
+                                if(olddict[key]['value']!=newdict[key]){
                                     obj[key]['time']=time;   
+                                    console.log('change');
+                                }
+                                else {
+                                    obj[key]['time']=olddict[key]['time'];
+                                    console.log('nochange');
                                 }
                             }
                             else{
                                 obj[key]={}
                                 obj[key]['value']=newdict[key];
                                 obj[key]['time']=time; 
+                                console.log('just at the start');
                             }
                         }
                         else {
@@ -176,8 +182,6 @@ var app = new Vue({
                     return returnDict
                 },
                 getTimedPPIDict(newdict){
-                    console.log(newdict);
-                    console.log(this.timedPPIDict);
                     var time=Date.now();
                     /* if PPIdict has not yet been created */
                     if(Object.keys(this.timedPPIDict).length===0){
@@ -185,7 +189,7 @@ var app = new Vue({
                     }
                     /* if dict has already been created */
                     else {
-                         this.timedPPIDict=this.convertDictToTimed(newdict, this.timedPPIDict, time-30000);
+                         this.timedPPIDict=this.convertDictToTimed(newdict, this.timedPPIDict, time);
                     }
                 },
                 getScenario: function(){
