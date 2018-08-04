@@ -45,7 +45,7 @@ def getScenarioData(user):
         'warmer':warmer,
         'supplies':getSupplies(baby.id),
         'tasks': tasks,
-        'PEtext':models.getExams(baby.id)
+        'PPIDict':models.getExams(baby.id)
     }
     return returnDict
 

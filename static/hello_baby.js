@@ -30,8 +30,7 @@ var app = new Vue({
             scenario_started:false,
             contents: '',
             instruction_index:0,
-            timedPE: {},
-            timedRD: {}, /*timed resusc dict */
+            timedPPIDict: {}, /*timed PPIDict */
             lastPE:{ /*each contains a copy of the full scenario.PE that is checked at different times, to use in the description of the PE
                       * Note that e.g. resp does not map 1:1 onto scenario.PE.resp as it includes secretions data as well*/
                 'hr':{'has_examined':false, 'text':"", 'time':0},
@@ -88,37 +87,8 @@ var app = new Vue({
             this.getScenario();
         },
         computed: {
-            availableSupplies: function(){
-                var toReturn=[];
-                var s=this.scenario.supplies;
-                for (var i=0;i<s.length;i++){
-                    if(s[i].is_available==true){
-                        if ((s[i].name!="mask") && (s[i].name!="ett") && (s[i].name!="laryngoscope")){
-                            toReturn.push(s[i]);
-                        }
-                    }
-                }
-                return toReturn;
-            },
-            supplySearchOptions: function(){
-                var supplyList=this.scenario.supplies;
-                var toReturn=[];
-                for (var i=0;i<supplyList.length;i++){
-                    if(supplyList[i].is_available==false){
-                        toReturn.push(supplyList[i]);
-                    };
-                }
-                return toReturn;
-            },
             getMasks: function(){
-                var masks=[];
-                var supplyList=this.scenario.supplies;
-                for (var i=0;i<supplyList.length;i++){
-                    if(supplyList[i].name=="mask"){
-                        masks.push(supplyList[i]);
-                    };
-                }
-                return masks;
+                return this.scenario.supplies.filter(function(supply){return supply.name==='mask'})
             },
             is_IE: function(){
                         var ua = window.navigator.userAgent;
@@ -147,16 +117,20 @@ var app = new Vue({
             }
         },
         methods: {  
+                getPrettyPrintPE: function(PEtype){
+                    
+                },
                 updateLastPE: function(PEtype){
                     this.lastPE[PEtype].has_examined=true;
                     if (PEtype=='hr'){
                         this.lastPE[PEtype].text=this.scenario.PE.vitals.hr;
                     }
                     else {
-                        this.lastPE[PEtype].text=this.scenario.PEtext[PEtype];
+                        this.getPrettyPrintPE(PEtype);
                     }
                     this.lastPE[PEtype].time=Date.now();
                 },
+            /*gives exam, together with time that it was last updated */
                  lpe: function(PEtype){
                     var toReturn={};
                     toReturn['text']=this.lastPE[PEtype].text;
@@ -171,7 +145,6 @@ var app = new Vue({
                     if(this.baby_delivered){
                         dtime=Date.now()-this.delivery_time;
                     }
-                    
                     axios.post("/getscenario", {"time":dtime}).then(function(response){
                         self.scenario=response.data;
                         self.app_mode=self.scenario.app_mode;
@@ -276,6 +249,8 @@ var app = new Vue({
                     this.show_message=false;
                     this.scenario_started=true;
                   },
+            
+            /*I have no idea what this code below is for - Aaaah refactor_this */
                   toggleEl: function(el_id){
                       this.toggle_values[el_id]=!this.toggle_values[el_id];
                       return this.toggle_values[el_id];
@@ -288,6 +263,7 @@ var app = new Vue({
                           Vue.set(this.toggle_values, el_id, false);
                       }
                   },
+            
                   toggleHeat: function(){
                       this.scenario.warmer.is_turned_on=!this.scenario.warmer.is_turned_on;
                       this.doTask({'name':"updatewarmer", 'is_turned_on':this.scenario.warmer.is_turned_on});

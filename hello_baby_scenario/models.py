@@ -255,9 +255,8 @@ db.create_all()
 
 # plan - track last changes in JS, <15 seconds, will add <span> and then recreate PP PE dict here
 
-# refactor_this
-def getPrettyPrintPEFromDict(ed, rd, ga):
-    resultDict={}
+getPPInputFromDict(ed, rd, ga):
+    PPIDict={} #pretty print input dictionary
     s=ed['skin']
     r=ed['resp']
     sec=ed['secretions']
@@ -301,7 +300,7 @@ def getPrettyPrintPEFromDict(ed, rd, ga):
         positioning="Infant is lying flat, no chin lift or jaw thrust"
     else: #vent.positioning should be 1
         positioning="Infant is in chin-lift position with jaw thrust"
-    d={
+    PPIDict['appearance']={
         'ga':ga,
         's':ed['skin'],
         'dry':dry,
@@ -316,14 +315,13 @@ def getPrettyPrintPEFromDict(ed, rd, ga):
         'positioning':positioning
 
     }
-    resultDict['appearance']="{ga} week old infant.  Skin is {s.color}{dry}. {texture}. {breathing}{vent_type}There is {chest_rise}.{wob}{grunting} Mouth is {mouth_open}. {positioning}.".format(**d)
 
     #respiratory
     breath_sounds="There are no breath sounds. "
     if r.breath_sounds!="None":
         breath_sounds="Breath sounds are "+r.breath_sounds+". "
 
-    d={
+    PPIDict['resp']={
         'breathing':breathing,
         'breath_sounds':breath_sounds,
         'chest_rise':chest_rise,
@@ -332,19 +330,17 @@ def getPrettyPrintPEFromDict(ed, rd, ga):
         'vent_type':vent_type,
         'wob':wob,
         'sec':sec
-
     }
-    resultDict['resp']="{breathing}{breath_sounds}{vent_type}There is {chest_rise}. {wob}{grunting}Secretions are {sec.quantity}, {sec.thickness}, and {sec.color}. ".format(**d)
 
     #cardiac
-    d={
+    PPIDict['cardiac']={
         'murmur':c.murmur,
         'b':c.brachial_pulse,
         'f':c.femoral_pulse,
         'hr':v.hr,
         'sounds':c.sounds.capitalize()
     }
-    resultDict['cardiac']="{sounds}. There is {murmur}. Pulses are {b} brachial and {f} femoral. Heart rate is {hr}.".format(**d)
+    PPIDict['abd']=abd
 
     #abdomen
     resultDict['abd']="Abdomen is {abd.palpate}. {abd.bs}.".format(abd=abd)
@@ -354,23 +350,34 @@ def getPrettyPrintPEFromDict(ed, rd, ga):
     if not n.loc=="no cry":
         cry=n.loc
     moving=n.motor_activity
-    d={
+    PPIDict['neuro']={
         'cry':cry,
         'moving':moving
     }
-    resultDict['neuro']="Infant is {cry}. Infant is {moving}.".format(**d)
 
     #other
-    d={
+    PPIDict['other']={
         'o':o,
         'scalp':"does not have a caput" if (o.scalp=="no caput") else ("has a "+o.scalp),
     }
     for key in ['clavicles', 'eyes', 'umbilical_cord', 'palate', 'lips', 'gu', 'hips', 'spine', 'anus']:
-        d[key]=getattr(o, key).capitalize()
-    resultDict['other']="Infant {scalp}. {clavicles}. Ears are {o.ears}. {eyes}. {umbilical_cord}. {palate}. {lips}. {gu}. {hips}. {spine}. {anus}".format(**d)
+        PPIDict['other'][key]=getattr(o, key).capitalize()
+    return PPIDict
+    
+# refactor_this
+def getPrettyPrintPEFromDict(PPIDict):
+    resultDict={}
+    resultDict['appearance']="{ga} week old infant.  Skin is {s.color}{dry}. {texture}. {breathing}{vent_type}There is {chest_rise}.{wob}{grunting} Mouth is {mouth_open}. {positioning}.".format(**PPIDict['appearance']) 
+    resultDict['resp']="{breathing}{breath_sounds}{vent_type}There is {chest_rise}. {wob}{grunting}Secretions are {sec.quantity}, {sec.thickness}, and {sec.color}. ".format(**PPIDict['resp'])
+    resultDict['cardiac']="{sounds}. There is {murmur}. Pulses are {b} brachial and {f} femoral. Heart rate is {hr}.".format(**PPIDict['cardiac'])
+    resultDict['abd']="Abdomen is {abd.palpate}. {abd.bs}.".format(PPIDict['abd'])
+    resultDict['neuro']="Infant is {cry}. Infant is {moving}.".format(**PPIDict['neuro'])
+    for key in ['clavicles', 'eyes', 'umbilical_cord', 'palate', 'lips', 'gu', 'hips', 'spine', 'anus']:
+        PPIDict['other'][key]=getattr(o, key).capitalize()
+    resultDict['other']="Infant {scalp}. {clavicles}. Ears are {o.ears}. {eyes}. {umbilical_cord}. {palate}. {lips}. {gu}. {hips}. {spine}. {anus}".format(**PPIDict['other'])
     return resultDict
 
-def getExams(baby_id):
+def getPPIDict(baby_id):
     ed={}
     rd={}
     for name,model in PEDict.items():
@@ -378,5 +385,21 @@ def getExams(baby_id):
     for name,model in resuscDict.items():
         rd[name]=model.query.filter_by(baby_id=baby_id).first()
     baby=Baby.query.filter_by(id=baby_id).first()
-    result_dict=getPrettyPrintPEFromDict(ed, rd, baby.ga)
+    return getPPInputFromDict(ed, rd, ga)
+
+def getHTMLValue(leaf, time):
+    if (time-leaf['time'])<15:
+        return "<span class='updated'>{val}</span>".format(val=leaf['value'])
+    else:
+        return leaf['value']
+
+def getHTMLPPIDict(PPIDict, time):
+    if 'time' in PPIDict.keys():
+        return getHTMLValue(PPIDict, time)
+    else:
+        return {k:getHTMLValue(v, time) for k,v in PPIDict}     
+    
+def getExams(PPIDict, time):
+    PPIDict=getHTMLPPIDict(PPIDict, time)
+    result_dict=getPrettyPrintPEFromDict(PPIDict)
     return result_dict

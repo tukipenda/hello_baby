@@ -101,3 +101,15 @@ def doTask():
             task.pop('pp')
         ppv.doTask(baby_id, taskName, time, **task)
         return("")
+
+@app.route('/getPrettyPrintPE', methods=["post"])
+def getPrettyPrintPE():
+    if 'user_id' in session.keys():
+        user_id=session['user_id']
+        baby_id=session['baby_id'] # could be a source of bugs, need to watch
+        time=request.get_json()['time']
+        PPIDict=request.get_json()['PPIDict']
+        pedict=models.getExams(PPIDict, time)
+        return(json.dumps(pedict))
+    else:
+        return "" #ugh

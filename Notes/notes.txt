@@ -1,6 +1,7 @@
 
-supplies:
-respiratory
-monitors
-warming
-medications
+
+I want to make a monad
+
+PE value -> PE value, time last updated
+and then PE value, time last updated -> PE value.  
+Alternatively, based on time last updated, PE value -> PE value, changed/unchanged -> PE value
