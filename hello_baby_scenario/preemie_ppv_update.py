@@ -10,7 +10,7 @@ def getSubDict(newdict, keys):
 
 def getSupplies(baby_id):
     supplies=models.Supply.query.filter_by(baby_id=baby_id)
-    return {name:getattr(supply, name) for name in ['size', 'name', 'is_available', 'is_using', 'pp', 'supply_type']}
+    return [{name:getattr(supply, name) for name in ['size', 'name', 'is_available', 'is_using', 'pp', 'supply_type']} for supply in supplies]
 
 def getSupply(baby_id, name, size=None):
     supplies=getSupplies(baby_id)

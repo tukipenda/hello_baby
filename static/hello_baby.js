@@ -33,6 +33,7 @@ var app = new Vue({
             timedPPIDict: {}, /*timed PPIDict */
             lastPE:{ /*each contains a copy of the full scenario.PE that is checked at different times, to use in the description of the PE
                       * Note that e.g. resp does not map 1:1 onto scenario.PE.resp as it includes secretions data as well*/
+                'appearance':{'has_examined':false, 'text':"", 'time':0},
                 'hr':{'has_examined':false, 'text':"", 'time':0},
                 'cardiac':{'has_examined':false, 'text':'', 'time':0},
                 'resp':{'has_examined':false, 'text':'', 'time':0},
@@ -118,7 +119,12 @@ var app = new Vue({
         },
         methods: {  
                 getPrettyPrintPE: function(PEtype){
-                    
+                    var time=Date.now()
+                    self=this;
+                    axios.post("/getscenario", {"time":time, 'PPIDict':self.timedPPIDict}).then(function(response){
+                        var pedict=response.data;
+                        self.lastPE[PEtype].text=pedict[PEtype];
+                    });
                 },
                 updateLastPE: function(PEtype){
                     this.lastPE[PEtype].has_examined=true;
@@ -138,6 +144,50 @@ var app = new Vue({
                     toReturn['time']=t;
                     return toReturn;
                 },
+                /*Probably need to test this logic because this is sort of patched together with string*/
+                convertDictToTimed(newdict, olddict, time){
+                    self=this;
+                    var returnDict=Object.keys(newdict).reduce(function(obj, key){
+                        if (typeof newdict[key] === 'string'){
+                            if(olddict.hasOwnProperty(key)){
+                                obj[key]={};
+                                obj[key]['value']=newdict[key];
+                                if(olddict[key]!=newdict[key]){
+                                    obj[key]['time']=time;   
+                                }
+                            }
+                            else{
+                                obj[key]={}
+                                obj[key]['value']=newdict[key];
+                                obj[key]['time']=time; 
+                            }
+                        }
+                        else {
+                            obj[key]={};
+                            if(olddict.hasOwnProperty(key)){
+                                obj[key]=self.convertDictToTimed(newdict[key], olddict[key], time);
+                            }
+                            else{
+                                obj[key]=self.convertDictToTimed(newdict[key], {}, time);
+                            }
+                       }
+                        return obj;
+                    }, {});
+                    return returnDict
+                },
+                getTimedPPIDict(newdict){
+                    console.log(newdict);
+                    console.log(this.timedPPIDict);
+                    var time=Date.now();
+                    /* if PPIdict has not yet been created */
+                    if(Object.keys(this.timedPPIDict).length===0){
+                        this.timedPPIDict=this.convertDictToTimed(newdict, {}, time-30000); /*this is a stupid hack*/
+                    }
+                    /* if dict has already been created */
+                    else {
+                         this.timedPPIDict=this.convertDictToTimed(newdict, this.timedPPIDict, time-30000);
+                    }
+                },
                 getScenario: function(){
                     this.data_last_updated=Date.now();
                     let self=this;
@@ -148,6 +198,8 @@ var app = new Vue({
                     axios.post("/getscenario", {"time":dtime}).then(function(response){
                         self.scenario=response.data;
                         self.app_mode=self.scenario.app_mode;
+                        var ppidict=self.scenario.PPIDict;
+                        self.getTimedPPIDict(ppidict);
                     });
                     
                     
@@ -172,6 +224,7 @@ var app = new Vue({
                         this.hb_message="The baby was just delivered!";
                         this.showTab="None";
                         this.show_message=true;
+                        this.updateLastPE('appearance');
                     }
                 },
                 doTask: function(task){
@@ -292,6 +345,7 @@ var app = new Vue({
                       this.data_updater=setInterval(function(){
                             if((Date.now()-self.data_last_updated)>5000){
                                 self.getScenario();
+                                self.updateLastPE('appearance');
                             }
                         }, 3000);
                   },

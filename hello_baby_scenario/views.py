@@ -110,6 +110,7 @@ def getPrettyPrintPE():
         time=request.get_json()['time']
         PPIDict=request.get_json()['PPIDict']
         pedict=models.getExams(PPIDict, time)
+        app.logger.info(pedict)
         return(json.dumps(pedict))
     else:
         return "" #ugh
