@@ -148,24 +148,21 @@ var app = new Vue({
                 convertDictToTimed(newdict, olddict, time){
                     self=this;
                     var returnDict=Object.keys(newdict).reduce(function(obj, key){
-                        if (typeof newdict[key] === 'string'){
+                        if ((typeof newdict[key] === 'string') || (typeof newdict[key] === 'number')){
                             if(olddict.hasOwnProperty(key)){
                                 obj[key]={};
                                 obj[key]['value']=newdict[key];
                                 if(olddict[key]['value']!=newdict[key]){
                                     obj[key]['time']=time;   
-                                    console.log('change');
                                 }
                                 else {
                                     obj[key]['time']=olddict[key]['time'];
-                                    console.log('nochange');
                                 }
                             }
                             else{
                                 obj[key]={}
                                 obj[key]['value']=newdict[key];
                                 obj[key]['time']=time; 
-                                console.log('just at the start');
                             }
                         }
                         else {

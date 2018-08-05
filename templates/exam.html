@@ -16,7 +16,9 @@
              {% if exam=='hr' %}
              <div class="col"> Heart rate is <span class="col-auto badge badge-danger">[[lpe('{{exam}}').text]]</span></div>
              {% else %}
-             <div class="col" v-html="'{{pp}}'+': '+lpe('{{exam}}').text"></div>
+             <div class="col">
+				 <span v-html="'{{pp}}'+': '+lpe('{{exam}}').text"></span>
+			</div>
              {% endif %}
             </div>
           <div v-if="lpe('{{exam}}').time!=0" class="row">

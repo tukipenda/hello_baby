@@ -15,6 +15,9 @@
 {% include "controls.html" %}
 
 <div class="container">
+		<div class="alert alert-warning row" role="alert" v-if="!baby_delivered">
+			<span>Not sure how to get started?  <a href="/static/Tutorial/tutorial.html" style="color:#007bff">Check out the tutorial!</a></span>
+        </div>
     	<div class="row">
         <div class="col-sm"><!--Needed to keep make app in the center of the screen -->
         </div>
@@ -60,7 +63,8 @@
 			    </div>
 			</div>
 		</div>
-	<div class="row mt-2" v-if="baby_delivered" v-html="lpe('appearance').text">
+	<div class="row mt-2" v-if="baby_delivered">
+		<span v-html="lpe('appearance').text"></span>
  	</div>
 	<div class="row mt-3">
             <span class="col-auto px-1">Heat is:</span>
