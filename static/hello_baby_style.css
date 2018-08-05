@@ -6,7 +6,7 @@
 .glyphicon { margin-right:10px; }
 .alert a {color: gold;}
 
-.updated {color:blue}
+.updated {color:white; background-color:#3490FF;}
 
 .popover {
     border-color:black;
