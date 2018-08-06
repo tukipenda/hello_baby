@@ -1,11 +1,16 @@
 <div v-if="ventTab==='start'" class="container">
-<div class="row">
-                <div class="col-auto">
-                    <span v-if="scenario.resusc.vent.vent_type==='spontaneous'">Infant is <span v-if="scenario.PE.vitals.rr===0" class="badge badge-sm badge-success">not breathing</span><span v-else class="badge badge-sm badge-success">spontaneously ventilating</span></span>
-                    <span v-else-if="scenario.resusc.vent.vent_type==='ppv'">Infant is getting <span class="badge badge-sm badge-success">bag-mask ventilated</span></span>
-                    <span v-else="scenario.resusc.vent.vent_type==='intubated'">Infant is <span class="badge badge-sm badge-success">intubated</span></span>
-                </div>
-           </div>
+		<div class="row">
+			<div class="col">
+				<span v-html="lpe('vent').text"></span>
+			</div>
+        </div>
+		<div class="row">
+			<div class="col-auto m-2" v-for="task in scenario.tasks" v-if="task.type==='vent'">
+				<div class="badge badge-success" v-if="action_in_progress[task.name]">	
+					[[task.in_progress]]
+				</div>
+			</div>	
+      	</div>
             <div v-if="scenario.resusc.vent.vent_type==='spontaneous'" class="row mt-3">
                 	<div class="col">
                         <button id="prep_ppv" v-on:click="ventTab='prep_ppv'" class="btn btn-sm btn-primary">Start PPV</button>
@@ -16,7 +21,7 @@
             </div>
             <div v-else-if="scenario.resusc.vent.vent_type==='ppv'" class="row mt-3">
                 <div class="col">
-                	<button v-on:click="simpleTask('stopPPV')" class="btn btn-sm btn-primary">Stop PPV</button>
+                	<button v-on:click="simpleTask('stop_ppv')" class="btn btn-sm btn-primary">Stop PPV</button>
                 </div>
                 <div class="col">
                     <button v-on:click="ventTab='prep_intubate'" class="btn btn-sm btn-primary">Intubate</button>
@@ -31,18 +36,20 @@
            <div class="row mt-3">
                <div v-if="scenario.resusc.vent.vent_type==='ppv'" class="col">
 				   <div class="row">
-                   <button id="adjust" v-on:click="simpleTask('adjustMask')" class="col-auto btn btn-primary btn-sm mr-2">
-                       Adjust Mask
-                   </button>
-                   <button v-on:click="simpleTask('reposition')" class="col-auto btn btn-primary btn-sm mr-2">
-                       Reposition
-                   </button>
-                   <button v-on:click="simpleTask('deep_suction')" class="col-auto btn btn-primary btn-sm mr-2">
-                       Suction
-                   </button>
-                   <button v-on:click="simpleTask('openMouth')" class="col-auto btn btn-primary btn-sm mt-2">
-                       Open Mouth
-                   </button>
+					   <div class="col-auto m-2" v-for="task in scenario.tasks" v-if="task.type==='resp'">
+							<div class="badge badge-success" v-if="action_in_progress[task.name]">	
+								[[task.in_progress]]
+							</div>
+							<!--Need to add some way to account for whether skin is dry, also need to check if required supplies are available -->
+							<button v-else v-on:click=doTask({'name':task.name}) class="btn btn-sm btn-primary">[[task.pp]]</button>
+						</div>	
+					    <div class="col-auto m-2">
+							<div class="badge badge-success" v-if="action_in_progress['deep_suction']">	
+								Suctioning
+							</div>
+							<!--Need to add some way to account for whether skin is dry, also need to check if required supplies are available -->
+							<button v-else v-on:click=doTask({'name':'deep_suction'}) class="btn btn-sm btn-primary">Deep Suction</button>
+						</div>
 				   </div>
                </div>
 
@@ -137,7 +144,7 @@
                             <div class="col">
                     <button v-on:click="ventTab='start'" class="btn btn-sm btn-secondary">
                         	Cancel
-                                </button>
+                    </button>
                 </div>
            </div>
 </div>

@@ -39,7 +39,8 @@ var app = new Vue({
                 'resp':{'has_examined':false, 'text':'', 'time':0},
                 'abd':{'has_examined':false, 'text':'', 'time':0},
                 'neuro':{'has_examined':false, 'text':'', 'time':0},
-                'other':{'has_examined':false, 'text':'', 'time':0}
+                'other':{'has_examined':false, 'text':'', 'time':0},
+                'vent':{'has_examined':false, 'text':'', 'time':0}
             },
             
             /*this is related to popper, still needed?*/
@@ -76,6 +77,9 @@ var app = new Vue({
             /* tasks, supplies */
             supplyToFetch: null,
             task: null,
+            
+            /*actions*/
+            action_in_progress: {},
             
             /* messages */
             show_message:true,
@@ -226,10 +230,24 @@ var app = new Vue({
                         this.showTab="None";
                         this.show_message=true;
                         this.updateLastPE('appearance');
+                        this.updateLastPE('vent');
                     }
                 },
                 doTask: function(task){
+                    /*the code below does not take into account the possibility that action is repeated in less than 5 seconds*/
                     let self=this;
+                    self.action_in_progress[task.name]=true;
+                    var timer=setInterval(function(){
+                        self.action_in_progress[task.name]=false;
+                    }, 5000);
+                    
+                    /*function will immediately go to use_supply if task is type 'use' */
+                    if(task.name.substring(0,4)==="use_"){
+                        this.useSupply({'name':task.name.substring(4), 'size':null});
+                        return null;
+                    }
+                    
+                    /*now we actually send the task to the server*/
                     var current_time=0;
                     if (this.baby_delivered) {
                         current_time=(Date.now()-this.delivery_time)/1000;
@@ -347,6 +365,7 @@ var app = new Vue({
                             if((Date.now()-self.data_last_updated)>5000){
                                 self.getScenario();
                                 self.updateLastPE('appearance');
+                                self.updateLastPE('vent');
                             }
                         }, 3000);
                   },

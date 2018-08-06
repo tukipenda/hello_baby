@@ -34,6 +34,7 @@
               <button v-if="baby_delivered" id="actions" v-on:click="toggleShowTab('actions')" v-bind:class="(showTab==='actions') ? 'btn btn-primary' : 'btn btn-light'" type="button" >Actions</button>
             </div>
 	    </div>
+			
 		<div class="row" style="background-color:black; padding:5px; border-radius:5px;">
 			<div class="col" style="padding-left:0px;">
 				<div v-if="baby_delivered">
@@ -55,11 +56,13 @@
 			    </div>
 			    <div class="row">
                 <span v-if="checkSupplyByName('pulse_ox').is_using==true" class="badge badge-primary">O2 Sat [[Math.round(scenario.PE.vitals.o2sat)]]</span>
-                <span v-else class="badge badge-warning">O2sat unavailable</span>
+                <button v-b-popover.click.blur.left="'Don\'t forget to place a pulse ox'" v-else class="btn badge badge-warning">
+					O2sat unavailable</button>
 			    </div>
 			    <div class="row">
-                <span v-if="checkSupplyByName('temp_probe').is_using==true" class="badge badge-success">Temp [[scenario.PE.vitals.temp]]</span>
-                <span v-else class="badge badge-warning">Temp unavailable</span>
+                <span v-if="checkSupplyByName('temp_probe').is_using==true" class="badge-success">Temp [[scenario.PE.vitals.temp]]</span>
+                <button v-b-popover.click.blur.left="'Don\'t forget to place a temp probe'" v-else class="btn badge badge-warning">
+					Temp unavailable</button>
 			    </div>
 			</div>
 		</div>
