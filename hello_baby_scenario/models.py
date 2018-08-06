@@ -10,7 +10,9 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
     
+# refactor_this - may not want scenario to be stored as a model, just as python code - that is probably the best thing actually.  
 class Scenario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name=db.Column(db.Text) # needs to be unique
@@ -182,6 +184,7 @@ class Supply(db.Model):
     name=db.Column(db.Text)
     is_available=db.Column(db.Boolean)
     is_using=db.Column(db.Boolean)
+    use_simple=db.Column(db.Boolean) #can the supply be used with just a simple use action?
     size=db.Column(db.Text, nullable=True)
     pp=db.Column(db.Text)
     supply_type=db.Column(db.Text)
@@ -239,8 +242,9 @@ def create_baby(user, scenario):
                 kwargs[k]=json.dumps(v)
         resuscModel=resuscDict[key](baby_id=baby_id, **kwargs)
         db.session.add(resuscModel)
+    
     for supply in supplies:
-        newSupply=Supply(baby_id=baby_id, name=supply['name'], size=supply['size'], is_available=supply['is_available'], is_using=supply['is_using'], pp=supply['pp'], supply_type=supply['supply_type'])
+        newSupply=Supply(baby_id=baby_id, **supply)
         db.session.add(newSupply)
     db.session.commit()
     w=Warmer(baby_id=baby_id, **warmer)
@@ -286,9 +290,9 @@ def getPPInputFromDict(ed, rd, ga):
         if v.rr==0:
             breathing="Infant is not breathing."
         elif v.rr<40:
-            breathing="Infant is bradypneic."
+            breathing="Infant is bradypneic and breathing spontaneously."
         elif v.rr>60:
-            breathing="Infant is tachypneic."
+            breathing="Infant is tachypneic and breathing spontaneously."
     wob=""
     if r.wob!="None":
         wob="Infant has "+r.wob+" work of breathing."
@@ -300,6 +304,10 @@ def getPPInputFromDict(ed, rd, ga):
         positioning="Infant is lying flat, no chin lift or jaw thrust"
     else: #vent.positioning should be 1
         positioning="Infant is in chin-lift position with jaw thrust"
+    if vent.has_air_leak:
+        air_leak="There is an air leak."
+    else:
+        air_leak="There is a good seal."
     PPIDict['appearance']={
         'ga':ga,
         'color':s.color,
@@ -313,14 +321,20 @@ def getPPInputFromDict(ed, rd, ga):
         'wob':wob,
         'mouth_open': mouth_open,
         'positioning':positioning
-
     }
 
     #respiratory
     breath_sounds="There are no breath sounds."
     if r.breath_sounds!="None":
         breath_sounds="Breath sounds are "+r.breath_sounds+"."
-
+    
+    air_leak=""
+    if vent.vent_type=="ppv":
+        if vent.has_air_leak:
+            air_leak="There is an air leak."
+        else:
+            air_leak="There is a good seal."
+        
     PPIDict['resp']={
         'breathing':breathing,
         'breath_sounds':breath_sounds,
@@ -331,7 +345,10 @@ def getPPInputFromDict(ed, rd, ga):
         'wob':wob,
         'quantity':sec.quantity,
         'thickness':sec.thickness,
-        'color':sec.color
+        'color':sec.color,
+        'mouth_open': mouth_open,
+        'positioning':positioning,
+        'air_leak':air_leak
     }
 
     #cardiac
@@ -377,6 +394,7 @@ def getPrettyPrintPEFromDict(PPIDict):
     resultDict['abd']="Abdomen is {palpate}. {bs}.".format(**PPIDict['abd'])
     resultDict['neuro']="Infant is {cry}. Infant is {moving}.".format(**PPIDict['neuro'])
     resultDict['other']="Infant {scalp}. {clavicles}. Ears are {ears}. {eyes}. {umbilical_cord}. {palate}. {lips}. {gu}. {hips}. {spine}. {anus}".format(**PPIDict['other'])
+    resultDict['vent']="{breathing} {vent_type} {air_leak} There is {chest_rise}. {wob} {grunting} Secretions are {quantity}, {thickness}, and {color}. Mouth is {mouth_open}. {positioning}.".format(**PPIDict['resp'])
     return resultDict
 
 def getPPIDict(baby_id):

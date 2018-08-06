@@ -10,7 +10,9 @@ def getSubDict(newdict, keys):
 
 def getSupplies(baby_id):
     supplies=models.Supply.query.filter_by(baby_id=baby_id)
-    return [{name:getattr(supply, name) for name in ['size', 'name', 'is_available', 'is_using', 'pp', 'supply_type']} for supply in supplies]
+    return [{name:getattr(supply, name) for name in 
+             ['size', 'name', 'is_available', 'is_using', 'use_simple', 'pp', 'supply_type']}
+            for supply in supplies]
 
 def getSupply(baby_id, name, size=None):
     supplies=getSupplies(baby_id)
@@ -69,8 +71,8 @@ taskDict={
     "dry":dry,
     "stimulate":stimulate,
     "deliver_baby":deliver_baby,
-    "startPPV":start_ppv,
-    'stopPPV':stop_ppv,
+    "start_ppv":start_ppv,
+    'stop_ppv':stop_ppv,
     'set_rate':set_rate,
     'updatewarmer':updatewarmer
 }

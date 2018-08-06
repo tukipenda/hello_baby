@@ -6,7 +6,7 @@ import preemie_ppv_data as data
 import preemie_ppv_update as ppv_update
 from preemie_ppv_update import getSubDict, getSupplies
 
-value_list=['baby_data', 'history', 'PE', 'supplies', 'warmer', 'tasks', 'vent', 'cpr', 'uvc', 'health']
+value_list=['baby_data', 'scenario', 'history', 'PE', 'supplies', 'warmer', 'tasks', 'vent', 'cpr', 'uvc', 'health']
 scenarioDict={name:json.dumps(getattr(data, name)) for name in value_list}
 ppvScenario=models.Scenario(name="preemie_ppv", **scenarioDict)
 
@@ -32,8 +32,7 @@ def getScenarioData(user):
             resusc[r]=getSubDict(result.__dict__, getattr(data, r).keys())
     warmer=models.Warmer.query.filter_by(baby_id=baby.id).first()
     warmer=getSubDict(warmer.__dict__, data.warmer.keys())
-
-    scenario_text=scenario.scenario
+    scenario_text=json.loads(scenario.scenario)
     history=json.loads(scenario.history)
     tasks=json.loads(scenario.tasks)
     returnDict={

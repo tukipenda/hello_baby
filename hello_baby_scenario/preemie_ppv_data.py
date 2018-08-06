@@ -1,4 +1,5 @@
-scenario="You are called by the OB team for a preterm delivery by SVD. The baby's gestational age is estimated at 32 weeks.  Mom is 37 years old, afebrile, and prenatal labs are normal.  "
+from app import app
+scenario="You are called by the OB team for a preterm delivery by SVD. The baby's gestational age is estimated at 32 weeks.  Mom is 37 years old, afebrile, and prenatal labs are normal."
 baby_data={"ga":"32", "neonatal_complications":"None", "delivery":"SVD", "is_delivered":False}
 
 history="Mom is a 37 year old G2P1 woman.  Baby is EGA 32 weeks, delivery by SVD.  She is VZVI, RI, HIV-, Hep B negative, RPRNR, GC/Chlamydia negative, and GBS negative.  \
@@ -75,11 +76,11 @@ basic_supplies=[
             "hat",
             "blankets",
             "bulb_suction",
-            "stethoscope",
             "cord_clamp"
         ]
 resp_supplies=[
-    "meconium_aspirator"
+    "meconium_aspirator",
+    "stethoscope"
 ]
 warming_supplies=[
     "transwarmer",
@@ -114,6 +115,8 @@ supplies.extend([{"name":'ett', "size":size, 'supply_type':'resp'} for size in [
 #masks
 supplies.extend([{"name":'mask', "size":size, 'supply_type':'basic'} for size in ["Infant", "Preemie"]])
 
+
+#need to make pp actually pp
 def setSupplyParams(supply):
     if supply['name']=='mask':
         supply['is_available']=True
@@ -123,7 +126,13 @@ def setSupplyParams(supply):
     if supply['size']:
         supply["pp"]=supply['name']+": "+supply['size']
     else:
-        supply['pp']=supply['name']
+        supply['pp']=" ".join(supply['name'].split("_")).title()
+        
+    #set whether supply is being used
+    if supply['name'] in (basic_supplies+monitor_supplies+warming_supplies):
+        supply['use_simple']=True
+    else:
+        supply['use_simple']=False
     return supply
 
 #list comprehension to modify list of supplies
@@ -131,28 +140,101 @@ supplies=[setSupplyParams(supply) for supply in supplies]
 
 #fetch tasks
 tasks=[{
-        'name':'fetch',
+        'name':'fetch_'+supply['name'],
         'supply_name':supply['name'],
         'size':supply['size'],
-        'pp':'fetch '+supply['pp']
+        'pp':'fetch '+supply['pp'],
+        'type':'fetch',
     } for supply in supplies]
 
 #use tasks
 tasks.extend([{
-        'name':'use',
+        'name':'use_'+supply['name'],
         'supply_name':supply['name'],
         'size':supply['size'],
-        'pp':'use '+supply['pp']
-    } for supply in supplies])
+        'in_progress':'Using '+supply['pp'],
+        'pp':'Use '+supply['pp'],
+        'type':'simple',
+    } for supply in supplies if supply['use_simple']])
 
 #simple tasks
 simpleTasks=[
-    "dry",
-    "stimulate",
-    "bulb_suction",
-    "deep_suction"
+    {
+       'name':'dry',
+        'pp':'Dry',
+        'in_progress':"Drying",
+        'requires':['blankets'],
+        'type':'simple'
+    },
+    {
+       'name':'stimulate',
+        'pp':'Stimulate Baby',
+        'in_progress':"Stimulating Baby",
+        'type':'simple'
+    },
+    {
+       'name':'bulb_suction',
+        'pp':'Bulb Suction',
+        'in_progress':"Suctioning with bulb",
+        'requires':['bulb_suction'],
+        'type':'simple'
+    },
+    {
+       'name':'deep_suction',
+        'pp':'Deep Suction',
+        'in_progress':"Suctioning",
+        'type':'simple'
+    }
 ]
-tasks.extend([{
-        'name':taskName,
-        'pp':taskName
-    } for taskName in simpleTasks])
+
+respTasks=[
+    {
+       'name':'adjust_mask',
+        'pp':'Adjust Mask',
+        'in_progress':"Adjusting Mask",
+        'type':'resp'
+    },
+    {
+       'name':'reposition',
+        'pp':'Reposition',
+        'in_progress':"Repositioning",
+        'type':'resp'
+    },
+    {
+       'name':'open_mouth',
+        'pp':'Open Mouth',
+        'in_progress':"Opening Mouth",
+        'type':'resp'
+    }
+]
+
+ventTasks=[
+    {
+       'name':'start_ppv',
+        'pp':'start_ppv',
+        'in_progress':"Starting PPV",
+        'type':'vent'
+    },
+    {
+       'name':'stop_ppv',
+        'pp':'stop_ppv',
+        'in_progress':"Stopping PPV",
+        'type':'vent'
+    },
+    {
+       'name':'intubate',
+        'pp':'Intubate',
+        'in_progress':"Intubating",
+        'type':'vent'
+    },
+    {
+       'name':'extubate',
+        'pp':'Extubate',
+        'in_progress':"Extubating",
+        'type':'vent'
+    }
+]
+
+tasks.extend(simpleTasks)
+tasks.extend(respTasks)
+tasks.extend(ventTasks)
