@@ -153,7 +153,7 @@ class UpdateBaby:
         if self.taskName=="reposition":
             self.resusc['vent']['positioning']=1
 
-        if self.taskName=="openMouth":
+        if self.taskName=="open_mouth":
             self.resusc['vent']['is_mouth_open']=True
 
         if self.taskName=="deep_suction":
