@@ -88,8 +88,6 @@
 <div class="col">
     
     </div>
-    <div class="card col-auto">
-    <div class="card-body">
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -97,15 +95,29 @@
                 </div>
             </div>
             <div class="row">
-                  Tutorial part 1
+                <div class="alert alert-warning" role="alert">
+                     Tutorial Step [[index]]/12: <span v-html="tutorial_message[index-1]">
+                    </span>
+                </div>
             </div>
-            [[tutorial_img]]
             <div class="row">
-                <img :src="'/static/Tutorial/IMG/'+tutorial_img" class="rounded" alt="...">
+                <a v-if="index===1" class="col-auto m-2 btn btn-primary" href="/simulation">
+                    Skip tutorial
+                </a>
+                <button class="col-auto m-2 btn btn-primary" v-if="index>1" v-on:click="index-=1">
+                    Previous Step
+                </button>
+                <button class="col-auto m-2 btn btn-primary" v-if="index<12" v-on:click="index+=1">
+                    Next Step
+                </button>
+                <a class="col-auto m-2 btn btn-primary" v-else href="/simulation">
+                    Ready to start the Simulation!
+                </a>
+            </div>
+            <div class="row">
+                <img :src="'/static/Tutorial/IMG/tutorial_'+index+'.png'" class="rounded" alt="...">
             </div>
         </div>
-        </div>
-</div>
 <div class="col">
         
 </div>
