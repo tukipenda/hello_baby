@@ -58,8 +58,7 @@ def doTask(baby_id, taskName, time, **kwargs):
     ub.taskUpdate(time, taskName, **kwargs)
     actionLog=models.Actionlog.query.filter_by(baby_id=baby_id).first()
     action="task:{name}, args:{kwargs}".format(name=taskName, kwargs=str(kwargs))
-    app.logger.info(action)
-    app.logger.info(time)
     a=models.Action(action=action, actionlog_id=actionLog.id, time=time)
     db.session.commit()
+    app.logger.info(str(a.action)+" "+str(a.time))
 

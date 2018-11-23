@@ -142,35 +142,51 @@ class UpdateBaby:
             result.update(self.resusc[e])
         self.db.session.commit()
 
+        # Needs_Update/testing
     def updateVent(self):
-        if self.resusc['vent']['vent_type'] in ['ppv', 'intubated']:
+        if self.resusc['vent']['vent_type']=='spontaneous':
+            pass
+        
+        elif self.resusc['vent']['vent_type'] in ['ppv', 'intubated']:
             self.PE['vitals']['rr']=self.resusc['vent']['set_rate']
 
-        if self.taskName=="adjustMask":
-            self.resusc['vent']['has_air_leak']=False
+            if self.taskName=="adjustMask":
+                self.resusc['vent']['has_air_leak']=False
 
 
-        if self.taskName=="reposition":
-            self.resusc['vent']['positioning']=1
+            if self.taskName=="reposition":
+                self.resusc['vent']['positioning']=1
 
-        if self.taskName=="open_mouth":
-            self.resusc['vent']['is_mouth_open']=True
+            if self.taskName=="open_mouth":
+                self.resusc['vent']['is_mouth_open']=True
 
-        if self.taskName=="deep_suction":
-            self.PE['secretions']['quantity']='minimal'
+            if self.taskName=="deep_suction":
+                self.PE['secretions']['quantity']='minimal'
 
-        v=self.resusc['vent']
-        r=self.PE['resp']
-        if((not v['has_air_leak']) and (v['is_mouth_open'])):
-            v['efficacy']=0.4
-            r['chest_rise']='poor chest rise'
-            if v['positioning']==1:
-                v['efficacy']=0.8
-                r['breath_sounds']="breath sounds present bilaterally, difficult to hear"
-                r['chest_rise']="good chest rise"
-                if(self.PE['secretions']['quantity'])=='minimal':
-                    v['efficacy']=1
-                    r['breath_sounds']="clear breath sounds bilaterally"
+            v=self.resusc['vent']
+            r=self.PE['resp']
+
+            if not v['is_mouth_open']:
+                v['efficacy']=0
+                r['breath_sounds']="no breath sounds"
+                r['chest_rise']="no chest rise"
+                self.PE['vitals']['rr']=0
+            
+            elif v['has_air_leak']:
+                pass
+
+            #Need to incorporate PIP, PEEP, FiO2 into this algorithm
+            if(v['is_mouth_open']):
+                v['efficacy']=0.4
+                r['chest_rise']='poor chest rise'
+                if v['positioning']==1:
+                    v['efficacy']=0.8
+                    r['breath_sounds']="breath sounds present bilaterally, difficult to hear"
+                    r['chest_rise']="good chest rise"
+                    if(self.PE['secretions']['quantity'])=='minimal':
+                        v['efficacy']=1
+                        r['breath_sounds']="clear breath sounds bilaterally"
+
 
     def updateUVC(self):
         pass
@@ -178,6 +194,7 @@ class UpdateBaby:
     def updateCPR(self):
         pass
 
+            # Needs_Update/testing
     def get_last_od(self, seconds):
         oxygenation=json.loads(self.resusc['health']['oxygenation'])
         circulation=json.loads(self.resusc['health']['circulation'])
@@ -188,6 +205,7 @@ class UpdateBaby:
         return last
 
     #maybe I can start to include some formulas - like the O2 delivery formula at some point
+            # Needs_Update/testing
     def updateHealth(self): #this is going to need some serious testing!!!
 
         oxygenation=json.loads(self.resusc['health']['oxygenation'])
@@ -249,7 +267,7 @@ class UpdateBaby:
             return brain_health
 
         self.resusc['health']['brain_health']=get_brain_health(self.resusc['health']['brain_health'])
-
+        
     def updatePE(self):
 
         def updateResp():
@@ -281,6 +299,7 @@ class UpdateBaby:
         updateNeuro()
 
     def updateVitals(self):
+                # Needs_Update/testing
         def updateHR():
             if (not self.taskName): #I don't want to update HR for a task update, just q5s.
                 hr=self.PE['vitals']['hr']
@@ -319,7 +338,7 @@ class UpdateBaby:
                 hr=int(hr)
                 self.PE['vitals']['hr']=hr
 
-
+                    # Needs_Update/testing
         def updateRR():
             if not self.taskName: #updating when not a specific task (will need another for extubation/stopping PPV)
                 card_health=self.resusc['health']['card_health']
@@ -342,6 +361,7 @@ class UpdateBaby:
                 else:
                     self.PE['vitals']['rr']=self.resusc['vent']['set_rate']
 
+            # Needs_Update/testing
         def updateTemp():
             temp=self.PE['vitals']['temp']
             #if warmer not on, lose 0.05 C every 5 seconds until temp is 33
@@ -368,14 +388,11 @@ class UpdateBaby:
 
 
 
-
+            # Needs_Update/testing
         def updateO2sat():
             if (not self.taskName):
-                app.logger.info(self.get_last_od(30))
-                app.logger.info(self.time)
                 o2sat=self.PE['vitals']['o2sat']
                 otime=self.PE['vitals']['o2sat_updated']
-                app.logger.info(o2sat)
                 if o2sat>95:
                     o2sat=o2sat+np.random.normal(0, 2)                
                     self.PE['vitals']['o2sat']=round(o2sat, 2)

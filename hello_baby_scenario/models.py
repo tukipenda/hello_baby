@@ -412,7 +412,6 @@ def getHTMLValue(leaf, time):
     if(leaf['value'].strip()==""):
         return leaf['value']
     if (time-leaf['time'])<25000: #25 seconds
-        app.logger.info(time-leaf['time'])
         return "<span class='updated'>{val}</span>".format(val=leaf['value'])
     else:
         return leaf['value']

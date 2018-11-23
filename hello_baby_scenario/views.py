@@ -113,3 +113,14 @@ def getPrettyPrintPE():
         return(json.dumps(pedict))
     else:
         return "" #ugh
+
+@app.route('/getActionLog', methods=["get", "post"])    
+def getActionLog():
+    if 'user_id' in session.keys():
+        user_id=session['user_id']
+        baby_id=session['baby_id'] # could be a source of bugs, need to watch
+        a=models.Actionlog().query.filter_by(baby_id=baby_id).first()
+        app.logger.info('here')
+        for action in a.actions:
+            app.logger.info(action.action)
+        return ""

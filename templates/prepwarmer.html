@@ -106,6 +106,6 @@
 {% endblock %}
 {% block javascript %}
 <!-- Vue slider component -->
-    <script src="https://nightcatsama.github.io/vue-slider-component/dist/index.js"></script>
+    <script src="{{ url_for('static',filename='Vue-Slider/index.js') }}"></script>
     <script src="{{ url_for('static',filename='hello_baby.js') }}"></script>
 {% endblock %}

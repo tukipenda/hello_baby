@@ -210,6 +210,7 @@ var app = new Vue({
                     
                 },
                 startBabyTimer: function(){
+                    this.simpleTask("startTimer")
                     this.baby_timer_started=true;
                     this.baby_time=Date.now();
                     this.elapsed_baby_time="0:00";
