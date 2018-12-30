@@ -56,6 +56,19 @@ def simulation():
         session['baby_id']=baby.id
         return render_template('prepwarmer.html', is_IE=is_IE)
 
+@app.route('/results')
+def results():
+    session['app_mode']='simulation'
+    user_agent=request.headers.get('User-Agent')
+    is_IE=False
+    for test in ["msie", "trident", "edge"]:
+        if test in user_agent.lower():
+            is_IE=True
+    if 'user_id' in session.keys():
+        return render_template('results.html', is_IE=is_IE)
+    else:
+        return "" # error
+
 
 @app.route('/getscenario', methods=["get", "post"])
 def getScenario():

@@ -35,6 +35,12 @@ def getScenarioData(user):
     scenario_text=json.loads(scenario.scenario)
     history=json.loads(scenario.history)
     tasks=json.loads(scenario.tasks)
+    
+    a=models.Actionlog().query.filter_by(baby_id=baby.id).first()
+    app.logger.info(a)
+    actionLog=[]
+    for action in a.actions:
+        actionLog.append({'action':action.action, 'time':action.time})
     returnDict={
         'scenario_text':scenario_text,
         'PE':PE,
@@ -44,7 +50,8 @@ def getScenarioData(user):
         'warmer':warmer,
         'supplies':getSupplies(baby.id),
         'tasks': tasks,
-        'PPIDict':models.getPPIDict(baby.id)
+        'PPIDict':models.getPPIDict(baby.id),
+        'actionLog': actionLog
     }
     return returnDict
 
@@ -59,6 +66,7 @@ def doTask(baby_id, taskName, time, **kwargs):
     actionLog=models.Actionlog.query.filter_by(baby_id=baby_id).first()
     action="task:{name}, args:{kwargs}".format(name=taskName, kwargs=str(kwargs))
     a=models.Action(action=action, actionlog_id=actionLog.id, time=time)
+    db.session.add(a)
     db.session.commit()
     app.logger.info(str(a.action)+" "+str(a.time))
 

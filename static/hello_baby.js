@@ -57,6 +57,9 @@ var app = new Vue({
             /* stand in for app data */
             scenario:{},
             
+            /*action log*/
+            actionLog: [],
+            
             
             data_last_updated:null,
             data_updater:null, /*repeatedly update data */
@@ -202,6 +205,7 @@ var app = new Vue({
                     }
                     axios.post("/getscenario", {"time":dtime}).then(function(response){
                         self.scenario=response.data;
+                        self.actionLog=self.scenario.actionLog;
                         self.app_mode=self.scenario.app_mode;
                         var ppidict=self.scenario.PPIDict;
                         self.getTimedPPIDict(ppidict);

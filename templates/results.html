@@ -11,11 +11,9 @@
     </tr>
   </thead>
   <tbody>
-    <tr v-for=>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
+    <tr v-for="action in scenario.actionLog">
+      <td>[[action.time]]</td>
+        <td>[[action.action]]</td>
     </tr>
     </tbody>
 </table>

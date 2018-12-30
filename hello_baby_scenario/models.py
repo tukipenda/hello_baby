@@ -202,7 +202,7 @@ class Action(db.Model):
     actionlog_id = db.Column(db.Integer, db.ForeignKey('actionlog.id'),
         nullable=False)
     action=db.Column(db.Text)
-    time=db.Column(db.DateTime)
+    time=db.Column(db.Float)
 
 PEDict={
     'vitals':PEVitals,
