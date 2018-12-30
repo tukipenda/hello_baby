@@ -95,6 +95,16 @@ var app = new Vue({
             this.getScenario();
         },
         computed: {
+            sortedActionLog: function(){
+                    function compare(a, b) {
+                      if (a.time < b.time)
+                        return -1;
+                      if (a.time > b.time)
+                        return 1;
+                      return 0;
+                    }
+                    return this.actionLog.sort(compare);
+            },
             getMasks: function(){
                 return this.scenario.supplies.filter(function(supply){return supply.name==='mask'})
             },
