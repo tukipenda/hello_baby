@@ -3,6 +3,17 @@
     <div class="card-body">
         Results
         Log:
+        
+        <div>
+            Your results
+        </div>
+        <div class="row">
+            <div class="col p-0 btn-group btn-group-sm" role="group" aria-label="Basic example">
+              <button type="button" v-on:click="resultTab='major'" v-bind:class="(resultTab=='major') ? 'btn btn-primary' : 'btn btn-light'">Feedback</button>
+              <button type="button" v-on:click="resultTab='timed'" v-bind:class="(resultTab=='timed') ? 'btn btn-primary' : 'btn btn-light'">Timed Results</button>
+            </div>
+	    </div>
+        <div v-if="resultTab=='timed'" class="modal-body">
         <table class="table">
   <thead>
     <tr>
@@ -17,6 +28,10 @@
     </tr>
     </tbody>
 </table>
+            
+        </div>
+        <div v-if="resultTab=='major'" class="modal-body">
+            Major results
     </div>
 </div>
 {% endblock %}

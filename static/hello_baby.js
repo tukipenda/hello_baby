@@ -76,6 +76,7 @@ var app = new Vue({
             warmerTab: "warmer_settings",
             supplyTab: 'basic',
             interveneTab:"supplies",
+            resultTab:"major",
             
             /* tasks, supplies */
             supplyToFetch: null,
