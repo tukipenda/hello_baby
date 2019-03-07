@@ -19,7 +19,7 @@ warmer={
 #Need to change the exams so they are less text-based.
 #I deleted APGAR for now,not including malformations, BP, EKG, or 4-extremity sats
 vitals={'o2sat':55, 'o2sat_updated':0, 'hr':120, 'rr':0, 'sbp':75, 'dbp':50, 'temp':35.2, 'weight':2.25}
-resp={"breath_sounds":"None", "chest_rise":"None", "wob":"None", "is_grunting":False, "is_spontaneous":False}
+resp={"breath_sounds":"None", "chest_rise":"None", "wob":"None", "is_grunting":False, "is_spontaneous":False, "pneumo":"None"}
 cardiac={"murmur":"no murmur", "sounds": "normal S1/S2", "femoral_pulse":"2+", "brachial_pulse":"2+"}
 abd={"bs":"+bs", "palpate":"soft, no HSM"}
 skin={"color":'blue', "is_dry":False, "texture":"term infant skin"}

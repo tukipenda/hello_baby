@@ -62,6 +62,7 @@ class PEResp(db.Model):
     wob=db.Column(db.Text)
     is_grunting=db.Column(db.Boolean)
     is_spontaneous=db.Column(db.Boolean)
+    pneumo=db.Column(db.Text) #can be left, right, or none
 
 class PECardiac(db.Model):
     id = db.Column(db.Integer, primary_key=True)
