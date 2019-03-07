@@ -21,11 +21,14 @@
                     <div class="row mt-3">
                         <p class="col-3">{{pname}}: </p>
                         <div class="col-9">
-                            <vue-slider id="{{pname}}-slider" ref="slider" v-on:callback="updateWarmer('{{pname}}',{{pressure}})" v-bind="helloSliderOptions(0, {% if pressure=="scenario.warmer.flow" %} 20 {% else %} 100 {% endif %}, width='100%', '50%')" v-model="{{pressure}}">
+                            <vue-slider id="{{pname}}-slider" ref="slider" v-on:callback="updateWarmer('{{pname}}',{{pressure}})" v-bind="helloSliderOptions({% if pressure=="scenario.warmer.flow" %}0,20 {% else %}21,100 {% endif %}, width='100%', '50%')" v-model="{{pressure}}">
                                 {% if is_IE %}
                                 <div slot="label"></div>
                                 {% else %}
                                 <div slot="label" slot-scope="{ label, active }">
+                                    {% if pressure=="scenario.warmer.fio2"%}
+                                    <span :class="['custom-label', { active }]" v-if="label===21"> [[ label ]]</span>
+                                    {% endif %}
                                     <span :class="['custom-label', { active }]" v-if="label % {% if pressure=="scenario.warmer.flow"%} 5 {% else %} 20 {% endif %} === 0">
                             [[ label ]]
                           </span>
