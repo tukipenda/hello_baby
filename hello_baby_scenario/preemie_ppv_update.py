@@ -135,6 +135,17 @@ class UpdateBaby:
         if self.PE['resp']['pneumo'] in ["left", "right", "both"]:
             self.ss.end_scenario=True
             self.ss.end_scenario_reason="pneumo"
+        if self.PE['vitals']['temp']<34:
+            self.ss.end_scenario=True
+            self.ss.end_scenario_reason="cold"
+        if self.PE['vitals']['temp']>39:
+            self.ss.end_scenario=True
+            self.ss.end_scenario_reason="hot"
+            
+        #for this scenario specifically, if HR gets less than 60, and patient needs CPR, scenario is failed, cutoff is 55 to provide some wiggle room
+        if self.PE['vitals']['hr']<55:
+            self.ss.end_scenario=True
+            self.ss.end_scenario_reason="needs CPR"
         self.db.session.commit()
 
         # Needs_Update/testing
