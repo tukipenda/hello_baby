@@ -6,6 +6,7 @@ import json
 import numpy as np
 import pretty_print_baby as ppb
 
+#helper function
 def getSubDict(newdict, keys):
     return {key:newdict[key] for key in keys if (key in newdict.keys())}
 
@@ -106,28 +107,13 @@ class UpdateBaby:
                 return supply
         return None
 
-    def update(self, time, **kwargs):#taskName, **kwargs):
-        self.getData()
-        self.time=time
-        self.updateVent()
-        self.updateUVC()
-        self.updateCPR()
-        self.updateHealth()
-        self.updatePE()
-        self.updateVitals()
-        for e, m in models.PEDict.items():
-            result=m.query.filter_by(baby_id=self.baby_id)
-            result.update(self.PE[e])
-        for e, m in models.resuscDict.items():
-            result=m.query.filter_by(baby_id=self.baby_id)
-            result.update(self.resusc[e])
-        self.db.session.commit()
+    def update(self, time, **kwargs):
+        if 'taskName' in kwargs:
+            self.taskName=kwargs['taskName']
+            kwargs.pop('taskName')
+            if self.taskName in taskDict:
+                taskDict[self.taskName](self.baby_id, **kwargs)
 
-    def taskUpdate(self, time, taskName, **kwargs):
-        self.taskName=taskName
-        if taskName in taskDict:
-            taskDict[taskName](self.baby_id, **kwargs)
-        self.db.session.commit()
         self.getData()
         self.time=time
         self.updateVent()
@@ -136,7 +122,7 @@ class UpdateBaby:
         self.updateHealth()
         self.updatePE()
         self.updateVitals()
-        self.updateScenario()
+        self.updateScenario() #check if the scenario is over
         for e, m in models.PEDict.items():
             result=m.query.filter_by(baby_id=self.baby_id)
             result.update(self.PE[e])

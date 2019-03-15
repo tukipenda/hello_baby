@@ -66,7 +66,7 @@ def updateWarmer(baby_id, warmer_dict):
 
 def doTask(baby_id, taskName, time, **kwargs):
     ub=ppv_update.UpdateBaby(baby_id)
-    ub.taskUpdate(time, taskName, **kwargs)
+    ub.update(time, taskName=taskName, **kwargs)
     actionLog=models.Actionlog.query.filter_by(baby_id=baby_id).first()
     action="task:{name}, args:{kwargs}".format(name=taskName, kwargs=str(kwargs))
     a=models.Action(action=action, actionlog_id=actionLog.id, time=time)
