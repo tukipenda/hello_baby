@@ -205,6 +205,13 @@ class Action(db.Model):
     action=db.Column(db.Text)
     time=db.Column(db.Float)
 
+class ScenarioStatus(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    baby_id = db.Column(db.Integer, db.ForeignKey('baby.id'),
+        nullable=False)
+    end_scenario=db.Column(db.Boolean) #is the scenario over?
+    end_scenario_reason=db.Column(db.Text) #why is the scenario over?
+
 PEDict={
     'vitals':PEVitals,
     'resp':PEResp,
@@ -250,8 +257,10 @@ def create_baby(user, scenario):
     db.session.commit()
     w=Warmer(baby_id=baby_id, **warmer)
     a=Actionlog(baby_id=baby_id)
+    ss=ScenarioStatus(baby_id=baby_id, end_scenario=False, end_scenario_reason="")
     db.session.add(a)
     db.session.add(w)
+    db.session.add(ss)
     db.session.commit()
     return b
 

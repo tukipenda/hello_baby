@@ -220,6 +220,9 @@ var app = new Vue({
                         self.app_mode=self.scenario.app_mode;
                         var ppidict=self.scenario.PPIDict;
                         self.getTimedPPIDict(ppidict);
+                        if(self.scenario.scenario_status.end_scenario){
+                            alert('end scenario');
+                        }
                     });
                     
                     

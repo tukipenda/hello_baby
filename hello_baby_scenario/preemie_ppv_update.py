@@ -97,6 +97,7 @@ class UpdateBaby:
             self.resusc[e]=getSubDict(result.__dict__, data.resusc[e].keys())
         self.warmer=models.Warmer.query.filter_by(baby_id=self.baby_id).first()
         self.supplies=getSupplies(self.baby_id)
+        self.ss=models.ScenarioStatus.query.filter_by(baby_id=self.baby_id).first()
 
     def getSupply(self, name, size=None):
         for supply in self.supplies:
@@ -134,12 +135,19 @@ class UpdateBaby:
         self.updateHealth()
         self.updatePE()
         self.updateVitals()
+        self.updateScenario()
         for e, m in models.PEDict.items():
             result=m.query.filter_by(baby_id=self.baby_id)
             result.update(self.PE[e])
         for e, m in models.resuscDict.items():
             result=m.query.filter_by(baby_id=self.baby_id)
             result.update(self.resusc[e])
+        self.db.session.commit()
+    
+    def updateScenario(self):
+        if self.PE['resp']['pneumo'] in ["left", "right", "both"]:
+            self.ss.end_scenario=True
+            self.ss.end_scenario_reason="pneumo"
         self.db.session.commit()
 
         # Needs_Update/testing
@@ -149,6 +157,8 @@ class UpdateBaby:
         
         elif self.resusc['vent']['vent_type'] in ['ppv', 'intubated']:
             self.PE['vitals']['rr']=self.resusc['vent']['set_rate']
+            if self.warmer.pip>45:
+                self.PE['resp']['pneumo']="left" # should make it so left or right is randomly selected
 
             if self.taskName=="adjustMask":
                 self.resusc['vent']['has_air_leak']=False

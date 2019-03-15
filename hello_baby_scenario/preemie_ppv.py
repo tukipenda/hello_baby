@@ -41,6 +41,8 @@ def getScenarioData(user):
     actionLog=[]
     for action in a.actions:
         actionLog.append({'action':action.action, 'time':action.time})
+    ss=models.ScenarioStatus().query.filter_by(baby_id=baby.id).first()
+    ss={'end_scenario':bool(ss.end_scenario), 'end_scenario_reason':str(ss.end_scenario_reason)}
     returnDict={
         'scenario_text':scenario_text,
         'PE':PE,
@@ -51,7 +53,8 @@ def getScenarioData(user):
         'supplies':getSupplies(baby.id),
         'tasks': tasks,
         'PPIDict':models.getPPIDict(baby.id),
-        'actionLog': actionLog
+        'actionLog': actionLog,
+        'scenario_status':ss
     }
     return returnDict
 
