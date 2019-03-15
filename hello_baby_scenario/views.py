@@ -6,7 +6,7 @@ import preemie_ppv as ppv
 import json
 import preemie_ppv_update as ppv_update
 import os
-
+import pretty_print_baby as ppb
 
 #need to adjust session safety - multiple tabs - have same id!
 
@@ -122,7 +122,7 @@ def getPrettyPrintPE():
         baby_id=session['baby_id'] # could be a source of bugs, need to watch
         time=request.get_json()['time']
         PPIDict=request.get_json()['PPIDict']
-        pedict=models.getExams(PPIDict, time)
+        pedict=ppb.getExams(PPIDict, time)
         return(json.dumps(pedict))
     else:
         return "" #ugh
