@@ -155,9 +155,10 @@ class UpdateBaby:
         
         elif self.resusc['vent']['vent_type'] in ['ppv', 'intubated']:
             self.PE['vitals']['rr']=self.resusc['vent']['set_rate']
-            if self.warmer.pip>45:
+            if ((self.warmer.pip>45) or (self.warmer.peep>15)):
                 self.PE['resp']['pneumo']="left" # should make it so left or right is randomly selected
 
+            #check if there is an air leak, and for mask size
             if self.taskName=="adjustMask":
                 self.resusc['vent']['has_air_leak']=False
 
@@ -180,8 +181,16 @@ class UpdateBaby:
                 r['chest_rise']="no chest rise"
                 self.PE['vitals']['rr']=0
             
+            #if there is an air leak, chest rise will be poor
             elif v['has_air_leak']:
                 pass
+            
+            #if there are moderate to many secretions, ventilation will be poor
+            
+            #if PIP is too low - chest rise will be poor or 0
+            #if PEEP is too low, chest rise will be poor
+            # if not repositioned, chest rise will be poor
+            # if PIP not increased to 25, chest rise will be poor
 
             #Need to incorporate PIP, PEEP, FiO2 into this algorithm
             if(v['is_mouth_open']):
