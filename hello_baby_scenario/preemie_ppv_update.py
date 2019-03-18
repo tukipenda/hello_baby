@@ -394,7 +394,7 @@ class UpdateBaby:
                         temp=round(temp-0.05, 2)
                 else:
                     if temp>34:
-                        temp=round(temp-0.05, 2)
+                        temp=round(temp-0.025, 2)
 
                     else:
                         temp=round(temp+0.05, 2)
