@@ -182,9 +182,10 @@ class UpdateBaby:
                 self.PE['vitals']['rr']=0
             
             #if there is an air leak, chest rise will be poor
-            elif v['has_air_leak']:
-                pass
-            
+            elif ((v['has_air_leak']) or (self.warmer.pip<15) or (self.warmer.peep<3) or (v['positioning']==0)):
+                v['efficacy']=0.3
+                r['chest_rise']="poor chest rise"
+                r['breath_sounds']="breath sounds present bilaterally, difficult to hear"
             #if there are moderate to many secretions, ventilation will be poor
             
             #if PIP is too low - chest rise will be poor or 0
@@ -193,17 +194,13 @@ class UpdateBaby:
             # if PIP not increased to 25, chest rise will be poor
 
             #Need to incorporate PIP, PEEP, FiO2 into this algorithm
-            if(v['is_mouth_open']):
-                v['efficacy']=0.4
-                r['chest_rise']='poor chest rise'
-                if v['positioning']==1:
-                    v['efficacy']=0.8
-                    r['breath_sounds']="breath sounds present bilaterally, difficult to hear"
-                    r['chest_rise']="good chest rise"
-                    if(self.PE['secretions']['quantity'])=='minimal':
-                        v['efficacy']=1
-                        r['breath_sounds']="clear breath sounds bilaterally"
-
+            elif v['positioning']==1:
+                v['efficacy']=0.8
+                r['breath_sounds']="breath sounds present bilaterally, difficult to hear"
+                r['chest_rise']="good chest rise"
+                if(self.PE['secretions']['quantity'])=='minimal':
+                    v['efficacy']=1
+                    r['breath_sounds']="clear breath sounds bilaterally"
 
     def updateUVC(self):
         pass
