@@ -1,32 +1,29 @@
-Dashboard: (provide only the necessary information, minimize the size to optimize for phone?)
-(responsive design - more information on desktop website than on iphone website)
-Start timer
-Appearance
-Last PE
-O2sat, temperature, RR, last HR
-Warmer settings:
-warmer on?, temp_mode
-PIP/PEEP/POP, flow, fiO2, suction
+Dashboard: 
 Resp mode - if giving breaths (how frequently) (can make a video later)
 CPR - if given compressions how frequently/how deep (can make a video later)
 medications - UVC in place, meds given w/ timing (later can add a time-keeper).
 supplies at bedside
 
-Additional information - mom's history
 Interventions - adjust warmer, get supplies, simple actions (dry/stim), adjust ventilation, adjust CPR, procedures, give meds
-
-35w male infant, not breathing, cyanotic, dry skin
-O2sat - unavailable. Temp 36.  RR 0.  Last HR 100.
-Last resp exam - no breath sounds
-Last CV exam - 2+ femoral pulses, no murmurs
-(more exams)
-PIP - 20, PEEP - 5, POP - 40
-Flow - 10, FiO2 - 21, suction - 100
-Resp mode - spontaneous
-Available supplies
-(some actions from main board)
 
 Actions - review history, adjust warmer, vent (start PPV or intubate), start cpr, place UVC (give meds), supplies, simple actions (dry, stim, suction).
 hx/warmer/vent/cpr (left) procedures/meds/simple actions/supplies (right) - overlay with modal window?
 
-Get UI kit?
+
+
+Feedback - correct interventions?  At the right time?
+Notes for teaching - review different parts of NRP
+
+How to make the game/simulation interesting and tricky (can I find some comparison games)
+Give a grade - score for percentage correct
+
+supplies - some are available, some are not (which ones do you really need)
+Have certain ones available (at random), ask if there are others that you need
+
+actions - how do I keep people from just doing the same actions every time automatically
+Need to have a few different scenarios, some with the right actions, some with the wrong actions
+
+Need to trial the game with different people and get feedback
+
+Interface needs to be really obvious
+Need to make it clear that you can't use certain things during the tutorial
