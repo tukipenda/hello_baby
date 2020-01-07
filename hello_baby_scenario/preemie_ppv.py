@@ -6,6 +6,7 @@ import preemie_ppv_data as data
 import preemie_ppv_update as ppv_update
 from preemie_ppv_update import getSubDict, getSupplies
 import pretty_print_baby as ppb
+import preemie_ppv_feedback as ppf
 
 value_list=['baby_data', 'scenario', 'history', 'PE', 'supplies', 'warmer', 'tasks', 'vent', 'cpr', 'uvc', 'health']
 scenarioDict={name:json.dumps(getattr(data, name)) for name in value_list}
@@ -73,4 +74,5 @@ def doTask(baby_id, taskName, time, **kwargs):
     db.session.add(a)
     db.session.commit()
     app.logger.info(str(a.action)+" "+str(a.time))
+    ppf.printActionLog(baby_id)
 
