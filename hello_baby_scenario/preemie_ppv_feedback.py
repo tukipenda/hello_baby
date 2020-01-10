@@ -15,11 +15,13 @@ ETT tubes
 required settings for preemie
 
 For good NRP need:
-warm/dry/stimulate/suction infant
+warm/dry/stimulate/suction infant <30 seconds
 start PPV in under 60 seconds
 do MRSOPA maneuvers
 reassess heart/lungs
-APGAR scores
+APGAR scores - need to request these
+
+OK to have patient stay with mother?  Is CPAP sufficient?
 
 
 """
@@ -29,3 +31,20 @@ def printActionLog(baby_id):
     for l in a.actions:
         print(l.action)
         print(l.time)
+    
+    s=[[l.action, l.time] for l in a.actions]
+    for k in s:
+        if(("fetch" in k[0]) and ("pulse_ox" in k[0])):
+            print(k[1])
+            if k[1]<60:
+                print("pass")
+            else:
+                print("fail")
+        
+# action requirements:
+"""
+[fetch pulse ox, 0]
+[fetch ETT tube, 0]
+etc... 
+
+"""
