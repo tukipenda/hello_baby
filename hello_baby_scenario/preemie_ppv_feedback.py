@@ -24,6 +24,35 @@ APGAR scores - need to request these
 OK to have patient stay with mother?  Is CPAP sufficient?
 
 
+requirements:
+required supplies -> make sure you fetch all of them
+"fetch" "pulse_ox" by delivery
+"fetch" "hat" by delivery
+"fetch" "ETT size 0" by delivery etc...
+settings for warmer
+"warm", "dry", "stimulate", "suction" by 30 seconds
+place hat by 30 seconds
+check HR by 30 seconds
+listen to heart and lung sounds by ***time
+place pulse ox by ***
+place temp probe by ***
+"start PPV" by 60 seconds
+MRSOPA steps
+
+Good Feedback: (color code green vs. red)
+Fetch - you correctly fetched the following items before delivery
+Negative feedback:
+You fetched this item, but after delivery
+You did not fetch the following items
+
+You correctly set the warmer to the following settings
+You did not correctly set ***
+
+action, time of action, (performed on time, not performed, performed late), feedback about action
+
+one of the confusing things is what should the UI be like.  Designing a good UI is probably the key to making this effective.  
+
+
 """
 def printActionLog(baby_id):
     a=models.Actionlog().query.filter_by(baby_id=baby_id).first()
