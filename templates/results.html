@@ -1,38 +1,19 @@
 {% extends "layout.html" %} {% block body %}
 <div class="card">
     <div class="card-body">
-        Results
-        Log:
-        
-        <div>
-            Your results
-        </div>
-        <div class="row">
-            <div class="col p-0 btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button type="button" v-on:click="resultTab='major'" v-bind:class="(resultTab=='major') ? 'btn btn-primary' : 'btn btn-light'">Feedback</button>
-              <button type="button" v-on:click="resultTab='timed'" v-bind:class="(resultTab=='timed') ? 'btn btn-primary' : 'btn btn-light'">Timed Results</button>
-            </div>
-	    </div>
-        <div v-if="resultTab=='timed'" class="modal-body">
-        <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Time</th>
-      <th scope="col">Task Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="action in sortedActionLog">
-      <td>[[action.time]]</td>
-        <td>[[action.action]]</td>
-    </tr>
-    </tbody>
-</table>
-            
-        </div>
-        <div v-if="resultTab=='major'" class="modal-body">
-            Major results
-    </div>
+    	  <h2>
+		Your Results
+		</h2>
+		<h4>Overall Score:</h4>
+		<ul class="list-group">
+		  <li class="list-group-item">Warmer Setup <span class='text-warning'>75%</span></li>
+		  <li class="list-group-item">Supplies <span class="text-success">95%</span></li>
+		  <li class="list-group-item">Physical Exam</li>
+		  <li class="list-group-item">Base Interventions</li>
+		  <li class="list-group-item">Airway Interventions</li>
+		</ul></div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 {% block javascript %}
