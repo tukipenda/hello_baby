@@ -81,4 +81,9 @@ def doTask(baby_id, taskName, time, **kwargs):
     db.session.commit()
     app.logger.info(str(a.action)+" "+str(a.time))
     ppf.printActionLog(baby_id)
+    if(taskName=="end_scenario"):
+        endScenario(baby_id)
+    
+def endScenario(baby_id):
+    ppf.scoreScenario(baby_id)
 

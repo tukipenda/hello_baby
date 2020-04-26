@@ -72,11 +72,30 @@ def printActionLog(baby_id):
     for k in s:
         if(("fetch" in k[0]) and ("pulse_ox" in k[0])):
             print(k[1])
-            if k[1]<60:
+            if k[1]<30:
                 print("pass")
             else:
                 print("fail")
-        
+
+def scoreScenario(baby_id):
+    a=models.Actionlog().query.filter_by(baby_id=baby_id).first()
+    app.logger.info(a)
+    for l in a.actions:
+        print(l.action)
+        print(l.time)
+    
+    s=[[l.action, l.time] for l in a.actions]
+    for k in s:
+        if(("fetch" in k[0]) and ("pulse_ox" in k[0])):
+            print(k[1])
+            if k[1]<30:
+                print("pass")
+            else:
+                print("fail")
+    
+#check if pulse ox was fetched
+
+            
 # action requirements:
 """
 [fetch pulse ox, 0]

@@ -234,10 +234,12 @@ var app = new Vue({
                     this.baby_time=Date.now();
                     this.elapsed_baby_time="0:00";
                     let self=this;
-                    var timer=setInterval(function(){
-                        ctime=Date.now();
-                        self.elapsed_baby_time=formatTime(ctime-self.baby_time);
-                    }, 1000);
+                    while(!this.scenario.scenario_status.end_scenario){
+                        var timer=setInterval(function(){
+                            ctime=Date.now();
+                            self.elapsed_baby_time=formatTime(ctime-self.baby_time);
+                        }, 1000);
+                    };
                 },
                 deliverBaby: function(){
                     if(!this.baby_delivered){
@@ -252,6 +254,11 @@ var app = new Vue({
                         this.updateLastPE('appearance');
                         this.updateLastPE('vent');
                     }
+                },
+                endScenario: function(reason){
+                    this.scenario.scenario_status.end_scenario=1;
+                    this.scenario.scenario_status.end_scenario_reason=reason;
+                    this.doTask({'name':"end_scenario"})
                 },
                 doTask: function(task){
                     /*the code below does not take into account the possibility that action is repeated in less than 5 seconds*/
