@@ -220,9 +220,10 @@ var app = new Vue({
                         self.app_mode=self.scenario.app_mode;
                         var ppidict=self.scenario.PPIDict;
                         self.getTimedPPIDict(ppidict);
+                        /*
                         if(self.scenario.scenario_status.end_scenario){
                             alert('end scenario');
-                        }
+                        }*/
                     });
                     
                     
@@ -302,6 +303,19 @@ var app = new Vue({
                       var name=supply.name;
                       var size=supply.size;
                       this.doTask({'name':"use", 'supply_name':name, 'size':size});
+                  },
+                  text_type: function(number){
+                      if (number<75) {
+                          return "text-danger";
+                      }  
+                      else if (number<90){
+                          return "text-warning";
+                      }
+                      else return "text-success";
+                  }, //This function returns a text color based on how good the percentage score in results is 
+                        //(probably should refactor this somehow so presentation isn't in javascript)
+                  getPPResultCategory: function(result_type){
+                      return this.scenario.pp_results[result_type][0];
                   },
                   helloSliderOptions: function(min, max, width){
                       width = typeof width !== 'undefined' ? width : '50%';

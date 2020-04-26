@@ -2,72 +2,26 @@
 <div class="card">
     <div class="card-body">
     	 <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-7">
+        <div class="col-lg-5 col-md-7 col-sm-8">
 			<h1>
 				Your Results
 				</h2> 
-			<h2>Overall Score: 95/100 </h4> 
+			<h2>Overall Score: [[scenario.score.overall]]/100 </h4> 
 			<ul class="list-group">
+				{% for name,key in [("Warmer Setup", "warmer_setup"), ("Supplies", "supplies_setup"), ("Physical Exam", "physical_exam"), ("Basic Interventions", "base"), ("Airway Interventions", "airway")] %}
 				<li class="list-group-item">
 					<div class="row">					
 					<div class="col h4">
-						Warmer Setup
-						<span class="text-warning">75%</span></div>
+						{{name}}
+						<span v-bind:class="text_type(scenario.score.{{key}})">[[scenario.score.{{key}}]]%</span></div>
 					</div>
 					<div class="row">
 						<div class="offset-2 col">
-						<a href="">Click for details</a>
+						<a href="result_detail/{{key}}">Click for details</a>
 						</div>
 					</div>
 				</li> 
-				<li class="list-group-item">
-					<div class="row">					
-					<div class="col h4">
-						Supplies
-						<span class="text-danger">55%</span></div>
-					</div>
-					<div class="row">
-						<div class="offset-2 col">
-						<a href="">Click for details</a>
-						</div>
-					</div>
-				</li> 
-				<li class="list-group-item">
-					<div class="row">					
-					<div class="col h4">
-						Physical Exam
-						<span class="text-success">90%</span></div>
-					</div>
-					<div class="row">
-						<div class="offset-2 col">
-						<a href="">Click for details</a>
-						</div>
-					</div>
-				</li> 
-				<li class="list-group-item">
-					<div class="row">					
-					<div class="col h4">
-						Base Interventions
-						<span class="text-warning">75%</span></div>
-					</div>
-					<div class="row">
-						<div class="offset-2 col">
-						<a href="">Click for details</a>
-						</div>
-					</div>
-				</li> 
-				<li class="list-group-item">
-					<div class="row">					
-					<div class="col h4">
-						Airway Interventions
-						<span class="text-warning">75%</span></div>
-					</div>
-					<div class="row">
-						<div class="offset-2 col">
-						<a href="">Click for details</a>
-						</div>
-					</div>
-				</li> 
+				{% endfor %}
 				</ul>
 		</div>
     </div>

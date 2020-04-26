@@ -138,6 +138,91 @@ def setSupplyParams(supply):
 #list comprehension to modify list of supplies
 supplies=[setSupplyParams(supply) for supply in supplies]
 
+pp_warmer_setup={
+    'set_PIP':"Set PIP Correctly",
+    'set_PEEP':"Set PEEP Correctly",
+    'set_POP':"Set POP Correctly",
+    'set_flow':"Set Flow Correctly",
+    'set_suction':"Set Suction Correctly",
+    'set_FIO2':"Set FIO2 Correctly",
+    'heat_on':"Turn Heat On",
+    'use_mask':"Select Correct Mask",
+    'temp_mode':"Set Temperature Mode to Manual"
+     }       
+
+pp_supplies_setup={
+    'fetch_pulse_ox':"Fetch Pulse Ox",
+    'fetch_temp_probe':"Fetch Temperature Probe",
+    'fetch_ETT':"Fetch Endotracheal Tubes", #all ETT tubes
+    'fetch_hat':"Fetch Hat",
+    'fetch_blankets':"Fetch Blankets",
+    'fetch_stethoscope':"Fetch Stethoscope",
+    'fetch_laryngoscopes':"Fetch Laryngoscopes",
+}
+
+pp_physical_exam={ #monitoring and physical exam
+    'check_hr':"Check Heart Rate", #how many times?
+    'listen_lungs':"Listen to Lungs", #how often?
+    'listen_heart':"Listen to Heart", #how often?
+    'other_exams':"Complete Physical Exam" #do I need this?
+}
+
+pp_base={
+    'start_timer':"Start Timer",
+    'place_pulse_ox':"Place Pulse Ox",
+    'place_temp_probe':"Place Temp Probe",
+    'heat_baby_mode':"Set Temperature Mode to Baby Mode",
+    'dry':"Dry Infant",
+    'stim':"Stimulate Infant",
+    'warm':"Warm Infant",
+    'bulb_suction':"Suction Infant with Bulb Suction",
+    'place_hat':"Place Hat",
+    'place_blanket':"Place Blanket"
+}
+
+pp_airway={
+    'start_ppv':"Start Positive Pressure Ventilation",
+    'set_vent_rate':"Ventilate at Correct Rate",
+    'adjust_mask':"Adjust Mask",
+    'reposition':"Reposition Infant",
+    'open_mouth':"Open Infant's Mouth",
+    'deep_suction':"Deep Suction",
+    'increase_PIP':"Increase PIP",
+    'check_lungs':"Recheck Lungs After Providing Positive Pressure",
+    'check_hr':"Recheck Heart Rate After Providing Positive Pressure",
+}
+
+warmer_setup={k:0 for k in pp_warmer_setup}
+supplies_setup={k:0 for k in pp_supplies_setup}
+physical_exam ={k:0 for k in pp_physical_exam}
+base={k:0 for k in pp_base}
+airway={k:0 for k in pp_airway}
+
+results={
+    'warmer_setup':warmer_setup,
+    'supplies_setup':supplies_setup,
+    'physical_exam':physical_exam,
+    'base':base,
+    'airway':airway
+}
+
+#variable below is not currently stored in the database, not sure if that is important or not.  Also this is kind of a clunky way to do this
+pp_result_categories={
+    'warmer_setup':"Warmer Setup",
+    'supplies_setup':"Supplies",
+    'physical_exam':"Physical Exam",
+    'base':"Basic Interventions",
+    'airway':"Airway Interventions"
+}
+
+pp_results={
+    'warmer_setup':pp_warmer_setup,
+    'supplies_setup':pp_supplies_setup,
+    'physical_exam':pp_physical_exam,
+    'base':pp_base,
+    'airway':pp_airway
+}
+
 #fetch tasks
 tasks=[{
         'name':'fetch_'+supply['name'],

@@ -51,9 +51,16 @@ You did not correctly set ***
 action, time of action, (performed on time, not performed, performed late), feedback about action
 
 one of the confusing things is what should the UI be like.  Designing a good UI is probably the key to making this effective.  
-
-
 """
+
+def score(results):
+    score={}
+    for k,v in results.items():
+        vs=results[k].values()
+        score[k]=round(100*float(sum(vs))/len(vs))
+    score['overall']=round(0.2*sum(score.values()))
+    return(score)
+
 def printActionLog(baby_id):
     a=models.Actionlog().query.filter_by(baby_id=baby_id).first()
     app.logger.info(a)

@@ -27,6 +27,7 @@ class Scenario(db.Model):
     cpr=db.Column(db.Text)
     uvc=db.Column(db.Text)
     health=db.Column(db.Text)
+    results=db.Column(db.Text)
 
 class Baby(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -211,7 +212,15 @@ class ScenarioStatus(db.Model):
         nullable=False)
     end_scenario=db.Column(db.Boolean) #is the scenario over?
     end_scenario_reason=db.Column(db.Text) #why is the scenario over?
+   
 
+class Results(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    baby_id = db.Column(db.Integer, db.ForeignKey('baby.id'),
+        nullable=False)
+    results=db.Column(db.Text)
+    
+    
 PEDict={
     'vitals':PEVitals,
     'resp':PEResp,
@@ -258,9 +267,11 @@ def create_baby(user, scenario):
     w=Warmer(baby_id=baby_id, **warmer)
     a=Actionlog(baby_id=baby_id)
     ss=ScenarioStatus(baby_id=baby_id, end_scenario=False, end_scenario_reason="")
+    r=Results(baby_id=baby_id, results=scenario.results)
     db.session.add(a)
     db.session.add(w)
     db.session.add(ss)
+    db.session.add(r)
     db.session.commit()
     return b
 

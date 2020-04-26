@@ -7,6 +7,7 @@ import json
 import preemie_ppv_update as ppv_update
 import os
 import pretty_print_baby as ppb
+import preemie_ppv_data as ppvdata
 
 #need to adjust session safety - multiple tabs - have same id!
 
@@ -69,6 +70,18 @@ def results():
     else:
         return "" # error
 
+@app.route('/result_detail/<result_type>')
+def result_detail(result_type):
+    session['app_mode']='simulation'
+    user_agent=request.headers.get('User-Agent')
+    is_IE=False
+    for test in ["msie", "trident", "edge"]:
+        if test in user_agent.lower():
+            is_IE=True
+    if 'user_id' in session.keys():
+        return render_template('result_detail.html', result_type=result_type, pp_results=ppvdata.pp_results, pp_result_categories=ppvdata.pp_result_categories, is_IE=is_IE)
+    else:
+        return "" # error
 
 @app.route('/getscenario', methods=["get", "post"])
 def getScenario():

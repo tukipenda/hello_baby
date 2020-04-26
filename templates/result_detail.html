@@ -1,0 +1,50 @@
+{% extends "layout.html" %} {% block body %}
+<div class="card">
+    <div class="card-body">
+    	 <div class="row">
+        <div class="col-lg-5 col-md-7 col-sm-8">
+		 <div class="row">
+			 <div class="col">
+				<h2>
+				{{pp_result_categories[result_type]}}
+				</h2> 
+			<h4>Score: [[scenario.score.{{result_type}}]] </h4> 
+			 </div>
+		</div>
+		 <div class="row">
+			<div class="col">
+				<ul class="list-group">
+                {% for key in pp_results[result_type] %}
+				<li class="list-group-item">
+					<div class="row">					
+					<div class="col-7">
+                        {{pp_results[result_type][key]}}
+					</div>
+					<div class="col">
+						<img v-if="scenario.results.{{result_type}}[{{key}}]" src="/static/Bootstrap_Icons/icons/custom_icons/check-box-green.svg" alt="correct" width="20" height="20" title="Correct">
+                        <img v-else src="/static/Bootstrap_Icons/icons/custom_icons/x-square-red.svg" alt="correct" width="20" height="20" title="Correct">
+         
+					</div>
+
+					</div>
+					<div class="row">
+						<div class="offset-2 col">
+						<a href="">Click for details</a>
+						</div>
+					</div>
+				</li> 
+                {% endfor %}
+				</ul>
+			 </div>
+		 </div>
+		</div>
+	 <div class="col-sm"><!--Needed to keep make app in the center of the screen -->
+	</div>
+	</div>
+	</div>
+</div>
+{% endblock %}
+{% block javascript %}
+    <script src="https://nightcatsama.github.io/vue-slider-component/dist/index.js"></script>
+    <script src="{{ url_for('static',filename='hello_baby.js') }}"></script>
+{% endblock %}
