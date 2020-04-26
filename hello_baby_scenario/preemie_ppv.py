@@ -72,6 +72,7 @@ def updateWarmer(baby_id, warmer_dict):
     warmer=models.Warmer.query.filter_by(baby_id=baby_id).first()
 
 def doTask(baby_id, taskName, time, **kwargs):
+    print(taskName)
     ub=ppv_update.UpdateBaby(baby_id)
     ub.update(time, taskName=taskName, **kwargs)
     actionLog=models.Actionlog.query.filter_by(baby_id=baby_id).first()
@@ -85,5 +86,6 @@ def doTask(baby_id, taskName, time, **kwargs):
         endScenario(baby_id)
     
 def endScenario(baby_id):
-    ppf.scoreScenario(baby_id)
+    scorer=ppf.ScenarioScoring()
+    scorer.scoreScenario(baby_id)
 

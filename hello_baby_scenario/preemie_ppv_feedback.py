@@ -77,23 +77,51 @@ def printActionLog(baby_id):
             else:
                 print("fail")
 
-def scoreScenario(baby_id):
-    a=models.Actionlog().query.filter_by(baby_id=baby_id).first()
-    app.logger.info(a)
-    for l in a.actions:
-        print(l.action)
-        print(l.time)
-    
-    s=[[l.action, l.time] for l in a.actions]
-    for k in s:
-        if(("fetch" in k[0]) and ("pulse_ox" in k[0])):
-            print(k[1])
-            if k[1]<30:
-                print("pass")
-            else:
-                print("fail")
-    
-#check if pulse ox was fetched
+class ScenarioScoring:
+    def __init__(self):
+        self.results=""
+        self.raw_result=""
+        self.actions=""
+                
+    def scoreScenario(self, baby_id):
+        self.actions=models.Actionlog().query.filter_by(baby_id=baby_id).first().actions
+        self.raw_result=models.Results().query.filter_by(baby_id=baby_id).first()
+        self.results=json.loads(self.raw_result.results)
+   
+        self.scorePE()
+        self.scoreSupplies()
+        self.scoreWarmerSetup()
+        self.scoreBasic()
+        self.scoreAirway()
+        self.raw_result.results=json.dumps(self.results)
+        db.session.commit()            
+
+    def scorePE(self):
+        pass
+
+    def scoreSupplies(self):
+        s=[[l.action, l.time] for l in self.actions]
+        for k in s:
+            if(("fetch" in k[0]) and ("pulse_ox" in k[0])):
+                if k[1]<30:
+                    self.results['supplies_setup']['fetch_pulse_ox']=1
+                else:
+                    print("fail")
+        for k in s:
+            if(("fetch" in k[0]) and ("temp_probe" in k[0])):
+                if k[1]<30:
+                    self.results['supplies_setup']['fetch_temp_probe']=1
+                else:
+                    print("fail")
+
+    def scoreWarmerSetup(self):
+        pass
+
+    def scoreBasic(self):
+        pass
+
+    def scoreAirway(self):
+        pass
 
             
 # action requirements:

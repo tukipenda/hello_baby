@@ -280,6 +280,8 @@ var app = new Vue({
                         current_time=(Date.now()-this.delivery_time)/1000;
                     }
                     this.elapsed_delivery_time=current_time;
+                    console.log(task);
+                    console.log(current_time);
                     axios.post("/dotask",
                              {'task':task,
                              'time':current_time,
