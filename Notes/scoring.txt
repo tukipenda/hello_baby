@@ -1,0 +1,14 @@
+Should I have a status update saved regularly to check on progress?
+
+status would include:
+time, PIP, PEEP, POP, suction, FiO2, flow, 
+heat_on, heat_mode, mask_type,
+ventilation type, ventilation rate
+
+what about a timeline?
+when was PPV started, when was heat set to baby_mode, etc..., when did key events occur?
+
+should add a score for the outcome of the scenario - will have to handle a little bit differently, not based on checks, 
+but based on numbers, give a percentage based on health of heart/lungs.  
+
+could add surfactant to the scenario
