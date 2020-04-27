@@ -72,11 +72,13 @@ def updateWarmer(baby_id, warmer_dict):
     warmer=models.Warmer.query.filter_by(baby_id=baby_id).first()
 
 def doTask(baby_id, taskName, time, **kwargs):
-    print(taskName)
     ub=ppv_update.UpdateBaby(baby_id)
     ub.update(time, taskName=taskName, **kwargs)
     actionLog=models.Actionlog.query.filter_by(baby_id=baby_id).first()
-    action="task:{name}, args:{kwargs}".format(name=taskName, kwargs=str(kwargs))
+    action=json.dumps({
+        'task':taskName, 
+        'args':kwargs
+    }) #need to add something to test if the action was successful or not
     a=models.Action(action=action, actionlog_id=actionLog.id, time=time)
     db.session.add(a)
     db.session.commit()

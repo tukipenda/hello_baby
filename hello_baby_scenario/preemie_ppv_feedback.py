@@ -96,38 +96,107 @@ class ScenarioScoring:
         self.raw_result.results=json.dumps(self.results)
         db.session.commit()            
 
-    def scorePE(self):
-        pass
-
     def scoreSupplies(self):
+        fetched_supplies=[]
+        for action in self.actions:
+            action_time=action.time
+            ad=json.loads(action.action) #ad for action details
+            if ad['task']=="fetch":
+                if(action_time<30):
+                    name=ad['args']['name']
+                    if(ad['args']['size']):
+                        name=name+"_"+ad['args']['size']
+                    fetched_supplies.append(name)
+        ETTS=["ett_2.5", "ett_3", "ett_3.5"]
+        laryngoscopes=['laryngoscope_0', 'laryngoscope_1', 'laryngoscope_00']
+        if(set(ETTS).issubset(set(fetched_supplies))):
+            self.results['supplies_setup']['fetch_ETT']=1
+        if(set(laryngoscopes).issubset(set(fetched_supplies))):
+            self.results['supplies_setup']['fetch_laryngoscopes']=1
+        items=['pulse_ox', 'hat', 'blankets', 'stethoscope', 'temp_probe']
+        for item in items:
+            if item in fetched_supplies:
+                self.results['supplies_setup']["fetch_"+item]=1
+    
+    def supplyFetched(self, supplyName, supplyNumber):
         s=[[l.action, l.time] for l in self.actions]
         for k in s:
-            if(("fetch" in k[0]) and ("pulse_ox" in k[0])):
-                if k[1]<30:
-                    self.results['supplies_setup']['fetch_pulse_ox']=1
-                else:
-                    print("fail")
-        for k in s:
-            if(("fetch" in k[0]) and ("temp_probe" in k[0])):
-                if k[1]<30:
-                    self.results['supplies_setup']['fetch_temp_probe']=1
-                else:
-                    print("fail")
-
+            if ("fetch"):
+                pass
+    
+    #PEEP (5), PIP (20-25), POP, flow, FiO2 (21 >35 wks, 21-30 <35wks), suction set to correct values by 15s after start.  Heat turned on and set to manual before start
+    #Values stay correct (except for PIP increasing after starting PPV)
+    #could allow for brief drops of PIP or PEEP as long as it is corrected quickly, but maybe not to start
     def scoreWarmerSetup(self):
         pass
 
-    def scoreBasic(self):
-        pass
+    #check HR (in first 30s, then how often?)
+    #listen to heart (), listen to lungs (after PPV)
+    #other exams by the end of this scenario
+    def scorePE(self):
+        for action in self.actions:
+            action_time=action.time
+            ad=json.loads(action.action) #ad for action details
+            if ad['task']=="check_hr":
+                if(action_time<30):
+                    name=ad['args']['name']
+                    if(ad['args']['size']):
+                        name=name+"_"+ad['args']['size']
+                    fetched_supplies.append(name)
 
+    
+    #first 30s, warm, dry, stim, hat, bulb suction, place temp probe, switch heat to baby mode (only after temp probe placed, and don't switch back)
+    #timer started within 10s of delivery
+    #pulse ox placed within 30s
+    def scoreBasic(self):
+        minTime=30
+        actionsToScore=[
+            ['dry', 'dry'],
+            ['place_temp_probe', 'use_temp_probe'],
+            ['stim', 'stimulate'],
+            ['bulb_suction', 'bulb_suction'],
+            ['place_hat', 'use_hat'],
+        ]
+        actionsToScore=[item+[minTime] for item in actionsToScore]
+        actionsToScore.append(['place_pulse_ox', 'use_pulse_ox', 60])
+        actionsToScore.append(['start_timer', 'start_timer', 10])
+        for action in actionsToScore:
+            self.results['base'][action[0]]=self.actionCompletedByTime(action[1], action[2])
+
+        # now need to add heat baby mode
+
+    #start PPV within 60s.  Correct rate set. Check HR and lungs after starting PPV.  How much of MRSOPA is required?
     def scoreAirway(self):
         pass
+   
 
-            
-# action requirements:
-"""
-[fetch pulse ox, 0]
-[fetch ETT tube, 0]
-etc... 
-
-"""
+    #method to check if action has been done by certain time.  
+    def actionCompletedByTime(self, action_name, time):
+        for action in self.actions:
+            action_time=action.time
+            if action_time<time:
+                ad=json.loads(action.action)
+                if(ad['task']==action_name):
+                    return True
+        return False
+    
+    #method to check if action has been done after first time another action has done (within a certain time frame)
+    def actionCompletedAfterAction(self, action_name, prior_action, time_elapsed):
+        first_action_time="blank"
+        for action in self.actions:
+            ad=json.loads(action.action)
+            if(ad['task']==prior_action):
+                if(first_action_time=="blank"):
+                    first_action_time=action.time
+                else:
+                    if(first_action_time>action.time):
+                        first_action_time=action.time
+        if(first_action_time!="blank"):
+            for action in self.actions:
+                action_time=action.time                
+                ad=json.loads(action.action)                
+                if(ad['task']==action_name):
+                    if action_time<(time+time_elapsed):
+                            return True
+        else:
+            return False

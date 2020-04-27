@@ -21,7 +21,7 @@
                         {{pp_results[result_type][key]}}
 					</div>
 					<div class="col">
-						<img v-if="scenario.results.{{result_type}}[{{key}}]" src="/static/Bootstrap_Icons/icons/custom_icons/check-box-green.svg" alt="correct" width="20" height="20" title="Correct">
+						<img v-if="scenario.results.{{result_type}}.{{key}}" src="/static/Bootstrap_Icons/icons/custom_icons/check-box-green.svg" alt="correct" width="20" height="20" title="Correct">
                         <img v-else src="/static/Bootstrap_Icons/icons/custom_icons/x-square-red.svg" alt="correct" width="20" height="20" title="Correct">
          
 					</div>

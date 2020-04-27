@@ -146,7 +146,7 @@ pp_warmer_setup={
     'set_suction':"Set Suction Correctly",
     'set_FIO2':"Set FIO2 Correctly",
     'heat_on':"Turn Heat On",
-    'use_mask':"Select Correct Mask",
+    'mask_type':"Select Correct Mask",
     'temp_mode':"Set Temperature Mode to Manual"
      }       
 
@@ -174,10 +174,8 @@ pp_base={
     'heat_baby_mode':"Set Temperature Mode to Baby Mode",
     'dry':"Dry Infant",
     'stim':"Stimulate Infant",
-    'warm':"Warm Infant",
     'bulb_suction':"Suction Infant with Bulb Suction",
-    'place_hat':"Place Hat",
-    'place_blanket':"Place Blanket"
+    'place_hat':"Place Hat"
 }
 
 pp_airway={

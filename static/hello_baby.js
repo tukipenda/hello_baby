@@ -234,12 +234,10 @@ var app = new Vue({
                     this.baby_time=Date.now();
                     this.elapsed_baby_time="0:00";
                     let self=this;
-                    while(!this.scenario.scenario_status.end_scenario){
-                        var timer=setInterval(function(){
-                            ctime=Date.now();
-                            self.elapsed_baby_time=formatTime(ctime-self.baby_time);
-                        }, 1000);
-                    };
+                    var timer=setInterval(function(){
+                        ctime=Date.now();
+                        self.elapsed_baby_time=formatTime(ctime-self.baby_time);
+                    }, 1000);
                 },
                 deliverBaby: function(){
                     if(!this.baby_delivered){
