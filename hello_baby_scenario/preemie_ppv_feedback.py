@@ -7,6 +7,8 @@ import preemie_ppv_data as data
 import preemie_ppv_update as ppv_update
 from preemie_ppv_update import getSubDict, getSupplies
 import pretty_print_baby as ppb
+from operator import mul
+from functools import reduce
 
 """
 Prior to delivery:
@@ -77,6 +79,11 @@ def printActionLog(baby_id):
             else:
                 print("fail")
 
+class Act: #action class to use only here as a temporary way of check if actions are the same.  This is a terrible way to do things 
+    def __init__(self, taskName, **kwargs):
+        self.task=taskName
+        self.kwargs=kwargs
+        
 class ScenarioScoring:
     def __init__(self):
         self.results=""
@@ -128,21 +135,19 @@ class ScenarioScoring:
     #Values stay correct (except for PIP increasing after starting PPV)
     #could allow for brief drops of PIP or PEEP as long as it is corrected quickly, but maybe not to start
     def scoreWarmerSetup(self):
-        pass
+        pass#updatewarmer tasks
 
     #check HR (in first 30s, then how often?)
     #listen to heart (), listen to lungs (after PPV)
     #other exams by the end of this scenario
     def scorePE(self):
-        for action in self.actions:
-            action_time=action.time
-            ad=json.loads(action.action) #ad for action details
-            if ad['task']=="check_hr":
-                if(action_time<30):
-                    name=ad['args']['name']
-                    if(ad['args']['size']):
-                        name=name+"_"+ad['args']['size']
-                    fetched_supplies.append(name)
+        self.results['physical_exam']['check_hr']=self.actionCompletedByTime(Act('examine', system='hr'), 30)
+        self.results['physical_exam']['listen_heart']=self.actionCompletedByTime(Act('examine', system='cardiac'), 30)        
+        self.results['physical_exam']['listen_lungs']=self.actionCompletedByTime(Act('examine', system='resp'), 60)
+        exams=['abd', 'neuro', 'other']
+        self.results['physical_exam']['other_exams']=reduce(mul, [self.actionCompletedByTime(Act('examine', system=exam), 15000) for exam in exams], 1)
+        
+    #doesn't seem like check hr, lungs, listen to heart have actions yet
 
     
     #first 30s, warm, dry, stim, hat, bulb suction, place temp probe, switch heat to baby mode (only after temp probe placed, and don't switch back)
@@ -151,41 +156,44 @@ class ScenarioScoring:
     def scoreBasic(self):
         minTime=30
         actionsToScore=[
-            ['dry', 'dry'],
-            ['place_temp_probe', 'use_temp_probe'],
-            ['stim', 'stimulate'],
-            ['bulb_suction', 'bulb_suction'],
-            ['place_hat', 'use_hat'],
+            ['dry', Act('dry')],
+            ['place_temp_probe', Act('use', name='temp_probe')],
+            ['stim', Act('stimulate')],
+            ['bulb_suction', Act('bulb_suction')],
+            ['place_hat', Act('use')]
         ]
         actionsToScore=[item+[minTime] for item in actionsToScore]
-        actionsToScore.append(['place_pulse_ox', 'use_pulse_ox', 60])
-        actionsToScore.append(['start_timer', 'start_timer', 10])
+        actionsToScore.append(['place_pulse_ox', Act('use', name='pulse_ox'), 60])
+        actionsToScore.append(['start_timer', Act('startTimer'), 10])
         for action in actionsToScore:
             self.results['base'][action[0]]=self.actionCompletedByTime(action[1], action[2])
+        self.results['base']['heat_baby_mode']=((self.actionCompletedByTime(Act('updatewarmer', temp_mode='baby'), 30)) and \
+        (self.actionCompletedAfterAction(Act('use', name='temp_probe'), Act('updatewarmer', temp_mode='baby'), 30)))
 
         # now need to add heat baby mode
 
     #start PPV within 60s.  Correct rate set. Check HR and lungs after starting PPV.  How much of MRSOPA is required?
     def scoreAirway(self):
-        pass
-   
+        self.results['airway']['start_ppv']=self.actionCompletedByTime(Act('start_ppv'), 60)
+        self.results['airway']['check_lungs']=self.actionCompletedAfterAction(Act('start_ppv'), Act('examine', system='resp'), 15)        
+        self.results['airway']['check_hr']=self.actionCompletedAfterAction(Act('start_ppv'), Act('examine', system='hr'), 15)
+        
+        #set vent rate - need to have a particular value to set the vent rate at
 
     #method to check if action has been done by certain time.  
-    def actionCompletedByTime(self, action_name, time):
+    def actionCompletedByTime(self, action_to_check, time):
         for action in self.actions:
             action_time=action.time
             if action_time<time:
-                ad=json.loads(action.action)
-                if(ad['task']==action_name):
+                if(self.actionsEqual(action, action_to_check)):
                     return True
         return False
     
     #method to check if action has been done after first time another action has done (within a certain time frame)
-    def actionCompletedAfterAction(self, action_name, prior_action, time_elapsed):
+    def actionCompletedAfterAction(self, prior_action, action_to_check, time_elapsed):
         first_action_time="blank"
         for action in self.actions:
-            ad=json.loads(action.action)
-            if(ad['task']==prior_action):
+            if(self.actionsEqual(action, prior_action)):
                 if(first_action_time=="blank"):
                     first_action_time=action.time
                 else:
@@ -193,10 +201,18 @@ class ScenarioScoring:
                         first_action_time=action.time
         if(first_action_time!="blank"):
             for action in self.actions:
-                action_time=action.time                
-                ad=json.loads(action.action)                
-                if(ad['task']==action_name):
-                    if action_time<(time+time_elapsed):
+                action_time=action.time
+                if(self.actionsEqual(action, action_to_check)):
+                    if action_time<(first_action_time+time_elapsed):
                             return True
+            return False
         else:
             return False
+    
+    #this is not the right way to do things!  What a mess!
+    def actionsEqual(self, action_model, compareAction):
+        ad=json.loads(action_model.action)
+        if (not ad['task']==compareAction.task):
+            return False
+        else:
+            return (set(compareAction.kwargs.items()).issubset(set(ad['args'].items())))

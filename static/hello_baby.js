@@ -145,6 +145,7 @@ var app = new Vue({
                     });
                 },
                 updateLastPE: function(PEtype){
+                    this.doTask({'name':'examine', 'system':PEtype})
                     this.lastPE[PEtype].has_examined=true;
                     if (PEtype=='hr'){
                         this.lastPE[PEtype].text=this.scenario.PE.vitals.hr;
