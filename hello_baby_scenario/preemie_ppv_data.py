@@ -1,8 +1,8 @@
 from app import app
-scenario="You are called by the OB team for a preterm delivery by SVD. The baby's gestational age is estimated at 32 weeks.  Mom is 37 years old, afebrile, and prenatal labs are normal."
-baby_data={"ga":"32", "neonatal_complications":"None", "delivery":"SVD", "is_delivered":False}
+scenario="You are called by the OB team for a preterm delivery by SVD. The baby's gestational age is estimated at 33 weeks.  Mom is 37 years old, afebrile, and prenatal labs are normal."
+baby_data={"ga":"33", "neonatal_complications":"None", "delivery":"SVD", "is_delivered":False}
 
-history="Mom is a 37 year old G2P1 woman.  Baby is EGA 32 weeks, delivery by SVD.  She is VZVI, RI, HIV-, Hep B negative, RPRNR, GC/Chlamydia negative, and GBS negative.  \
+history="Mom is a 37 year old G2P1 woman.  Baby is EGA 33 weeks, delivery by SVD.  She is VZVI, RI, HIV-, Hep B negative, RPRNR, GC/Chlamydia negative, and GBS negative.  \
 She has been afebrile.  Rupture of membranes occurred 36 hours ago with clear fluids.  She received one dose of betamethasone 24 hours ago."
 
 warmer={
@@ -185,7 +185,7 @@ pp_airway={
     'reposition':"Reposition Infant",
     'open_mouth':"Open Infant's Mouth",
     'deep_suction':"Deep Suction",
-    'increase_PIP':"Increase PIP",
+    #'increase_PIP':"Increase PIP", (not required for now)
     'check_lungs':"Recheck Lungs After Providing Positive Pressure",
     'check_hr':"Recheck Heart Rate After Providing Positive Pressure",
 }

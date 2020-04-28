@@ -12,3 +12,5 @@ should add a score for the outcome of the scenario - will have to handle a littl
 but based on numbers, give a percentage based on health of heart/lungs.  
 
 could add surfactant to the scenario
+
+I think I may need to include transwarmer, plastic bag for a GA 32 week infant?

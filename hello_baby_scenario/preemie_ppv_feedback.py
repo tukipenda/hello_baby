@@ -135,8 +135,23 @@ class ScenarioScoring:
     #Values stay correct (except for PIP increasing after starting PPV)
     #could allow for brief drops of PIP or PEEP as long as it is corrected quickly, but maybe not to start
     def scoreWarmerSetup(self):
-        pass#updatewarmer tasks
-
+        self.results['warmer_setup']['set_PEEP']=self.actionCompletedByTime(Act('updatewarmer'), 1, 'actionsWithEqualParam', 'peep', 5)
+        self.results['warmer_setup']['set_PIP']=self.actionCompletedByTime(Act('updatewarmer'), 1, 'actionsWithParamRange', 'pip', 20, 25)
+        self.results['warmer_setup']['set_POP']=self.actionCompletedByTime(Act('updatewarmer'), 1, 'actionsWithEqualParam', 'pop', 40)
+        self.results['warmer_setup']['set_flow']=self.actionCompletedByTime(Act('updatewarmer'), 1, 'actionsWithEqualParam', 'flow', 10)
+        self.results['warmer_setup']['set_FIO2']=self.actionCompletedByTime(Act('updatewarmer'), 1, 'actionsWithParamRange', 'fio2', 21, 30)        
+         
+        # need to check params on suction!
+        self.results['warmer_setup']['set_suction']=self.actionCompletedByTime(Act('updatewarmer'), 1, 'actionsWithParamRange', 'suction', 80, 120)        
+        
+        self.results['warmer_setup']['heat_on']=self.actionCompletedByTime(Act('updatewarmer', is_turned_on=True), 1)        
+        
+        #need to clarify what the correct size for the mask is
+        self.results['warmer_setup']['mask_type']=self.actionCompletedByTime(Act('use', size="Infant", name="mask"), 1)        
+        
+        self.results['warmer_setup']['temp_mode']=1 #at the moment default is manual mode.  Need a test to make sure that baby mode is not set by mistake at the start
+   
+        
     #check HR (in first 30s, then how often?)
     #listen to heart (), listen to lungs (after PPV)
     #other exams by the end of this scenario
@@ -178,19 +193,25 @@ class ScenarioScoring:
         self.results['airway']['check_lungs']=self.actionCompletedAfterAction(Act('start_ppv'), Act('examine', system='resp'), 15)        
         self.results['airway']['check_hr']=self.actionCompletedAfterAction(Act('start_ppv'), Act('examine', system='hr'), 15)
         
-        #set vent rate - need to have a particular value to set the vent rate at
+        #need to clarify what ventilation rate should be
+        self.results['airway']['set_vent_rate']=self.actionCompletedAfterAction(Act('start_ppv'), Act('set_rate'), 1, 'actionsWithParamRange', 'set_rate', 40, 60)
+
+        self.results['airway']['adjust_mask']=self.actionCompletedAfterAction(Act('start_ppv'), Act('adjust_mask'), 15)
+        self.results['airway']['deep_suction']=self.actionCompletedAfterAction(Act('start_ppv'), Act('deep_suction'), 15)
+        self.results['airway']['reposition']=self.actionCompletedAfterAction(Act('start_ppv'), Act('reposition'), 15)
+        self.results['airway']['open_mouth']=self.actionCompletedAfterAction(Act('start_ppv'), Act('open_mouth'), 15)
 
     #method to check if action has been done by certain time.  
-    def actionCompletedByTime(self, action_to_check, time, comp_function='actionsEqual', comp_args={}):
+    def actionCompletedByTime(self, action_to_check, time, comp_function='actionsEqual', *comp_args):
         for action in self.actions:
             action_time=action.time
             if action_time<time:
-                if(getattr(self, comp_function)(action, action_to_check, **comp_args)):
+                if(getattr(self, comp_function)(action, action_to_check, *comp_args)):
                     return True
         return False
     
     #method to check if action has been done after first time another action has done (within a certain time frame)
-    def actionCompletedAfterAction(self, prior_action, action_to_check, time_elapsed, comp_function='actionsEqual', comp_args={}):
+    def actionCompletedAfterAction(self, prior_action, action_to_check, time_elapsed, comp_function='actionsEqual', *comp_args):
         first_action_time="blank"
         for action in self.actions:
             if(self.actionsEqual(action, prior_action)):
@@ -202,7 +223,7 @@ class ScenarioScoring:
         if(first_action_time!="blank"):
             for action in self.actions:
                 action_time=action.time
-                if(getattr(self, comp_function)(action, action_to_check, **comp_args)):
+                if(getattr(self, comp_function)(action, action_to_check, *comp_args)):
                     if action_time<(first_action_time+time_elapsed):
                             return True
             return False
@@ -215,4 +236,29 @@ class ScenarioScoring:
         if (not ad['task']==compareAction.task):
             return False
         else:
+            return (set(compareAction.kwargs.items()).issubset(set(ad['args'].items())))
+        
+    
+    def actionsWithEqualParam(self, action_model, compareAction, param_name, param_val):
+        ad=json.loads(action_model.action)
+        if (not ad['task']==compareAction.task):
+            return False
+        elif (not param_name in ad['args'].keys()):
+            return False
+        elif (not ad['args'][param_name]==param_val):
+            return False
+        else:
+            ad['args'].pop(param_name)
+            return (set(compareAction.kwargs.items()).issubset(set(ad['args'].items())))
+    
+    def actionsWithParamRange(self, action_model, compareAction, param_name, param_min, param_max):
+        ad=json.loads(action_model.action)
+        if (not ad['task']==compareAction.task):
+            return False
+        elif ((not param_name in ad['args'].keys())):
+            return False
+        elif (not ((ad['args'][param_name]>=param_min) and (ad['args'][param_name]<=param_max))):
+            return False
+        else:
+            ad['args'].pop(param_name)
             return (set(compareAction.kwargs.items()).issubset(set(ad['args'].items())))
