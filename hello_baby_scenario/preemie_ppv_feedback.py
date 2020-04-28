@@ -181,16 +181,16 @@ class ScenarioScoring:
         #set vent rate - need to have a particular value to set the vent rate at
 
     #method to check if action has been done by certain time.  
-    def actionCompletedByTime(self, action_to_check, time):
+    def actionCompletedByTime(self, action_to_check, time, comp_function='actionsEqual', comp_args={}):
         for action in self.actions:
             action_time=action.time
             if action_time<time:
-                if(self.actionsEqual(action, action_to_check)):
+                if(getattr(self, comp_function)(action, action_to_check, **comp_args)):
                     return True
         return False
     
     #method to check if action has been done after first time another action has done (within a certain time frame)
-    def actionCompletedAfterAction(self, prior_action, action_to_check, time_elapsed):
+    def actionCompletedAfterAction(self, prior_action, action_to_check, time_elapsed, comp_function='actionsEqual', comp_args={}):
         first_action_time="blank"
         for action in self.actions:
             if(self.actionsEqual(action, prior_action)):
@@ -202,7 +202,7 @@ class ScenarioScoring:
         if(first_action_time!="blank"):
             for action in self.actions:
                 action_time=action.time
-                if(self.actionsEqual(action, action_to_check)):
+                if(getattr(self, comp_function)(action, action_to_check, **comp_args)):
                     if action_time<(first_action_time+time_elapsed):
                             return True
             return False
